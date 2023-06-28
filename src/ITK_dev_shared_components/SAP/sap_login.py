@@ -32,6 +32,8 @@ def login(user, password):
 
     driver.quit()
 
+    #TODO: Wait for if SAP has opened
+
 def wait_for_download():
     downloads_folder = str(pathlib.Path.home() / "Downloads")
     for _ in range(10):
