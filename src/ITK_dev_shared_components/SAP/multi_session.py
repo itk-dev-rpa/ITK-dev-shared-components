@@ -2,8 +2,9 @@ import pythoncom
 import win32com.client
 import win32gui
 import threading
+from typing import Callable
 
-def run_with_session(session_index:int, func:function, args:tuple) -> None:
+def run_with_session(session_index:int, func:Callable, args:tuple) -> None:
     """Run a function in a sepcific session based on the sessions index.
     
     This function is meant to be run inside a seperate thread.
@@ -23,7 +24,7 @@ def run_with_session(session_index:int, func:function, args:tuple) -> None:
 
     pythoncom.CoUninitialize()
 
-def run_batch(func:function, args:tuple[tuple], num_sessions=6) -> None:
+def run_batch(func:Callable, args:tuple[tuple], num_sessions=6) -> None:
     """Run a function in parallel sessions.
     
     The function will be run {num_sessions} times with args[i] as input.
@@ -45,7 +46,7 @@ def run_batch(func:function, args:tuple[tuple], num_sessions=6) -> None:
         if t.error:
             raise t.error
 
-def run_batches(func:function, args:tuple[tuple], num_sessions=6):
+def run_batches(func:Callable, args:tuple[tuple], num_sessions=6):
     """Run a function in parallel batches.
     
     This function runs the input function for each set of arguments in args.
