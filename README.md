@@ -1,3 +1,5 @@
 # itk-dev-shared-components
 
-Hej itk du er min ven
+pip install ITK-dev-shared-components
+
+Version 0.0.2
