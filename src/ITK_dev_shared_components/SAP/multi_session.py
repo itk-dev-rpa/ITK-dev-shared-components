@@ -1,6 +1,7 @@
 import pythoncom
 import win32com.client
 import win32gui
+import time
 import threading
 from typing import Callable
 
@@ -81,6 +82,9 @@ def spawn_sessions(num_sessions=6) -> list:
 
     for _ in range(num_sessions - connection.Sessions.count):
         session.CreateSession()
+    
+    while connection.Sessions.count < num_sessions:
+        time.sleep(0.1)
 
     sessions = list(connection.Sessions)
     num_sessions = len(sessions)
