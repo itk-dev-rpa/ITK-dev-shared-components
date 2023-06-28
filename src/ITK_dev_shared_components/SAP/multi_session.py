@@ -83,6 +83,7 @@ def spawn_sessions(num_sessions=6) -> list:
     for _ in range(num_sessions - connection.Sessions.count):
         session.CreateSession()
     
+    # Wait for the sessions to spawn
     while connection.Sessions.count < num_sessions:
         time.sleep(0.1)
 
