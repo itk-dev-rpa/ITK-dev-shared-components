@@ -7,6 +7,7 @@ def run_with_session(session_index:int, func:function, args:tuple) -> None:
     """Run a function in a sepcific session based on the sessions index.
     
     This function is meant to be run inside a seperate thread.
+    The function must take a session object as its first argument.
     Note that this function will not spawn the sessions before running,
     use spawn_sessions to do that.
     """
@@ -26,6 +27,7 @@ def run_batch(func:function, args:tuple[tuple], num_sessions=6) -> None:
     """Run a function in parallel sessions.
     
     The function will be run {num_sessions} times with args[i] as input.
+    The function must take a session object as its first argument.
     Note that this function will not spawn the sessions before running,
     use spawn_sessions to do that.
     """
@@ -48,6 +50,7 @@ def run_batches(func:function, args:tuple[tuple], num_sessions=6):
     
     This function runs the input function for each set of arguments in args.
     The function will be run in parallel batches of size {num_sessions}.
+    The function must take a session object as its first argument.
     Note that this function will not spawn the sessions before running,
     use spawn_sessions to do that.
     """
