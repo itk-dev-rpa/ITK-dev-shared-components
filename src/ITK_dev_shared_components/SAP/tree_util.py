@@ -1,28 +1,28 @@
-def get_node_key_by_text(tree, text: str, contains=False) -> str:
+def get_node_key_by_text(tree, text: str, fuzzy=False) -> str:
     """Get the node key of a node based on its text.
     tree: A SAP GuiTree object.
     text: The text to search for.
-    contains: Whether to check if the node text just contains the text.
+    fuzzy: Whether to check if the node text just contains the search text.
     """
     for key in tree.GetAllNodeKeys():
         t = tree.GetNodeTextByKey(key)
 
-        if t == text or (contains and text in t):
+        if t == text or (fuzzy and text in t):
             return key
     
     raise ValueError(f"No node with the text '{text}' was found.")
 
-def get_item_by_text(tree, text: str, contains=False) -> tuple[str,str]:
+def get_item_by_text(tree, text: str, fuzzy=False) -> tuple[str,str]:
     """Get the node key and item name of an item based on its text.
     tree: A SAP GuiTree object.
     text: The text to search for.
-    contains: Whether to check if the node text just contains the text.
+    fuzzy: Whether to check if the node text just contains the search text.
     """
     for key in tree.GetAllNodeKeys():
         for name in tree.GetColumnNames():
             t = tree.GetItemText(key, name)
             
-            if t == text or (contains and text in t):
+            if t == text or (fuzzy and text in t):
                 return (key, name)
     
     raise ValueError(f"No item with the text '{text}' was found.")
@@ -49,4 +49,4 @@ if __name__ == '__main__':
     # print(tree.GetItemText('          2', '&Hierarchy'))
 
     key, name = get_item_by_text(tree, '2291987', True)
-    tree.ChangeCheckBox(key, name, False)
+    tree.ChangeCheckBox(key, name, True)
