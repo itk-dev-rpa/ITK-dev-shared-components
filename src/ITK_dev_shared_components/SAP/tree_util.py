@@ -16,7 +16,7 @@ def get_item_by_text(tree, text: str, fuzzy=False) -> tuple[str,str]:
     """Get the node key and item name of an item based on its text.
     tree: A SAP GuiTree object.
     text: The text to search for.
-    fuzzy: Whether to check if the node text just contains the search text.
+    fuzzy: Whether to check if the item text just contains the search text.
     """
     for key in tree.GetAllNodeKeys():
         for name in tree.GetColumnNames():
