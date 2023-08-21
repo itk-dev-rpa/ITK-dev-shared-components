@@ -76,7 +76,7 @@ def get_column_titles(grid_view):
     return tuple(grid_view.GetColumnTitles(c)[0] for c in grid_view.ColumnOrder)
 
 
-def find_row_index_by_value(grid_view, column:str, value:str):
+def find_row_index_by_value(grid_view, column:str, value:str) -> int:
     """Find the index of the first row where the given column's value
     match the given value. Returns -1 if no row is found.
     grid_view: A SAP GuiGridView object.
