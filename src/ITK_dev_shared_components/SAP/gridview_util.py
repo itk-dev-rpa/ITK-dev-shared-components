@@ -78,7 +78,7 @@ def get_column_titles(grid_view):
 
 def find_row_index_by_value(grid_view, column:str, value:str):
     """Find the index of the first row where the given column's value
-    match the given value.
+    match the given value. Returns -1 if no row is found.
     grid_view: A SAP GuiGridView object.
     column: The name of the column whose value to check.
     value: The value to search for.
