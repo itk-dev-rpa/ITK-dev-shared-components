@@ -83,6 +83,9 @@ def find_row_index_by_value(grid_view, column:str, value:str):
     column: The name of the column whose value to check.
     value: The value to search for.
     """
+    if column not in grid_view.ColumOrder:
+        raise ValueError(f"Column '{column}' not in grid_view")
+
     for row in range(grid_view.RowCount):
         # Only scroll when row isn't visible
         if not (grid_view.FirstVisibleRow <= row <= grid_view.FirstVisibleRow + grid_view.VisibleRowCount-1):
