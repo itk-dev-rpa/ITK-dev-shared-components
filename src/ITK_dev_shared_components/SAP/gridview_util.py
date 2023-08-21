@@ -9,6 +9,7 @@ def scroll_entire_table(grid_view, return_to_top=False) -> None:
     if return_to_top:
         grid_view.FirstVisibleRow = 0
 
+
 def get_all_rows(grid_view, pre_load=True) -> tuple[tuple[str]]:
     """Get all values from a table and return them in a 2D tuple.
     grid_view: A SAP GuiGridView object.
@@ -33,6 +34,7 @@ def get_all_rows(grid_view, pre_load=True) -> tuple[tuple[str]]:
     
     return tuple(output)
 
+
 def get_row(grid_view, row, scroll_to_row=False) -> tuple[str]:
     """Return the data of a single row
     grid_view: A SAP GuiGridView object.
@@ -48,6 +50,7 @@ def get_row(grid_view, row, scroll_to_row=False) -> tuple[str]:
         v = grid_view.GetCellValue(row, c)
         row_data.append(v)
     return tuple(row_data)
+
 
 def iterate_rows(grid_view) -> tuple[str]:
     """This generator yields each row of the table in order.
@@ -65,11 +68,32 @@ def iterate_rows(grid_view) -> tuple[str]:
         yield get_row(grid_view, row)
         row += 1
 
+
 def get_column_titles(grid_view):
     """Get the column titles of the table instead of the column ids.
     grid_view: A SAP GuiGridView object.
     """
     return tuple(grid_view.GetColumnTitles(c)[0] for c in grid_view.ColumnOrder)
+
+
+def find_row_index_by_value(grid_view, column:str, value:str):
+    """Find the index of the first row where the given column's value
+    match the given value.
+    grid_view: A SAP GuiGridView object.
+    column: The name of the column whose value to check.
+    value: The value to search for.
+    """
+    for row in range(grid_view.RowCount):
+        # Only scroll when row isn't visible
+        if not (grid_view.FirstVisibleRow <= row <= grid_view.FirstVisibleRow + grid_view.VisibleRowCount-1):
+            grid_view.FirstVisibleRow = row
+        
+        if grid_view.GetCellValue(row, column) == value:
+            return row
+    
+    return -1
+    
+
 
 
 if __name__=='__main__':
