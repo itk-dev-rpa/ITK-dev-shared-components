@@ -1,2 +1,7 @@
 [pylint.messages_control]
-disable = C0303, C0103, C0305
+disable = 
+  C0303, # Trailing whitespace
+  C0103, # Variable names
+  C0305, # Trailing newlines
+  C0304, # Missing final line
+  C0301 # Line too long
