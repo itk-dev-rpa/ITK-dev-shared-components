@@ -5,4 +5,5 @@ disable =
   C0305, # Trailing newlines
   C0304, # Missing final line
   C0301, # Line too long
-  I1101  # C-modules members
+  I1101, # C-modules members
+  W0621  # Redefine outer name
