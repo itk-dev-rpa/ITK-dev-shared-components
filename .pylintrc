@@ -4,4 +4,5 @@ disable =
   C0103, # Variable names
   C0305, # Trailing newlines
   C0304, # Missing final line
-  C0301 # Line too long
+  C0301, # Line too long
+  I1101  # C-modules members
