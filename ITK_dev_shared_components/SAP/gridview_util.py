@@ -19,7 +19,7 @@ def get_all_rows(grid_view, pre_load=True) -> tuple[tuple[str]]:
               If a row hasn't been loaded before reading, the row data will be empty.
     """
     if pre_load:
-        scroll_entire_table(table, True)
+        scroll_entire_table(grid_view, True)
 
     columns = grid_view.ColumnOrder
     row_count = grid_view.RowCount
