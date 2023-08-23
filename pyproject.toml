@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ITK_dev_shared_components"
-version = "0.0.4"
+version = "0.0.5"
 authors = [
   { name="ITK Development", email="itk-rpa@mkb.aarhus.dk" },
 ]
@@ -17,10 +17,10 @@ classifiers = [
     "Operating System :: Microsoft :: Windows",
 ]
 dependencies = [
-  'pywin32'
+  "pywin32 >= 306",
+  "selenium >= 4.10.0"
 ]
 
 [project.urls]
 "Homepage" = "https://github.com/itk-dev-rpa/itk-dev-shared-components"
 "Bug Tracker" = "https://github.com/itk-dev-rpa/itk-dev-shared-components/issues"
-
