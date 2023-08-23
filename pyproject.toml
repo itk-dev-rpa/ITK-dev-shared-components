@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ITK_dev_shared_components"
-version = "0.0.3"
+version = "0.0.4"
 authors = [
   { name="ITK Development", email="itk-rpa@mkb.aarhus.dk" },
 ]
@@ -16,8 +16,10 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: Microsoft :: Windows",
 ]
+dependencies = [
+  'pywin32'
+]
 
 [project.urls]
 "Homepage" = "https://github.com/itk-dev-rpa/itk-dev-shared-components"
 "Bug Tracker" = "https://github.com/itk-dev-rpa/itk-dev-shared-components/issues"
-
