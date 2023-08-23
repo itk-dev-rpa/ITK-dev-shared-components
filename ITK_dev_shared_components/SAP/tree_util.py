@@ -1,3 +1,5 @@
+"""This module provides static functions to peform common tasks with SAP GuiTree COM objects."""
+
 def get_node_key_by_text(tree, text: str, fuzzy=False) -> str:
     """Get the node key of a node based on its text.
     tree: A SAP GuiTree object.
@@ -49,13 +51,9 @@ def uncheck_all_check_boxes(tree) -> None:
 
 
 if __name__ == '__main__':
-    import win32com.client
-    import time
+    from ITK_dev_shared_components.SAP import multi_session
 
-    SAP = win32com.client.GetObject("SAPGUI")
-    app = SAP.GetScriptingEngine
-    connection = app.Connections(0)
-    session = connection.Sessions(0)
+    session = multi_session.spawn_sessions(1)[0]
 
     tree = session.findById('/app/con[0]/ses[0]/wnd[1]/usr/cntlCONTAINER_PSOBKEY/shellcont/shell/shellcont[1]/shell[1]')
 

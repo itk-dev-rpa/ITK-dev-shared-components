@@ -26,12 +26,9 @@ def print_all_descendants(container, max_depth=-1, indent=0):
 
 
 if __name__=='__main__':
-    import win32com.client
+    from ITK_dev_shared_components.SAP import multi_session
 
-    SAP = win32com.client.GetObject("SAPGUI")
-    app = SAP.GetScriptingEngine
-    connection = app.Connections(0)
-    session = connection.Sessions(0)
+    session = multi_session.spawn_sessions(1)[0]
 
     usr = session.FindById('/app/con[0]/ses[0]/wnd[0]/usr')
 
