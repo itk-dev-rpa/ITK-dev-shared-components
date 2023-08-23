@@ -69,7 +69,7 @@ def iterate_rows(grid_view) -> tuple[str]:
         row += 1
 
 
-def get_column_titles(grid_view):
+def get_column_titles(grid_view) -> tuple[str]:
     """Get the column titles of the table instead of the column ids.
     grid_view: A SAP GuiGridView object.
     """

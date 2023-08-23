@@ -28,13 +28,13 @@ def login(user, password):
     mine_genveje.click()
 
     #Wait for download and launch file
-    wait_for_download()
+    _wait_for_download()
 
     driver.quit()
 
     #TODO: Wait for if SAP has opened
 
-def wait_for_download():
+def _wait_for_download():
     downloads_folder = str(pathlib.Path.home() / "Downloads")
     for _ in range(10):
         for file in os.listdir(downloads_folder):
