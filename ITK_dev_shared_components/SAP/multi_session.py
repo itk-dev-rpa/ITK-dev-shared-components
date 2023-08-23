@@ -1,9 +1,13 @@
-import pythoncom
-import win32com.client
-import win32gui
+"""This module provides static function to handle multiple sessions of SAP.
+Using this module you can spawn multiple sessions and automatically execute
+a function in parallel on the sessions."""
+
 import time
 import threading
 from typing import Callable
+import pythoncom
+import win32com.client
+import win32gui
 
 def run_with_session(session_index:int, func:Callable, args:tuple) -> None:
     """Run a function in a sepcific session based on the sessions index.
@@ -113,13 +117,13 @@ def spawn_sessions(num_sessions=6) -> list:
 class ExThread(threading.Thread):
     """A thread with a handle to get an exception raised inside the thread: ExThread.error"""
     def __init__(self, *args, **kwargs):
-        super(ExThread, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.error = None
 
     def run(self):
         try:
             self._target(*self._args, **self._kwargs)
-        except Exception as e:
+        except Exception as e: # pylint: disable=broad-exception-caught
             self.error = e
 
 

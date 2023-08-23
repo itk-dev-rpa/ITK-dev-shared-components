@@ -1,3 +1,5 @@
+"""This module provides static functions to peform common tasks with SAP GuiGridView COM objects."""
+
 def scroll_entire_table(grid_view, return_to_top=False) -> None:
     """This function scrolls through the entire table to load all cells.
     grid_view: A SAP GuiGridView object.
@@ -62,7 +64,7 @@ def iterate_rows(grid_view) -> tuple[str]:
     row = 0
     while row < grid_view.RowCount:
         # Only scroll when row isn't visible
-        if not (grid_view.FirstVisibleRow <= row <= grid_view.FirstVisibleRow + grid_view.VisibleRowCount-1):
+        if not grid_view.FirstVisibleRow <= row <= grid_view.FirstVisibleRow + grid_view.VisibleRowCount-1:
             grid_view.FirstVisibleRow = row
 
         yield get_row(grid_view, row)
@@ -88,7 +90,7 @@ def find_row_index_by_value(grid_view, column:str, value:str) -> int:
 
     for row in range(grid_view.RowCount):
         # Only scroll when row isn't visible
-        if not (grid_view.FirstVisibleRow <= row <= grid_view.FirstVisibleRow + grid_view.VisibleRowCount-1):
+        if not grid_view.FirstVisibleRow <= row <= grid_view.FirstVisibleRow + grid_view.VisibleRowCount-1:
             grid_view.FirstVisibleRow = row
         
         if grid_view.GetCellValue(row, column) == value:
@@ -101,7 +103,6 @@ def find_row_index_by_value(grid_view, column:str, value:str) -> int:
 
 if __name__=='__main__':
     import win32com.client
-    import time
 
     SAP = win32com.client.GetObject("SAPGUI")
     app = SAP.GetScriptingEngine

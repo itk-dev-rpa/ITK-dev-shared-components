@@ -1,10 +1,19 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
+"""This module provides a single function to open SAP GUI using the KMD Portal website."""
+
 import os
 import pathlib
 import time
+from selenium import webdriver
+from selenium.webdriver.common.by import By
 
-def login(user, password):
+
+def login(user:str, password:str):
+    """Open KMD Portal in Edge, login and start SAP GUI.
+
+    Args:
+        user: KMD Portal username.
+        password: KMD Portal password.
+    """
     driver = webdriver.Chrome()
     driver.implicitly_wait(10)
     driver.get('https://portal.kmd.dk/irj/portal')
@@ -35,6 +44,11 @@ def login(user, password):
     #TODO: Wait for if SAP has opened
 
 def _wait_for_download():
+    """Private function that checks if the SAP .erp file has been downloaded.
+
+    Raises:
+        TimeoutError: If the file hasn't been downloaded within 5 seconds.
+    """
     downloads_folder = str(pathlib.Path.home() / "Downloads")
     for _ in range(10):
         for file in os.listdir(downloads_folder):
