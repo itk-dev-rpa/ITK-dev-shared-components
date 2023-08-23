@@ -7,7 +7,6 @@ from typing import Callable
 
 def run_with_session(session_index:int, func:Callable, args:tuple) -> None:
     """Run a function in a sepcific session based on the sessions index.
-    
     This function is meant to be run inside a seperate thread.
     The function must take a session object as its first argument.
     Note that this function will not spawn the sessions before running,
@@ -27,7 +26,6 @@ def run_with_session(session_index:int, func:Callable, args:tuple) -> None:
 
 def run_batch(func:Callable, args:tuple[tuple], num_sessions=6) -> None:
     """Run a function in parallel sessions.
-    
     The function will be run {num_sessions} times with args[i] as input.
     The function must take a session object as its first argument.
     Note that this function will not spawn the sessions before running,
@@ -49,7 +47,6 @@ def run_batch(func:Callable, args:tuple[tuple], num_sessions=6) -> None:
 
 def run_batches(func:Callable, args:tuple[tuple], num_sessions=6):
     """Run a function in parallel batches.
-    
     This function runs the input function for each set of arguments in args.
     The function will be run in parallel batches of size {num_sessions}.
     The function must take a session object as its first argument.
@@ -63,7 +60,6 @@ def run_batches(func:Callable, args:tuple[tuple], num_sessions=6):
 
 def spawn_sessions(num_sessions=6) -> list:
     """A function to spawn multiple sessions of SAP.
-    
     This function will attempt to spawn the desired number of sessions.
     If the current number of open sessions exceeds the desired number of sessions
     the already open sessions will not be closed to match the desired number.

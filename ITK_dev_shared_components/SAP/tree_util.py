@@ -27,13 +27,19 @@ def get_item_by_text(tree, text: str, fuzzy=False) -> tuple[str,str]:
     
     raise ValueError(f"No item with the text '{text}' was found.")
 
-def check_all_check_boxes(tree):
+def check_all_check_boxes(tree) -> None:
+    """Find and check all checkboxes in the tree.
+    tree: A SAP GuiTree object.
+    """
     for key in tree.GetAllNodeKeys():
         for name in tree.GetColumnNames():
             if tree.GetItemType(key, name) == 3:
                 tree.ChangeCheckBox(key, name, True)
 
-def uncheck_all_check_boxes(tree):
+def uncheck_all_check_boxes(tree) -> None:
+    """Find and uncheck all checkboxes in the tree.
+    tree: A SAP GuiTree object.
+    """
     for key in tree.GetAllNodeKeys():
         for name in tree.GetColumnNames():
             if tree.GetItemType(key, name) == 3:

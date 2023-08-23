@@ -5,7 +5,7 @@ from typing import Literal
 
 def opret_kundekontakter(session, fp:str, aftaler:list[str], 
                          art:Literal[' ', 'Automatisk', 'Fakturagrundlag', 'Fuldmagt ifm. værge', 'Konverteret', 'Myndighedshenvend.', 'Orientering', 'Returpost', 'Ringeaktivitet', 'Skriftlig henvend.', 'Telefonisk henvend.'], 
-                         notat:str, lock=None):
+                         notat:str, lock=None) -> None:
     """Creates a kundekontakt on the given FP and aftaler.
     session: The SAP session to peform the action.
     fp: The forretningspartner number.
@@ -20,7 +20,7 @@ def opret_kundekontakter(session, fp:str, aftaler:list[str],
     session.findById("wnd[0]/usr/ctxtGPART_DYN").text = fp
     session.findById("wnd[0]").sendVKey(0)
 
-    # Klik 'Opret kundekontakt-flere
+    # Click 'Opret kundekontakt-flere
     session.findById("wnd[0]/shellcont/shell").nodeContextMenu("GP0000000001")
     session.findById("wnd[0]/shellcont/shell").selectContextMenuItem("FLERE")
 
@@ -32,13 +32,13 @@ def opret_kundekontakter(session, fp:str, aftaler:list[str],
             aftale_tree.ChangeCheckBox(key, name, True)
     session.findById("wnd[1]/usr/cntlCONTAINER_PSOBKEY/shellcont/shell/shellcont[1]/shell[0]").pressButton("OK")
 
-    #Set art
+    # Set art
     session.findById("wnd[0]/usr/tabsTSTRIP/tabpT_CA/ssubSUBSR_TSTRIP:SAPLBPT1:0510/cmbBCONTD-CTYPE").Value = art
 
-    #Go to editor and paste (lock if multithreaded)
+    # Go to editor and paste (lock if multithreaded)
     session.findById("wnd[0]/usr/subNOTICE:SAPLEENO:1002/btnEENO_TEXTE-EDITOR").press()
     if lock: lock.acquire()
-    setClipboard(notat)
+    _setClipboard(notat)
     session.findById("wnd[0]/tbar[1]/btn[9]").press()
     if lock: lock.release()
 
@@ -46,7 +46,8 @@ def opret_kundekontakter(session, fp:str, aftaler:list[str],
     session.findById("wnd[0]/tbar[0]/btn[3]").press()
     session.findById("wnd[0]/tbar[0]/btn[11]").press()
 
-def setClipboard(text):
+
+def _setClipboard(text:str) -> None:
     win32clipboard.OpenClipboard()
     win32clipboard.EmptyClipboard()
     win32clipboard.SetClipboardText(text)
