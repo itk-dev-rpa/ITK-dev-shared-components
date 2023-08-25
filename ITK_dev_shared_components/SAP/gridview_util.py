@@ -85,7 +85,7 @@ def find_row_index_by_value(grid_view, column:str, value:str) -> int:
     column: The name of the column whose value to check.
     value: The value to search for.
     """
-    if column not in grid_view.ColumOrder:
+    if column not in grid_view.ColumnOrder:
         raise ValueError(f"Column '{column}' not in grid_view")
 
     for row in range(grid_view.RowCount):
