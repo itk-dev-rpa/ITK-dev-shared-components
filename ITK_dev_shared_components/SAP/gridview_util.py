@@ -97,6 +97,36 @@ def find_row_index_by_value(grid_view, column:str, value:str) -> int:
             return row
     
     return -1
+
+def find_all_row_indecies_by_value(grid_view, column:str, value:str) -> list[int]:
+    """Find all indecies of the rows where the given column's value
+    match the given value. Returns an empty list if no row is found.
+
+    Args:
+        grid_view (_type_): A SAP GuiGridView object.
+        column (str): The name of the column whose value to check.
+        value (str): The value to search for.
+
+    Raises:
+        ValueError: If the column name doesn't exist in the grid view.
+
+    Returns:
+        list[int]: A list of row indecies where the value matches.
+    """    
+    if column not in grid_view.ColumnOrder:
+        raise ValueError(f"Column '{column}' not in grid_view")
+
+    rows = []
+
+    for row in range(grid_view.RowCount):
+        # Only scroll when row isn't visible
+        if not grid_view.FirstVisibleRow <= row <= grid_view.FirstVisibleRow + grid_view.VisibleRowCount-1:
+            grid_view.FirstVisibleRow = row
+        
+        if grid_view.GetCellValue(row, column) == value:
+            rows.append(row)
+    
+    return rows
     
 
 
@@ -109,7 +139,11 @@ if __name__=='__main__':
     connection = app.Connections(0)
     session = connection.Sessions(0)
 
-    table = session.findById("wnd[0]/usr/tabsDATA_DISP/tabpDATA_DISP_FC1/ssubDATA_DISP_SCA:RFMCA_COV:0202/cntlRFMCA_COV_0100_CONT5/shellcont/shell")
+    table = session.findById("wnd[0]/usr/cntlGRID1/shellcont/shell")
+    
+    rows = find_all_row_indecies_by_value(table, "ZZ_PARTNER", '15879880')
+    print(rows)
+    table.setCurrentCell(rows[0], "ZZ_PARTNER")
 
     # print(get_row(table, 1, True))
 
