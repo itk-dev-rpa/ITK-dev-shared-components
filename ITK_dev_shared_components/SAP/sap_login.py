@@ -6,6 +6,7 @@ import subprocess
 import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+import pywintypes
 from ITK_dev_shared_components.SAP import multi_session
 
 
@@ -99,7 +100,7 @@ def _wait_for_sap_to_open() -> None:
             sessions = multi_session.get_all_SAP_sessions()
             if len(sessions) > 0:
                 return
-        except:
+        except pywintypes.com_error:
             pass
 
     raise TimeoutError("SAP didn't respond within 10 seconds.")
