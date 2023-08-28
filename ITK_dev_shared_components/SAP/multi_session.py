@@ -114,6 +114,17 @@ def spawn_sessions(num_sessions=6) -> list:
     
     return sessions
 
+def get_all_SAP_sessions() -> tuple:
+    """Returns a tuple of all open SAP sessions (on connection index 0).
+
+    Returns:
+        tuple: A tuple of SAP GuiSession objects.
+    """
+    SAP = win32com.client.GetObject("SAPGUI")
+    app = SAP.GetScriptingEngine
+    connection = app.Connections(0)
+    return tuple(connection.Sessions)
+
 class ExThread(threading.Thread):
     """A thread with a handle to get an exception raised inside the thread: ExThread.error"""
     def __init__(self, *args, **kwargs):
