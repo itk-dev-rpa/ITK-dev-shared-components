@@ -6,6 +6,7 @@ import subprocess
 import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from ITK_dev_shared_components.SAP import multi_session
 
 
 def login_using_portal(username:str, password:str):
@@ -42,7 +43,7 @@ def login_using_portal(username:str, password:str):
 
     driver.quit()
 
-    #TODO: Wait for if SAP has opened
+    _wait_for_sap_to_open()
 
 
 def _wait_for_download():
@@ -83,11 +84,35 @@ def login_using_cli(username: str, password: str, client='751', system='P02') ->
 
     subprocess.run(command_args, check=False)
 
+    _wait_for_sap_to_open()
+
+
+def _wait_for_sap_to_open() -> None:
+    """Check every second for 10 seconds if the SAP Gui scripting engine is available.
+
+    Raises:
+        TimeoutError: If SAP doesn't start within 10 seconds.
+    """    
+    for _ in range(10):
+        time.sleep(1)
+        try:
+            sessions = multi_session.get_all_SAP_sessions()
+            if len(sessions) > 0:
+                return
+        except:
+            pass
+
+    raise TimeoutError("SAP didn't respond within 10 seconds.")
+
+def kill_sap():
+    """Kills all SAP processes currently running."""
+    os.system("taskkill /F /IM saplogon.exe")
 
 if __name__=="__main__":
-    user = "az12345"
-    password = "Hunter2"
-    login_using_portal(user, password)
-    login_using_cli(user, password)
+    # user = "az12345"
+    # password = "Hunter2"
+    # login_using_portal(user, password)
+    # login_using_cli(user, password)
+    kill_sap()
 
 
