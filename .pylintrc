@@ -8,3 +8,6 @@ disable =
   I1101, E1101, # C-modules members
   W0621, # Redefine outer name
   R0913 # Too many arguments
+
+[MASTER]
+ignore = tests # Ignore the tests folder
