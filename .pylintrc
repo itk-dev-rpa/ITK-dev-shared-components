@@ -10,4 +10,4 @@ disable =
   R0913 # Too many arguments
 
 [MASTER]
-ignore-paths = tests/* # Ignore the tests folder
+ignore-paths = ^tests/ # Ignore the tests folder
