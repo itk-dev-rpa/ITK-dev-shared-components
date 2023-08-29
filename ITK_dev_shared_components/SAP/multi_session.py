@@ -62,14 +62,23 @@ def run_batches(func:Callable, args:tuple[tuple], num_sessions=6):
         batch = args[b:b+num_sessions]
         run_batch(func, args, len(batch))
 
-def spawn_sessions(num_sessions=6) -> list:
+def spawn_sessions(num_sessions=6) -> tuple:
     """A function to spawn multiple sessions of SAP.
     This function will attempt to spawn the desired number of sessions.
-    If the current number of open sessions exceeds the desired number of sessions
+    If the current number of already open sessions exceeds the desired number of sessions
     the already open sessions will not be closed to match the desired number.
     The number of sessions must be between 1 and 6.
-    Returns a list of all open sessions.
-    """
+
+    Args:
+        num_sessions: The number of sessions desired. Defaults to 6.
+
+    Raises:
+        ValueError: If the number of sessions is not between 1 and 6.
+
+    Returns:
+        tuple: A tuple of all currently open sessions.
+    """    
+
     SAP = win32com.client.GetObject("SAPGUI")
     app = SAP.GetScriptingEngine
     connection = app.Connections(0)
@@ -87,7 +96,7 @@ def spawn_sessions(num_sessions=6) -> list:
     while connection.Sessions.count < num_sessions:
         time.sleep(0.1)
 
-    sessions = list(connection.Sessions)
+    sessions = tuple(connection.Sessions)
     num_sessions = len(sessions)
 
     if num_sessions == 1:
