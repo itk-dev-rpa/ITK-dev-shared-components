@@ -5,6 +5,8 @@ from ITK_dev_shared_components.SAP import gridview_util, sap_login, multi_sessio
 class test_gridview_util(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        sap_login.kill_sap()
+
         user, password = os.environ['SAP Login'].split(';')
         sap_login.login_using_cli(user, password)
         session = multi_session.get_all_SAP_sessions()[0]

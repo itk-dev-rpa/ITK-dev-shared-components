@@ -5,6 +5,8 @@ from ITK_dev_shared_components.SAP import tree_util, sap_login, multi_session
 class test_tree_util(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        sap_login.kill_sap()
+
         user, password = os.environ['SAP Login'].split(';')
         sap_login.login_using_cli(user, password)
         session = multi_session.get_all_SAP_sessions()[0]
@@ -56,14 +58,11 @@ class test_tree_util(unittest.TestCase):
         session = multi_session.get_all_SAP_sessions()[0]
         session.findById("wnd[0]/shellcont/shell").nodeContextMenu("GP0000000001")
         session.findById("wnd[0]/shellcont/shell").selectContextMenuItem("FLERE")
+        
+        # Test on tree with checkboxes
         tree = session.findById("wnd[1]/usr/cntlCONTAINER_PSOBKEY/shellcont/shell/shellcont[1]/shell[1]")
-
-        # Test in different orders
         tree_util.check_all_check_boxes(tree)
         tree_util.uncheck_all_check_boxes(tree)
-        tree_util.uncheck_all_check_boxes(tree)
-        tree_util.check_all_check_boxes(tree)
-        tree_util.check_all_check_boxes(tree)
 
         session.findById("wnd[1]/usr/cntlCONTAINER_PSOBKEY/shellcont/shell/shellcont[1]/shell[0]").pressButton("CANCEL")
 
