@@ -2,7 +2,7 @@ import unittest
 import os
 from ITK_dev_shared_components.SAP import sap_login
 
-class test_gridview_util(unittest.TestCase):
+class test_sap_login(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         sap_login.kill_sap()
