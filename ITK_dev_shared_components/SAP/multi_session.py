@@ -1,9 +1,10 @@
-"""This module provides static function to handle multiple sessions of SAP.
+"""This module provides static functions to handle multiple sessions of SAP.
 Using this module you can spawn multiple sessions and automatically execute
 a function in parallel on the sessions."""
 
 import time
 import threading
+import math
 from typing import Callable
 import pythoncom
 import win32com.client
@@ -99,17 +100,9 @@ def spawn_sessions(num_sessions=6) -> tuple:
     sessions = tuple(connection.Sessions)
     num_sessions = len(sessions)
 
-    if num_sessions == 1:
-        c = 1
-    elif num_sessions <= 4:
-        c = 2
-    elif num_sessions <= 6:
-        c = 3
-
-    if num_sessions < 3:
-        r = 1
-    else:
-        r = 2
+    # Calculate number of columns and rows
+    c = math.ceil(math.sqrt(num_sessions))
+    r = math.ceil(num_sessions / c)
 
     w, h = 1920//c, 1040//r
 
