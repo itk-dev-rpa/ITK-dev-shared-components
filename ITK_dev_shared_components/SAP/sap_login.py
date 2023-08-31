@@ -124,7 +124,7 @@ def _check_for_splash_screen() -> bool:
     session = multi_session.get_all_SAP_sessions()[0]
     image = session.findById("wnd[0]/usr/cntlIMAGE_CONTAINER/shellcont/shell/shellcont[1]/shell", False)
     
-    return (image is not None)
+    return image is not None
 
 def change_password(username:str, old_password:str, new_password:str,
                     client:str='751',
@@ -147,7 +147,7 @@ def change_password(username:str, old_password:str, new_password:str,
     
     """    
     
-    subprocess.Popen(r"C:\Program Files (x86)\SAP\FrontEnd\SAPgui\saplogon.exe")
+    subprocess.Popen(r"C:\Program Files (x86)\SAP\FrontEnd\SAPgui\saplogon.exe") #pylint: disable=consider-using-with
 
     # Wait for SAP Logon to open
     for _ in range(timeout):
@@ -175,8 +175,8 @@ def change_password(username:str, old_password:str, new_password:str,
         session.findById("wnd[1]/usr/pwdRSYST-NCODE").text = new_password
         session.findById("wnd[1]/usr/pwdRSYST-NCOD2").text = new_password
         session.findById("wnd[1]/tbar[0]/btn[0]").press()
-    except pywintypes.com_error:
-        raise ValueError("Login with current credentials failed.")
+    except pywintypes.com_error as exc:
+        raise ValueError("Login with current credentials failed.") from exc
     
     if not _check_for_splash_screen():
         raise ValueError("New password couldn't be set. Please check password requirements.")
