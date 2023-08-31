@@ -18,6 +18,8 @@ class test_sap_login(unittest.TestCase):
         with self.assertRaises(TimeoutError):
             sap_login.login_using_cli(user, password, timeout=0)
         
+        sap_login.kill_sap()
+
         with self.assertRaises(ValueError):
             sap_login.login_using_cli("Foo", "Bar")
     
