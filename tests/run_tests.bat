@@ -1,15 +1,28 @@
+@echo off
+
 :: Change dir to parent dir
+echo Changing directory...
 cd /d %~dp0..
 
-:: Delete old venv
-rmdir /s /q venv
 
-:: Setup venv
-python -m venv venv
-call venv/Scripts/activate
-pip install .
+choice /C YN /M "Do you want to reset venv?"
+if errorlevel 2 (
+    echo Activating excisting venv...
+    call venv\Scripts\activate
 
-:: Run all unittests
+) else (
+    echo Removing old venv...
+    rmdir /s /q venv
+
+    echo Setting up new venv...
+    python -m venv venv
+    call venv\Scripts\activate
+
+    echo Installing package...
+    pip install .
+)
+
+echo Running unit tests...
 python -m unittest discover
 
 pause
