@@ -199,10 +199,12 @@ if __name__=="__main__":
     # password = "Hunter2"
     # login_using_portal(user, password)
     # login_using_cli(user, password)
+    # change_password(username, password, "Hunter3")
     kill_sap()
 
     username, password = os.environ['SAP Login'].split(';')
+    login_using_cli(username, password)
 
-    change_password(username, password, "Hunter3")
+    
 
 
