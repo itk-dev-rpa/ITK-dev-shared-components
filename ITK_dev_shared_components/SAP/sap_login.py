@@ -123,15 +123,13 @@ def _check_for_splash_screen() -> bool:
     """
     session = multi_session.get_all_SAP_sessions()[0]
     image = session.findById("wnd[0]/usr/cntlIMAGE_CONTAINER/shellcont/shell/shellcont[1]/shell", False)
-    if image:
-        return True
-    else:
-        return False
+    
+    return (image is not None)
 
 def change_password(username:str, old_password:str, new_password:str,
                     client:str='751',
                     system:str='...KMD OPUS Produktion [P02]',
-                    timeout:int=10):
+                    timeout:int=10) -> None:
     """Change the password of a user in SAP Gui. Closes SAP when done.
 
     Args:
@@ -144,12 +142,12 @@ def change_password(username:str, old_password:str, new_password:str,
 
     Raises:
         TimeoutError: If the connection couldn't be established within the timeout limit.
+        ValueError: If the current credentials are not valid.
+        ValueError: If the new password is not valid.
     
-    Returns:
-        True if the password has successfully been changed.
     """    
     
-    subprocess.Popen("C:\Program Files (x86)\SAP\FrontEnd\SAPgui\saplogon.exe")
+    subprocess.Popen(r"C:\Program Files (x86)\SAP\FrontEnd\SAPgui\saplogon.exe")
 
     # Wait for SAP Logon to open
     for _ in range(timeout):
@@ -166,22 +164,24 @@ def change_password(username:str, old_password:str, new_password:str,
 
     session = multi_session.get_all_SAP_sessions()[0]
 
+    
     # Enter credentials
     session.findById("wnd[0]/usr/txtRSYST-MANDT").text = client
     session.findById("wnd[0]/usr/txtRSYST-BNAME").text = username
     session.findById("wnd[0]/usr/pwdRSYST-BCODE").text = old_password
     session.findById("wnd[0]/tbar[1]/btn[5]").press()
 
-    session.findById("wnd[1]/usr/pwdRSYST-NCODE").text = new_password
-    session.findById("wnd[1]/usr/pwdRSYST-NCOD2").text = new_password
-
-    session.findById("wnd[1]/tbar[0]/btn[0]").press()
+    try:
+        session.findById("wnd[1]/usr/pwdRSYST-NCODE").text = new_password
+        session.findById("wnd[1]/usr/pwdRSYST-NCOD2").text = new_password
+        session.findById("wnd[1]/tbar[0]/btn[0]").press()
+    except pywintypes.com_error:
+        raise ValueError("Login with current credentials failed.")
     
-    success = _check_for_splash_screen()
+    if not _check_for_splash_screen():
+        raise ValueError("New password couldn't be set. Please check password requirements.")
     
     kill_sap()
-    
-    return success
 
             
 def kill_sap():
