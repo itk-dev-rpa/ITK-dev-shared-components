@@ -142,7 +142,7 @@ def change_password(username:str, old_password:str, new_password:str,
 
     Raises:
         TimeoutError: If the connection couldn't be established within the timeout limit.
-        ValueError: If the current credentials are not valid.
+        ValueError: If the current credentials are not valid or if the password can't be changed.
         ValueError: If the new password is not valid.
     
     """    
@@ -171,13 +171,16 @@ def change_password(username:str, old_password:str, new_password:str,
     session.findById("wnd[0]/usr/pwdRSYST-BCODE").text = old_password
     session.findById("wnd[0]/tbar[1]/btn[5]").press()
 
-    try:
-        session.findById("wnd[1]/usr/pwdRSYST-NCODE").text = new_password
-        session.findById("wnd[1]/usr/pwdRSYST-NCOD2").text = new_password
-        session.findById("wnd[1]/tbar[0]/btn[0]").press()
-    except pywintypes.com_error as exc:
+    # Check status bar
+    status_bar = session.findById("wnd[0]/sbar")
+    if status_bar.MessageType != 'S':
         kill_sap()
-        raise ValueError("Password change was blocked. Check credentials.") from exc
+        raise ValueError(f"Password change was blocked: {status_bar.Text}")
+
+    # Enter new password
+    session.findById("wnd[1]/usr/pwdRSYST-NCODE").text = new_password
+    session.findById("wnd[1]/usr/pwdRSYST-NCOD2").text = new_password
+    session.findById("wnd[1]/tbar[0]/btn[0]").press()
   
     if not _check_for_splash_screen():
         kill_sap()
