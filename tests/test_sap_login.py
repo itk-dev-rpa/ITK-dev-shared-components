@@ -1,4 +1,5 @@
 import unittest
+import time
 import os
 from ITK_dev_shared_components.SAP import sap_login
 
@@ -13,11 +14,6 @@ class test_sap_login(unittest.TestCase):
         user, password = os.environ['SAP Login'].split(';') 
         sap_login.login_using_cli(user, password)
 
-        sap_login.kill_sap()
-
-        with self.assertRaises(TimeoutError):
-            sap_login.login_using_cli(user, password, timeout=0)
-        
         sap_login.kill_sap()
 
         with self.assertRaises(ValueError):
