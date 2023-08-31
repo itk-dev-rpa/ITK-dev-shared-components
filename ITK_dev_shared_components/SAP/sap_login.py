@@ -176,9 +176,11 @@ def change_password(username:str, old_password:str, new_password:str,
         session.findById("wnd[1]/usr/pwdRSYST-NCOD2").text = new_password
         session.findById("wnd[1]/tbar[0]/btn[0]").press()
     except pywintypes.com_error as exc:
-        raise ValueError("Login with current credentials failed.") from exc
-    
+        kill_sap()
+        raise ValueError("Password change was blocked. Check credentials.") from exc
+  
     if not _check_for_splash_screen():
+        kill_sap()
         raise ValueError("New password couldn't be set. Please check password requirements.")
     
     kill_sap()
@@ -198,6 +200,6 @@ if __name__=="__main__":
 
     username, password = os.environ['SAP Login'].split(';')
 
-    change_password(username, password, "Hunter2")
+    change_password(username, password, "Hunter3")
 
 
