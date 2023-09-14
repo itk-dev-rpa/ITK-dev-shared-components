@@ -10,7 +10,9 @@ def scroll_entire_table(grid_view, return_to_top=False) -> None:
     Returns:
         _type_: _description_
     """    
-
+    if grid_view.RowCount == 0 or grid_view.VisibleRowCount == 0:
+        return
+    
     for i in range(0, grid_view.RowCount, grid_view.VisibleRowCount):
         grid_view.FirstVisibleRow = i
     
