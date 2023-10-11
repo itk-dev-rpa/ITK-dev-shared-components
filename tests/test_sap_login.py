@@ -1,5 +1,6 @@
 """Tests relating to the module SAP.sap_login."""
 
+import os
 import unittest
 from tkinter import simpledialog
 
@@ -13,9 +14,8 @@ class TestSapLogin(unittest.TestCase):
         """Show popups that asks for username, password and new password
         used in the following tests.
         """
-        cls.username = simpledialog.askstring("Enter username", "Enter the SAP username to be used in tests.")
-        cls.password = simpledialog.askstring("Enter password", "Enter the SAP password to be used in tests.")
-        cls.new_password = simpledialog.askstring("Enter password", "Enter the new password to be used in tests.\nRemember to write down the new password!\nLeave empty to skip test_change_password.")
+        cls.username, cls.password = os.environ['SAP Login'].split(';')
+        cls.new_password = simpledialog.askstring("Enter new password", "Enter the new password to be used in testing the change SAP password function.\nRemember to write down the new password!\nLeave empty to skip test_change_password.")
 
     def setUp(self) -> None:
         sap_login.kill_sap()
@@ -40,7 +40,7 @@ class TestSapLogin(unittest.TestCase):
         If no new_password is entered in the setup
         """
         if not self.new_password:
-            raise ValueError("Test not run because new_password was missing.")
+            raise unittest.SkipTest("Test not run because new_password was missing.")
 
         sap_login.change_password(self.username, self.password, self.new_password)
         self.password = self.new_password
