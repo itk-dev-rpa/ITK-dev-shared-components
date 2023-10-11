@@ -6,13 +6,14 @@ import time
 import threading
 import math
 from typing import Callable
+
 import pythoncom
 import win32com.client
 import win32gui
 
 def run_with_session(session_index:int, func:Callable, args:tuple) -> None:
-    """Run a function in a sepcific session based on the sessions index.
-    This function is meant to be run inside a seperate thread.
+    """Run a function in a specific session based on the sessions index.
+    This function is meant to be run inside a separate thread.
     The function must take a session object as its first argument.
     Note that this function will not spawn the sessions before running,
     use spawn_sessions to do that.
@@ -20,14 +21,15 @@ def run_with_session(session_index:int, func:Callable, args:tuple) -> None:
 
     pythoncom.CoInitialize()
 
-    SAP = win32com.client.GetObject("SAPGUI")
-    app = SAP.GetScriptingEngine
+    sap = win32com.client.GetObject("SAPGUI")
+    app = sap.GetScriptingEngine
     connection = app.Connections(0)
     session = connection.Sessions(session_index)
 
     func(session, *args)
 
     pythoncom.CoUninitialize()
+
 
 def run_batch(func:Callable, args:tuple[tuple], num_sessions=6) -> None:
     """Run a function in parallel sessions.
@@ -41,7 +43,7 @@ def run_batch(func:Callable, args:tuple[tuple], num_sessions=6) -> None:
     for i in range(num_sessions):
         t = ExThread(target=run_with_session, args=(i, func, args[i]))
         threads.append(t)
-    
+
     for t in threads:
         t.start()
     for t in threads:
@@ -49,6 +51,7 @@ def run_batch(func:Callable, args:tuple[tuple], num_sessions=6) -> None:
     for t in threads:
         if t.error:
             raise t.error
+
 
 def run_batches(func:Callable, args:tuple[tuple], num_sessions=6):
     """Run a function in parallel batches.
@@ -62,6 +65,7 @@ def run_batches(func:Callable, args:tuple[tuple], num_sessions=6):
     for b in range(0, len(args), num_sessions):
         batch = args[b:b+num_sessions]
         run_batch(func, args, len(batch))
+
 
 def spawn_sessions(num_sessions=6) -> tuple:
     """A function to spawn multiple sessions of SAP.
@@ -78,10 +82,10 @@ def spawn_sessions(num_sessions=6) -> tuple:
 
     Returns:
         tuple: A tuple of all currently open sessions.
-    """    
+    """
 
-    SAP = win32com.client.GetObject("SAPGUI")
-    app = SAP.GetScriptingEngine
+    sap = win32com.client.GetObject("SAPGUI")
+    app = sap.GetScriptingEngine
     connection = app.Connections(0)
     session = connection.Sessions(0)
 
@@ -92,7 +96,7 @@ def spawn_sessions(num_sessions=6) -> tuple:
 
     for _ in range(num_sessions - connection.Sessions.count):
         session.CreateSession()
-    
+
     # Wait for the sessions to spawn
     while connection.Sessions.count < num_sessions:
         time.sleep(0.1)
@@ -113,19 +117,21 @@ def spawn_sessions(num_sessions=6) -> tuple:
         x = i % c * w
         y = i // c * h
         win32gui.MoveWindow(hwnd, x, y, w, h, True)
-    
+
     return sessions
 
-def get_all_SAP_sessions() -> tuple:
+
+def get_all_SAP_sessions() -> tuple: # pylint: disable=invalid-name
     """Returns a tuple of all open SAP sessions (on connection index 0).
 
     Returns:
         tuple: A tuple of SAP GuiSession objects.
     """
-    SAP = win32com.client.GetObject("SAPGUI")
-    app = SAP.GetScriptingEngine
+    sap = win32com.client.GetObject("SAPGUI")
+    app = sap.GetScriptingEngine
     connection = app.Connections(0)
     return tuple(connection.Sessions)
+
 
 class ExThread(threading.Thread):
     """A thread with a handle to get an exception raised inside the thread: ExThread.error"""
@@ -138,5 +144,3 @@ class ExThread(threading.Thread):
             self._target(*self._args, **self._kwargs)
         except Exception as e: # pylint: disable=broad-exception-caught
             self.error = e
-
-

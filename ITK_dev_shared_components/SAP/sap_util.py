@@ -1,7 +1,7 @@
 """This module provides miscellaneous static functions to peform common tasks in SAP."""
 
 def print_all_descendants(container, max_depth=-1, indent=0):
-    """Prints the object and all of its decendants recursivly
+    """Prints the object and all of its descendants recursively
     to the console.
 
     Args:

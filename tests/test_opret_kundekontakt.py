@@ -1,9 +1,11 @@
+"""Test relating to the module SAP.opret_kundekontakt."""
+
 import unittest
 import os
-import threading
 from ITK_dev_shared_components.SAP import sap_login, multi_session, opret_kundekontakt
 
-class test_opret_kundekontakt(unittest.TestCase):
+class TestOpretKundekontakt(unittest.TestCase):
+    """Test relating to the module SAP.opret_kundekontakt."""
     def setUp(self):
         sap_login.kill_sap()
         user, password = os.environ['SAP Login'].split(';')
@@ -14,9 +16,10 @@ class test_opret_kundekontakt(unittest.TestCase):
 
 
     def test_opret_kundekontakt(self):
+        """Test the function opret_kundekontakter."""
         fp = "25564617"
         aftaler = ("2291987", "1990437", "1473781")
-        
+
         session = multi_session.get_all_SAP_sessions()[0]
 
         # Test with 3 aftaler
@@ -28,7 +31,6 @@ class test_opret_kundekontakt(unittest.TestCase):
         # Test with 0 aftaler
         opret_kundekontakt.opret_kundekontakter(session, fp, None, 'Returpost', "Test 3")
 
-        
 
 if __name__ == '__main__':
     unittest.main()

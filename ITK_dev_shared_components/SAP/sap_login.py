@@ -61,7 +61,7 @@ def _wait_for_download():
                 path = os.path.join(downloads_folder, file)
                 os.startfile(path)
                 return
-            
+
         time.sleep(0.5)
     raise TimeoutError(f".SAP file not found in {downloads_folder}")
 
@@ -79,8 +79,8 @@ def login_using_cli(username: str, password: str, client:str='751', system:str='
     Raises:
         TimeoutError: If SAP doesn't start within timeout limit.
         ValueError: If SAP is unable to log in using the given credentials.
-    """    
-    
+    """
+
     command_args = [
         r"C:\Program Files (x86)\SAP\FrontEnd\SAPgui\sapshcut.exe",
         f"-system={system}",
@@ -93,7 +93,7 @@ def login_using_cli(username: str, password: str, client:str='751', system:str='
     _wait_for_sap_session(timeout)
     if not _check_for_splash_screen():
         raise ValueError("Unable to log in. Please check username and password.")
-    
+
 
 def _wait_for_sap_session(timeout:int) -> None:
     """Check every second if the SAP Gui scripting engine is available until timeout is reached.
@@ -103,7 +103,7 @@ def _wait_for_sap_session(timeout:int) -> None:
 
     Raises:
         TimeoutError: If SAP doesn't start within timeout limit.
-    """    
+    """
     for _ in range(timeout):
         time.sleep(1)
         try:
@@ -123,7 +123,7 @@ def _check_for_splash_screen() -> bool:
     """
     session = multi_session.get_all_SAP_sessions()[0]
     image = session.findById("wnd[0]/usr/cntlIMAGE_CONTAINER/shellcont/shell/shellcont[1]/shell", False)
-    
+
     return image is not None
 
 def change_password(username:str, old_password:str, new_password:str,
@@ -145,16 +145,16 @@ def change_password(username:str, old_password:str, new_password:str,
         ValueError: If the current credentials are not valid or if the password can't be changed.
         ValueError: If the new password is not valid.
     
-    """    
-    
+    """
+
     subprocess.Popen(r"C:\Program Files (x86)\SAP\FrontEnd\SAPgui\saplogon.exe") #pylint: disable=consider-using-with
 
     # Wait for SAP Logon to open
     for _ in range(timeout):
         time.sleep(1)
         try:
-            SAP = win32com.client.GetObject("SAPGUI")
-            app = SAP.GetScriptingEngine
+            sap = win32com.client.GetObject("SAPGUI")
+            app = sap.GetScriptingEngine
             app.OpenConnection(system)
             break
         except pywintypes.com_error:
@@ -164,7 +164,6 @@ def change_password(username:str, old_password:str, new_password:str,
 
     session = multi_session.get_all_SAP_sessions()[0]
 
-    
     # Enter credentials
     session.findById("wnd[0]/usr/txtRSYST-MANDT").text = client
     session.findById("wnd[0]/usr/txtRSYST-BNAME").text = username
@@ -174,37 +173,22 @@ def change_password(username:str, old_password:str, new_password:str,
     # Check status bar
     status_bar = session.findById("wnd[0]/sbar")
     if status_bar.MessageType != 'S':
+        text = status_bar.Text
         kill_sap()
-        raise ValueError(f"Password change was blocked: {status_bar.Text}")
+        raise ValueError(f"Password change was blocked: {text}")
 
     # Enter new password
     session.findById("wnd[1]/usr/pwdRSYST-NCODE").text = new_password
     session.findById("wnd[1]/usr/pwdRSYST-NCOD2").text = new_password
     session.findById("wnd[1]/tbar[0]/btn[0]").press()
-  
+
     if not _check_for_splash_screen():
         kill_sap()
         raise ValueError("New password couldn't be set. Please check password requirements.")
-    
+
     kill_sap()
 
-            
+
 def kill_sap():
     """Kills all SAP processes currently running."""
     os.system("taskkill /F /IM saplogon.exe > NUL 2>&1")
-
-
-if __name__=="__main__":
-    # user = "az12345"
-    # password = "Hunter2"
-    # login_using_portal(user, password)
-    # login_using_cli(user, password)
-    # change_password(username, password, "Hunter3")
-    kill_sap()
-
-    username, password = os.environ['SAP Login'].split(';')
-    login_using_cli(username, password)
-
-    
-
-
