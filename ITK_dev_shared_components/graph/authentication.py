@@ -3,7 +3,7 @@ connection."""
 
 import msal
 
-def authorize_by_username_password(username: str, password: str, *, client_id: str, tenant_id: str) -> msal.PublicClientApplication:
+def authorize_by_username_password(username: str, password: str, *, client_id: str, tenant_id: str) -> GraphAccess:
     """Get a bearer token for the given user.
     This is used in most other Graph API calls.
 
@@ -14,10 +14,7 @@ def authorize_by_username_password(username: str, password: str, *, client_id: s
         tenant_id: The Graph API tenant id in 8-4-4-12 format.
     
     Returns:
-        str: The bearer token.
-    
-    Raises:
-        RuntimeError: If the token couldn't be acquired.
+        GraphAccess: The GraphAccess object used to authorize Graph access.
     """
     authority = f"https://login.microsoftonline.com/{tenant_id}"
     scopes = ["https://graph.microsoft.com/.default"]

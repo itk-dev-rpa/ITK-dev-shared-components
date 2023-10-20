@@ -236,6 +236,15 @@ def delete_email(email: Email, graph_access: GraphAccess, *, permanent: bool=Fal
 
 
 def _find_folder(response: dict, target_folder: str) -> str:
+    """Find the target folder in 
+
+    Args:
+        response: The json dict of the HTTP response.
+        target_folder: The folder to find.
+
+    Returns:
+        str: The id of the target folder.
+    """
     for g_folder in response['value']:
         if g_folder['displayName'] == target_folder:
             return g_folder['id']
