@@ -17,8 +17,8 @@ class TestOpretKundekontakt(unittest.TestCase):
 
     def test_opret_kundekontakt(self):
         """Test the function opret_kundekontakter."""
-        fp = "25564617"
-        aftaler = ("2291987", "1990437", "1473781")
+        fp = "25564617"  # TODO find aftaler i SAP og hard code her
+        aftaler = ("2544577", "1990437", "1473781")
 
         session = multi_session.get_all_SAP_sessions()[0]
 
