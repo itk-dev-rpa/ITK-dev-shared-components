@@ -2,7 +2,7 @@
 connection."""
 
 import msal
-
+# pylint: disable=R0903   # GraphAccess only has one public method
 class GraphAccess:
     """An object that handles access to the Graph api.
     This object should not be created directly but instead
