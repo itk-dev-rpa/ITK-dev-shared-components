@@ -3,6 +3,38 @@ connection."""
 
 import msal
 
+class GraphAccess:
+    """An object that handles access to the Graph api.
+    This object should not be created directly but instead
+    using one of the authorize methods in the graph.authentication module.
+    """
+    def __init__(self, app: msal.PublicClientApplication, scopes: list[str]) -> str:
+        self.app = app
+        self.scopes = scopes
+
+    def get_access_token(self):
+        """Get the access token to Graph.
+        This function automatically reuses an existing token
+        or refreshes an expired one.
+
+        Raises:
+            RuntimeError: If the access token couldn't be acquired.
+
+        Returns:
+            str: The Graph access token.
+        """
+        account = self.app.get_accounts()[0]
+        token = self.app.acquire_token_silent(self.scopes, account)
+
+        if "access_token" in token:
+            return token['access_token']
+
+        if 'error_description' in token:
+            raise RuntimeError(f"Token could not be acquired. {token['error_description']}")
+
+        raise RuntimeError("Something went wrong. No error description was returned from Graph.")
+
+
 def authorize_by_username_password(username: str, password: str, *, client_id: str, tenant_id: str) -> GraphAccess:
     """Get a bearer token for the given user.
     This is used in most other Graph API calls.
@@ -30,33 +62,3 @@ def authorize_by_username_password(username: str, password: str, *, client_id: s
     return graph_access
 
 
-class GraphAccess:
-    """An object that handles access to the Graph api.
-    This object should not be created directly but instead
-    using one of the authorize methods in the graph.authentication module.
-    """
-    def __init__(self, app: msal.PublicClientApplication, scopes: list[str]) -> str:
-        self.app = app
-        self.scopes = scopes
-
-    def get_access_token(self):
-        """Get the access token to Graph.
-        This function automatically reuses an existing token 
-        or refreshes an expired one.
-
-        Raises:
-            RuntimeError: If the access token couldn't be acquired.
-
-        Returns:
-            str: The Graph access token.
-        """
-        account = self.app.get_accounts()[0]
-        token = self.app.acquire_token_silent(self.scopes, account)
-
-        if "access_token" in token:
-            return token['access_token']
-
-        if 'error_description' in token:
-            raise RuntimeError(f"Token could not be acquired. {token['error_description']}")
-
-        raise RuntimeError("Something went wrong. No error description was returned from Graph.")
