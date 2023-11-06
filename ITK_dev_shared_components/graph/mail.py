@@ -10,7 +10,7 @@ from ITK_dev_shared_components.graph.authentication import GraphAccess
 
 
 @dataclass
-class Email:
+class Email:  # pylint: disable=too-many-instance-attributes
     """A class representing an email."""
     user: str
     id: str = field(repr=False)
