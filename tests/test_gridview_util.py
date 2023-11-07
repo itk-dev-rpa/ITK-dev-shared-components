@@ -1,8 +1,9 @@
 """Tests relating to the module SAP.gridview_util."""
 
 import unittest
-import os
+
 from ITK_dev_shared_components.SAP import gridview_util, sap_login, multi_session
+from . import test_tree_util
 
 class TestGridviewUtil(unittest.TestCase):
     """Tests relating to the module SAP.gridview_util."""
@@ -11,12 +12,7 @@ class TestGridviewUtil(unittest.TestCase):
         """Launch SAP and navigate to fmcacov on FP 25564617 (Test person)."""
         sap_login.kill_sap()
 
-        user, password = os.environ['SAP Login'].split(';')
-        sap_login.login_using_cli(user, password)
-        session = multi_session.get_all_SAP_sessions()[0]
-        session.startTransaction("fmcacov")
-        session.findById("wnd[0]/usr/ctxtGPART_DYN").text = "25564617"
-        session.findById("wnd[0]").sendVKey(0)
+        test_tree_util.navigate_to_test_page()
 
     @classmethod
     def tearDownClass(cls):

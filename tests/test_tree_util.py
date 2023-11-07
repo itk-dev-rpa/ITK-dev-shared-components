@@ -9,16 +9,8 @@ class TestTreeUtil(unittest.TestCase):
     """Tests relating to the module SAP.tree_util."""
     @classmethod
     def setUpClass(cls):
-        """Launch SAP and navigate to fmcacov on FP 25564617."""
         sap_login.kill_sap()
-
-        user, password = os.environ['SAP Login'].split(';')
-        sap_login.login_using_cli(user, password)
-        session = multi_session.get_all_SAP_sessions()[0]
-        session.startTransaction("fmcacov")
-        session.findById("wnd[0]/usr/ctxtGPART_DYN").text = "25564617"
-        session.findById("wnd[0]").sendVKey(0)
-
+        navigate_to_test_page()
 
     @classmethod
     def tearDownClass(cls):
@@ -86,6 +78,15 @@ class TestTreeUtil(unittest.TestCase):
         tree_util.check_all_check_boxes(tree)
         tree_util.uncheck_all_check_boxes(tree)
 
+
+def navigate_to_test_page():
+    """Launch SAP and navigate to fmcacov on FP 25564617."""
+    user, password = os.environ['SAP Login'].split(';')
+    sap_login.login_using_cli(user, password)
+    session = multi_session.get_all_SAP_sessions()[0]
+    session.startTransaction("fmcacov")
+    session.findById("wnd[0]/usr/ctxtGPART_DYN").text = "25564617"
+    session.findById("wnd[0]").sendVKey(0)
 
 if __name__ == '__main__':
     unittest.main()
