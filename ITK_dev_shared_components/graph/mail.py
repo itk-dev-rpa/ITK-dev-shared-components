@@ -317,26 +317,3 @@ def _get_request(endpoint: str, graph_access: GraphAccess) -> requests.models.Re
     response.raise_for_status()
 
     return response
-
-
-if __name__ == '__main__':
-    import os, json, authentication
-    def main():
-        credentials = json.loads(os.environ['GraphAPI'])
-        client_id = credentials['client_id']
-        tenant_id = credentials['tenant_id']
-        username = credentials['username']
-        password = credentials['password']
-
-        graph_access = authentication.authorize_by_username_password(username, password, client_id=client_id, tenant_id=tenant_id)
-
-        emails = get_emails_from_folder("itk-rpa@mkb.aarhus.dk", "Indbakke/Graph Test/Undermappe", graph_access)
-        email = emails[0]
-
-        print(repr(email.get_text()))
-
-        # move_email(email, "Indbakke/Graph Test/Undermappe2", graph_access)
-
-        # list_email_attachments(email, graph_access)
-
-    main()
