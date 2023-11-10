@@ -2,7 +2,7 @@
 
 import unittest
 import os
-from itk_dev_shared_components.SAP import sap_login, multi_session, opret_kundekontakt
+from itk_dev_shared_components.sap import sap_login, multi_session, opret_kundekontakt
 
 class TestOpretKundekontakt(unittest.TestCase):
     """Test relating to the module SAP.opret_kundekontakt."""

@@ -2,7 +2,7 @@
 
 from typing import Literal
 import win32clipboard
-from itk_dev_shared_components.SAP import tree_util
+from itk_dev_shared_components.sap import tree_util
 
 
 def opret_kundekontakter(session, fp:str, aftaler:list[str] | None,

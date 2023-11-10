@@ -11,7 +11,7 @@ from selenium.webdriver.common.by import By
 import pywintypes
 import win32com.client
 
-from itk_dev_shared_components.SAP import multi_session
+from itk_dev_shared_components.sap import multi_session
 
 
 def login_using_portal(username:str, password:str):
@@ -60,7 +60,7 @@ def _wait_for_download():
                 return
 
         time.sleep(0.5)
-    raise TimeoutError(f".SAP file not found in {downloads_folder}")
+    raise TimeoutError(f".sap file not found in {downloads_folder}")
 
 
 def login_using_cli(username: str, password: str, client:str='751', system:str='P02', timeout:int=10) -> None:

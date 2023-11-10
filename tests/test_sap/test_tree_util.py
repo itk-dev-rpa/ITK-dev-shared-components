@@ -3,7 +3,7 @@
 import unittest
 import os
 
-from itk_dev_shared_components.SAP import tree_util, sap_login, multi_session
+from itk_dev_shared_components.sap import tree_util, sap_login, multi_session
 
 class TestTreeUtil(unittest.TestCase):
     """Tests relating to the module SAP.tree_util."""
