@@ -2,7 +2,7 @@
 
 :: Change dir to parent dir
 echo Changing directory...
-cd /d %~dp0.
+cd /d %~dp0..
 
 
 choice /C YN /M "Do you want to reset venv?"
