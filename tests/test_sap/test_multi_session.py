@@ -33,7 +33,7 @@ class TestMultiSession(unittest.TestCase):
         sessions = multi_session.spawn_sessions(6)
         self.assertEqual(len(sessions), 6)
 
-        sessions = multi_session.get_all_SAP_sessions()
+        sessions = multi_session.get_all_sap_sessions()
         self.assertEqual(len(sessions), 6)
 
     def test_run_batches(self):

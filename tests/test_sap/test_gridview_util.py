@@ -13,7 +13,7 @@ class TestGridviewUtil(unittest.TestCase):
 
         user, password = os.environ['SAP Login'].split(';')
         sap_login.login_using_cli(user, password)
-        session = multi_session.get_all_SAP_sessions()[0]
+        session = multi_session.get_all_sap_sessions()[0]
         session.startTransaction("fmcacov")
         session.findById("wnd[0]/usr/ctxtGPART_DYN").text = "25564617"
         session.findById("wnd[0]").sendVKey(0)
@@ -24,7 +24,7 @@ class TestGridviewUtil(unittest.TestCase):
 
     def setUp(self) -> None:
         # Find SAP gridview (table) object for testing
-        session = multi_session.get_all_SAP_sessions()[0]
+        session = multi_session.get_all_sap_sessions()[0]
         self.table = session.findById("wnd[0]/usr/tabsDATA_DISP/tabpDATA_DISP_FC1/ssubDATA_DISP_SCA:RFMCA_COV:0202/cntlRFMCA_COV_0100_CONT5/shellcont/shell")
 
     def test_scroll_entire_table(self):
