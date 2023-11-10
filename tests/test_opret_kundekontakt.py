@@ -20,7 +20,7 @@ class TestOpretKundekontakt(unittest.TestCase):
         fp = "25564617"
         aftaler = ("2544577", "1990437", "1473781")
 
-        session = multi_session.get_all_SAP_sessions()[0]
+        session = multi_session.get_all_sap_sessions()[0]
 
         # Test with 3 aftaler
         opret_kundekontakt.opret_kundekontakter(session, fp, aftaler, 'Orientering', "Test 1")

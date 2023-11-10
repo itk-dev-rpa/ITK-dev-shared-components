@@ -97,7 +97,7 @@ def _wait_for_sap_to_open() -> None:
     for _ in range(10):
         time.sleep(1)
         try:
-            sessions = multi_session.get_all_SAP_sessions()
+            sessions = multi_session.get_all_sap_sessions()
             if len(sessions) > 0:
                 return
         except pywintypes.com_error:

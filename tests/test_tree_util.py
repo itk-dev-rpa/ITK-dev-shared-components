@@ -22,7 +22,7 @@ class TestTreeUtil(unittest.TestCase):
         Test that strict search and fuzzy search works
         and throws errors on nonsense input.
         """
-        session = multi_session.get_all_SAP_sessions()[0]
+        session = multi_session.get_all_sap_sessions()[0]
         tree = session.findById("wnd[0]/shellcont/shell")
 
         result = tree_util.get_node_key_by_text(tree, "25564617")
@@ -43,7 +43,7 @@ class TestTreeUtil(unittest.TestCase):
         Test that strict search and fuzzy search works
         and throws errors on nonsense input.
         """
-        session = multi_session.get_all_SAP_sessions()[0]
+        session = multi_session.get_all_sap_sessions()[0]
         tree = session.findById("wnd[0]/shellcont/shell")
 
         result = tree_util.get_item_by_text(tree, "25564617")
@@ -62,7 +62,7 @@ class TestTreeUtil(unittest.TestCase):
     def test_check_uncheck_all_check_boxes(self):
         """Test check_all_check_boxes and uncheck_all_check_boxes."""
         # Open popup with tree containing many checkboxes.
-        session = multi_session.get_all_SAP_sessions()[0]
+        session = multi_session.get_all_sap_sessions()[0]
         session.findById("wnd[0]/shellcont/shell").nodeContextMenu("GP0000000001")
         session.findById("wnd[0]/shellcont/shell").selectContextMenuItem("FLERE")
 
@@ -83,7 +83,7 @@ def navigate_to_test_page():
     """Launch SAP and navigate to fmcacov on FP 25564617."""
     user, password = os.environ['SAP Login'].split(';')
     sap_login.login_using_cli(user, password)
-    session = multi_session.get_all_SAP_sessions()[0]
+    session = multi_session.get_all_sap_sessions()[0]
     session.startTransaction("fmcacov")
     session.findById("wnd[0]/usr/ctxtGPART_DYN").text = "25564617"
     session.findById("wnd[0]").sendVKey(0)
