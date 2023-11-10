@@ -1,4 +1,4 @@
-"""This module provides a single function to conviniently peform the action 'opret-kundekontaker' in SAP."""
+"""This module provides a single function to conveniently perform the action 'opret-kundekontaker' in SAP."""
 
 from typing import Literal
 import win32clipboard
@@ -11,7 +11,7 @@ def opret_kundekontakter(session, fp:str, aftaler:list[str] | None,
     """Creates a kundekontakt on the given FP and aftaler.
 
     Args:
-        session (COM Object): The SAP session to peform the action.
+        session (COM Object): The SAP session to preform the action.
         fp (str): The forretningspartner number.
         aftaler (list[str] | None): A list of aftaler to put the kundekontakt on. If empty or None the kundekontakt will be created on fp-level.
         art (str): The art of the kundekontakt.
