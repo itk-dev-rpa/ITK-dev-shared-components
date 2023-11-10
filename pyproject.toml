@@ -3,7 +3,7 @@ requires = ["setuptools>=65.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ITK_dev_shared_components"
+name = "itk_dev_shared_components"
 version = "0.0.6"
 authors = [
   { name="ITK Development", email="itk-rpa@mkb.aarhus.dk" },
