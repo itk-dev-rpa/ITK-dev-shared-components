@@ -6,7 +6,7 @@ import io
 import requests
 from bs4 import BeautifulSoup
 
-from ITK_dev_shared_components.graph.authentication import GraphAccess
+from itk_dev_shared_components.graph.authentication import GraphAccess
 
 
 @dataclass

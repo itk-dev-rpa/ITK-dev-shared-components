@@ -2,7 +2,7 @@
 
 import unittest
 import os
-from ITK_dev_shared_components.SAP import gridview_util, sap_login, multi_session
+from itk_dev_shared_components.SAP import gridview_util, sap_login, multi_session
 
 class TestGridviewUtil(unittest.TestCase):
     """Tests relating to the module SAP.gridview_util."""

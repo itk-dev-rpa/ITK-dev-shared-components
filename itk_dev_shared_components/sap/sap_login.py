@@ -11,7 +11,7 @@ from selenium.webdriver.common.by import By
 import pywintypes
 import win32com.client
 
-from ITK_dev_shared_components.SAP import multi_session
+from itk_dev_shared_components.SAP import multi_session
 
 
 def login_using_portal(username:str, password:str):

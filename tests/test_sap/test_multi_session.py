@@ -3,7 +3,7 @@
 import unittest
 import os
 import threading
-from ITK_dev_shared_components.SAP import sap_login, multi_session, opret_kundekontakt
+from itk_dev_shared_components.SAP import sap_login, multi_session, opret_kundekontakt
 
 class TestMultiSession(unittest.TestCase):
     """Tests relating to the module SAP.multi_session."""
