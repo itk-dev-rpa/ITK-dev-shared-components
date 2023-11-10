@@ -4,6 +4,8 @@ import unittest
 import os
 from itk_dev_shared_components.sap import gridview_util, sap_login, multi_session
 
+# Some tests might look similiar, and we want this. pylint: disable=duplicate-code
+
 class TestGridviewUtil(unittest.TestCase):
     """Tests relating to the module SAP.gridview_util."""
     @classmethod
