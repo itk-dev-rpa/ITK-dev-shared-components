@@ -100,7 +100,7 @@ def _wait_for_sap_session(timeout:int) -> None:
     for _ in range(timeout):
         time.sleep(1)
         try:
-            sessions = multi_session.get_all_SAP_sessions()
+            sessions = multi_session.get_all_sap_sessions()
             if len(sessions) > 0:
                 return
         except pywintypes.com_error:
@@ -114,7 +114,7 @@ def _check_for_splash_screen() -> bool:
     Returns:
         bool: True if the splash screen image is currently present.
     """
-    session = multi_session.get_all_SAP_sessions()[0]
+    session = multi_session.get_all_sap_sessions()[0]
     image = session.findById("wnd[0]/usr/cntlIMAGE_CONTAINER/shellcont/shell/shellcont[1]/shell", False)
 
     return image is not None
@@ -154,7 +154,7 @@ def change_password(username:str, old_password:str, new_password:str,
     else:
         raise TimeoutError(f"SAP Logon didn't open within timeout limit: {timeout} seconds.")
 
-    session = multi_session.get_all_SAP_sessions()[0]
+    session = multi_session.get_all_sap_sessions()[0]
 
     # Enter credentials
     session.findById("wnd[0]/usr/txtRSYST-MANDT").text = client
