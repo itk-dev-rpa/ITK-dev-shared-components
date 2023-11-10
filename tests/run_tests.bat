@@ -6,17 +6,15 @@ cd /d %~dp0..
 
 
 choice /C YN /M "Do you want to reset venv?"
+
 if errorlevel 2 (
     echo Activating excisting venv...
-    call venv\Scripts\activate
+    call .venv\Scripts\activate
 
 ) else (
-    echo Removing old venv...
-    rmdir /s /q venv
-
     echo Setting up new venv...
-    python -m venv venv
-    call venv\Scripts\activate
+    python -m venv .venv
+    call .venv\Scripts\activate
 
     echo Installing package...
     pip install .
