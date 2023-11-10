@@ -5,7 +5,7 @@ import win32clipboard
 from ITK_dev_shared_components.SAP import tree_util
 
 
-def opret_kundekontakter(session, fp:str, aftaler:list[str] | None, 
+def opret_kundekontakter(session, fp:str, aftaler:list[str] | None,
                          art:Literal[' ', 'Automatisk', 'Fakturagrundlag', 'Fuldmagt ifm. værge', 'Konverteret', 'Myndighedshenvend.', 'Orientering', 'Returpost', 'Ringeaktivitet', 'Skriftlig henvend.', 'Telefonisk henvend.'],
                          notat:str, lock=None) -> None:
     """Creates a kundekontakt on the given FP and aftaler.
