@@ -1,4 +1,4 @@
-"""This module provides static functions to perform common tasks with SAP GuiGridView COM objects."""
+"""This module provides static functions to peform common tasks with SAP GuiGridView COM objects."""
 
 def scroll_entire_table(grid_view, return_to_top=False) -> None:
     """This function scrolls through the entire table to load all cells.
@@ -9,13 +9,11 @@ def scroll_entire_table(grid_view, return_to_top=False) -> None:
 
     Returns:
         _type_: _description_
-    """
-    if grid_view.RowCount == 0 or grid_view.VisibleRowCount == 0:
-        return
+    """    
 
     for i in range(0, grid_view.RowCount, grid_view.VisibleRowCount):
         grid_view.FirstVisibleRow = i
-
+    
     if return_to_top:
         grid_view.FirstVisibleRow = 0
 
@@ -30,7 +28,7 @@ def get_all_rows(grid_view, pre_load=True) -> tuple[tuple[str]]:
 
     Returns:
         tuple[tuple[str]]: A 2D tuple of all cell values in the gridview.
-    """
+    """    
 
     if pre_load:
         scroll_entire_table(grid_view, True)
@@ -45,9 +43,9 @@ def get_all_rows(grid_view, pre_load=True) -> tuple[tuple[str]]:
         for c in columns:
             v = grid_view.GetCellValue(r, c)
             row_data.append(v)
-
+        
         output.append(tuple(row_data))
-
+    
     return tuple(output)
 
 
@@ -62,7 +60,7 @@ def get_row(grid_view, row:int, scroll_to_row=False) -> tuple[str]:
 
     Returns:
         tuple[str]: A tuple of the row's data.
-    """
+    """    
 
     if scroll_to_row:
         grid_view.FirstVisibleRow = row
@@ -85,7 +83,7 @@ def iterate_rows(grid_view) -> tuple[str]:
 
     Yields:
         tuple[str]: A tuple of the next row's data.
-    """
+    """    
 
     row = 0
     while row < grid_view.RowCount:
@@ -106,7 +104,7 @@ def get_column_titles(grid_view) -> tuple[str]:
 
     Returns:
         tuple[str]: A tuple of the gridview's column titles.
-    """
+    """    
 
     return tuple(grid_view.GetColumnTitles(c)[0] for c in grid_view.ColumnOrder)
 
@@ -125,7 +123,7 @@ def find_row_index_by_value(grid_view, column:str, value:str) -> int:
 
     Returns:
         int: The index of the first row which column value matches the given value.
-    """
+    """    
 
     if column not in grid_view.ColumnOrder:
         raise ValueError(f"Column '{column}' not in grid_view")
@@ -134,14 +132,14 @@ def find_row_index_by_value(grid_view, column:str, value:str) -> int:
         # Only scroll when row isn't visible
         if not grid_view.FirstVisibleRow <= row <= grid_view.FirstVisibleRow + grid_view.VisibleRowCount-1:
             grid_view.FirstVisibleRow = row
-
+        
         if grid_view.GetCellValue(row, column) == value:
             return row
-
+    
     return -1
 
-def find_all_row_indices_by_value(grid_view, column:str, value:str) -> list[int]:
-    """Find all indices of the rows where the given column's value
+def find_all_row_indecies_by_value(grid_view, column:str, value:str) -> list[int]:
+    """Find all indecies of the rows where the given column's value
     match the given value. Returns an empty list if no row is found.
 
     Args:
@@ -153,8 +151,8 @@ def find_all_row_indices_by_value(grid_view, column:str, value:str) -> list[int]
         ValueError: If the column name doesn't exist in the grid view.
 
     Returns:
-        list[int]: A list of row indices where the value matches.
-    """
+        list[int]: A list of row indecies where the value matches.
+    """    
     if column not in grid_view.ColumnOrder:
         raise ValueError(f"Column '{column}' not in grid_view")
 
@@ -164,8 +162,39 @@ def find_all_row_indices_by_value(grid_view, column:str, value:str) -> list[int]
         # Only scroll when row isn't visible
         if not grid_view.FirstVisibleRow <= row <= grid_view.FirstVisibleRow + grid_view.VisibleRowCount-1:
             grid_view.FirstVisibleRow = row
-
+        
         if grid_view.GetCellValue(row, column) == value:
             rows.append(row)
-
+    
     return rows
+    
+
+
+
+if __name__=='__main__':
+    import win32com.client
+
+    SAP = win32com.client.GetObject("SAPGUI")
+    app = SAP.GetScriptingEngine
+    connection = app.Connections(0)
+    session = connection.Sessions(0)
+
+    table = session.findById("wnd[0]/usr/cntlGRID1/shellcont/shell")
+    
+    rows = find_all_row_indecies_by_value(table, "ZZ_PARTNER", '15879880')
+    print(rows)
+    table.setCurrentCell(rows[0], "ZZ_PARTNER")
+
+    # print(get_row(table, 1, True))
+
+    # scroll_entire_table(table)
+
+    # data = get_all_rows(table)
+    # print(len(data), len(data[0]))
+
+    # for r in iterate_rows(table):
+    #     print(r)
+    
+    # print(get_column_titles(table))
+    
+

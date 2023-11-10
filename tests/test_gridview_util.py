@@ -1,9 +1,8 @@
 """Tests relating to the module SAP.gridview_util."""
 
 import unittest
-
+import os
 from ITK_dev_shared_components.SAP import gridview_util, sap_login, multi_session
-from . import test_tree_util
 
 class TestGridviewUtil(unittest.TestCase):
     """Tests relating to the module SAP.gridview_util."""
