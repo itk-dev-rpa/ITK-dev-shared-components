@@ -234,8 +234,6 @@ def delete_email(email: Email, graph_access: GraphAccess, *, permanent: bool=Fal
         move_email(email, "deleteditems", graph_access, well_known_folder=True)
 
 
-
-
 def _find_folder(response: dict, target_folder: str) -> str:
     """Find the target folder in 
 
