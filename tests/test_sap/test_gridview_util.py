@@ -11,7 +11,12 @@ class TestGridviewUtil(unittest.TestCase):
         """Launch SAP and navigate to fmcacov on FP 25564617 (Test person)."""
         sap_login.kill_sap()
 
-        test_tree_util.navigate_to_test_page()
+        user, password = os.environ['SAP Login'].split(';')
+        sap_login.login_using_cli(user, password)
+        session = multi_session.get_all_SAP_sessions()[0]
+        session.startTransaction("fmcacov")
+        session.findById("wnd[0]/usr/ctxtGPART_DYN").text = "25564617"
+        session.findById("wnd[0]").sendVKey(0)
 
     @classmethod
     def tearDownClass(cls):
@@ -19,7 +24,7 @@ class TestGridviewUtil(unittest.TestCase):
 
     def setUp(self) -> None:
         # Find SAP gridview (table) object for testing
-        session = multi_session.get_all_sap_sessions()[0]
+        session = multi_session.get_all_SAP_sessions()[0]
         self.table = session.findById("wnd[0]/usr/tabsDATA_DISP/tabpDATA_DISP_FC1/ssubDATA_DISP_SCA:RFMCA_COV:0202/cntlRFMCA_COV_0100_CONT5/shellcont/shell")
 
     def test_scroll_entire_table(self):
@@ -73,7 +78,7 @@ class TestGridviewUtil(unittest.TestCase):
         with self.assertRaises(ValueError):
             gridview_util.find_row_index_by_value(self.table, "Foo", "Bar")
 
-    def test_find_all_row_indecies_by_value(self):
+    def test_find_all_row_indices_by_value(self):
         """Test finding all rows by column value."""
         # Test finding an actual value.
         indices = gridview_util.find_all_row_indices_by_value(self.table, "TXTU2", "Gebyr")
