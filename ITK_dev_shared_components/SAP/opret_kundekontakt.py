@@ -1,4 +1,4 @@
-"""This module provides a single function to conviniently peform the action 'opret-kundekontaker' in SAP."""
+"""This module provides a single function to conveniently perform the action 'opret-kundekontaker' in SAP."""
 
 from typing import Literal
 import win32clipboard
