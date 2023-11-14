@@ -3,8 +3,8 @@ requires = ["setuptools>=65.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ITK_dev_shared_components"
-version = "0.0.6"
+name = "itk_dev_shared_components"
+version = "1.0.0"
 authors = [
   { name="ITK Development", email="itk-rpa@mkb.aarhus.dk" },
 ]
@@ -18,7 +18,10 @@ classifiers = [
 ]
 dependencies = [
   "pywin32 >= 306",
-  "selenium >= 4.10.0"
+  "selenium >= 4.10.0",
+  "msal >= 1.24.1",
+  "requests >= 2.31.0",
+  "beautifulsoup4 >= 4.12.2"
 ]
 
 [project.urls]

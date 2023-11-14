@@ -1,7 +1,7 @@
 """This module provides miscellaneous static functions to peform common tasks in SAP."""
 
 def print_all_descendants(container, max_depth=-1, indent=0):
-    """Prints the object and all of its decendants recursivly
+    """Prints the object and all of its descendants recursively
     to the console.
 
     Args:
@@ -23,13 +23,3 @@ def print_all_descendants(container, max_depth=-1, indent=0):
             print_all_descendants(child, max_depth, indent+1)
         else:
             print(indent_text)
-
-
-if __name__=='__main__':
-    from ITK_dev_shared_components.SAP import multi_session
-
-    session = multi_session.spawn_sessions(1)[0]
-
-    usr = session.FindById('/app/con[0]/ses[0]/wnd[0]/usr')
-
-    print_all_descendants(usr)
