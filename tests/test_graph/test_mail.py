@@ -4,7 +4,7 @@ import unittest
 import json
 import os
 
-from ITK_dev_shared_components.graph import authentication, mail
+from itk_dev_shared_components.graph import authentication, mail
 
 class EmailTest(unittest.TestCase):
     """Tests relating to the graph.mail module."""

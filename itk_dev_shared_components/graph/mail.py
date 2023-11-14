@@ -6,7 +6,7 @@ import io
 import requests
 from bs4 import BeautifulSoup
 
-from ITK_dev_shared_components.graph.authentication import GraphAccess
+from itk_dev_shared_components.graph.authentication import GraphAccess
 
 
 @dataclass
@@ -232,8 +232,6 @@ def delete_email(email: Email, graph_access: GraphAccess, *, permanent: bool=Fal
         response.raise_for_status()
     else:
         move_email(email, "deleteditems", graph_access, well_known_folder=True)
-
-
 
 
 def _find_folder(response: dict, target_folder: str) -> str:
