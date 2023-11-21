@@ -11,7 +11,7 @@ import pythoncom
 import win32com.client
 import win32gui
 
-def run_with_session(session_index:int, func:Callable, args:tuple) -> None:
+def run_with_session(session_index:int, func:Callable, args: tuple) -> None:
     """Run a function in a specific session based on the sessions index.
     This function is meant to be run inside a separate thread.
     The function must take a session object as its first argument.
@@ -53,7 +53,7 @@ def run_batch(func:Callable, args:tuple[tuple], num_sessions=6) -> None:
             raise t.error
 
 
-def run_batches(func:Callable, args:tuple[tuple], num_sessions=6):
+def run_batches(func: Callable, args: tuple[tuple], num_sessions: int=6) -> None:
     """Run a function in parallel batches.
     This function runs the input function for each set of arguments in args.
     The function will be run in parallel batches of size {num_sessions}.
@@ -64,7 +64,7 @@ def run_batches(func:Callable, args:tuple[tuple], num_sessions=6):
 
     for b in range(0, len(args), num_sessions):
         batch = args[b:b+num_sessions]
-        run_batch(func, args, len(batch))
+        run_batch(func, batch, len(batch))
 
 
 def spawn_sessions(num_sessions=6) -> list:
@@ -143,3 +143,13 @@ class ExThread(threading.Thread):
             self._target(*self._args, **self._kwargs)
         except Exception as e: # pylint: disable=broad-exception-caught
             self.error = e
+
+
+if __name__ == '__main__':
+    def p(session, number):
+        print(f"'{number}'")
+    
+    args = [[i] for i in range(12)]
+
+    print(args)
+    run_batches(p, args)
