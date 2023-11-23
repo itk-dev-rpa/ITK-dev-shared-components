@@ -22,10 +22,10 @@ jobs:
         pip install flake8
         pip install .
 
-    - name: Analysing the code with pylint
+    - name: Analyzing the code with pylint
       run: |
         pylint --rcfile=.pylintrc $(git ls-files '*.py')
 
-    - name: Analysing the code with flake8
+    - name: Analyzing the code with flake8
       run: |
         flake8 --extend-ignore=E501,E251 $(git ls-files '*.py')
