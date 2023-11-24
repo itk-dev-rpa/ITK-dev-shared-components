@@ -69,23 +69,7 @@ def opret_kundekontakter(session, fp: str, aftaler: list[str] | None,
     session.findById("wnd[0]/tbar[0]/btn[3]").press()
     session.findById("wnd[0]/tbar[0]/btn[11]").press()
 
-    # Confirm the kundekontakt was created
-    # Compare the top 3 kundekontakter in the table with the input of this function
-    # Compare date, art and (up to) the first 10 letters of the notat
-    session.findById("wnd[0]/usr/tabsDATA_DISP/tabpDATA_DISP_FC3").select()
-    table = session.findById("wnd[0]/usr/tabsDATA_DISP/tabpDATA_DISP_FC3/ssubDATA_DISP_SCA:RFMCA_COV:0204/cntlRFMCA_COV_0100_CONT3/shellcont/shell")
-
-    for row in range(3):
-        kundekontakt_date = table.GetCellValue(row, "DATE")
-        kontaktart = table.GetCellValue(row, "ZZ_KONTAKTART")
-        kontakttekst = table.GetCellValue(row, "ZZ_TEXT")
-
-        length_to_compare = min([10, len(notat), len(kontakttekst)])
-
-        if (date.today().strftime("%d.%m.%Y") == kundekontakt_date and art == kontaktart and notat[:length_to_compare] == kontakttekst[:length_to_compare]):
-            break
-    else:
-        raise RuntimeError("The kundekontakt wasn't found in the kontakt-table after creation.")
+    _confirm_kundekontakt(session, notat, art)
 
 
 def _set_clipboard(text: str) -> None:
@@ -98,3 +82,26 @@ def _set_clipboard(text: str) -> None:
     win32clipboard.EmptyClipboard()
     win32clipboard.SetClipboardText(text)
     win32clipboard.CloseClipboard()
+
+
+def _confirm_kundekontakt(session, notat: str, art: str):
+    """Confirm the kundekontakt was created
+    Compare the top 10 kundekontakter in the table with the input of this function
+    Compare date, art and (up to) the first 10 letters of the notat
+    """
+    session.findById("wnd[0]/usr/tabsDATA_DISP/tabpDATA_DISP_FC3").select()
+    table = session.findById("wnd[0]/usr/tabsDATA_DISP/tabpDATA_DISP_FC3/ssubDATA_DISP_SCA:RFMCA_COV:0204/cntlRFMCA_COV_0100_CONT3/shellcont/shell")
+
+    rows = min(10, table.RowCount)
+
+    for row in range(rows):
+        kundekontakt_date = table.GetCellValue(row, "DATE")
+        kontaktart = table.GetCellValue(row, "ZZ_KONTAKTART")
+        kontakttekst = table.GetCellValue(row, "ZZ_TEXT")
+
+        length_to_compare = min([10, len(notat), len(kontakttekst)])
+
+        if (date.today().strftime("%d.%m.%Y") == kundekontakt_date and art == kontaktart and notat[:length_to_compare] == kontakttekst[:length_to_compare]):
+            break
+    else:
+        raise RuntimeError("The kundekontakt wasn't found in the kontakt-table after creation.")
