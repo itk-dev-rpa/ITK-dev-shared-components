@@ -6,6 +6,7 @@ import os
 
 from itk_dev_shared_components.graph import authentication, mail
 
+
 class EmailTest(unittest.TestCase):
     """Tests relating to the graph.mail module."""
     @classmethod
@@ -63,7 +64,6 @@ class EmailTest(unittest.TestCase):
 
         # Move email back
         mail.move_email(email, self.folder1, self.graph_access)
-
 
     def test_wrong_usage(self):
         """Test that raised errors actually get raised."""

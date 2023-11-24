@@ -5,6 +5,7 @@ import os
 import threading
 from itk_dev_shared_components.sap import sap_login, multi_session, opret_kundekontakt
 
+
 class TestMultiSession(unittest.TestCase):
     """Tests relating to the module SAP.multi_session."""
 
@@ -46,7 +47,7 @@ class TestMultiSession(unittest.TestCase):
 
         multi_session.spawn_sessions(num_sessions)
 
-        #Data
+        # Data
         lock = threading.Lock()
 
         data = [

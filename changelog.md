@@ -12,10 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - sap.opret_kundekontakt: Function 'opret_kundekontakter' made more stable.
 - sap.multi_session: Function 'spawn_session' is no longer hardcoded to 1080p screen size.
 - sap.multi_session: Arrange session windows moved to separate function.
+- Bunch o' linting
 
 ### Added
 
 - Changelog!
+- pylint.yml: Flake8 added
 
 ### Fixed
 

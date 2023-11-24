@@ -3,6 +3,7 @@ connection."""
 
 import msal
 
+
 # pylint: disable-next=too-few-public-methods
 class GraphAccess:
     """An object that handles access to the Graph api.
@@ -45,7 +46,7 @@ def authorize_by_username_password(username: str, password: str, *, client_id: s
         password: The password of the user.
         client_id: The Graph API client id in 8-4-4-12 format.
         tenant_id: The Graph API tenant id in 8-4-4-12 format.
-    
+
     Returns:
         GraphAccess: The GraphAccess object used to authorize Graph access.
     """

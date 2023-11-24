@@ -6,6 +6,7 @@ from tkinter import simpledialog
 
 from itk_dev_shared_components.sap import sap_login
 
+
 class TestSapLogin(unittest.TestCase):
     """Tests relating to the module SAP.sap_login."""
 
