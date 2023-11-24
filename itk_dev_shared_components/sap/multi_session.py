@@ -108,7 +108,28 @@ def spawn_sessions(num_sessions=6) -> list:
     while connection.Sessions.count < num_sessions:
         time.sleep(0.1)
 
-    sessions = tuple(connection.Sessions)
+    arrange_sessions()
+
+    return tuple(connection.Sessions)
+
+
+def get_all_sap_sessions() -> tuple:
+    """Returns a tuple of all open SAP sessions (on connection index 0).
+
+    Returns:
+        tuple: A tuple of SAP GuiSession objects.
+    """
+    sap = win32com.client.GetObject("SAPGUI")
+    app = sap.GetScriptingEngine
+    connection = app.Connections(0)
+    return tuple(connection.Sessions)
+
+
+def arrange_sessions():
+    """Take all toplevel windows of currently open SAP sessions
+    and arrange them equally on the screen.
+    """
+    sessions = get_all_sap_sessions()
     num_sessions = len(sessions)
 
     # Calculate number of columns and rows
@@ -128,20 +149,6 @@ def spawn_sessions(num_sessions=6) -> list:
         x = i % c * w
         y = i // c * h
         win32gui.MoveWindow(hwnd, x, y, w, h, True)
-
-    return sessions
-
-
-def get_all_sap_sessions() -> tuple:
-    """Returns a tuple of all open SAP sessions (on connection index 0).
-
-    Returns:
-        tuple: A tuple of SAP GuiSession objects.
-    """
-    sap = win32com.client.GetObject("SAPGUI")
-    app = sap.GetScriptingEngine
-    connection = app.Connections(0)
-    return tuple(connection.Sessions)
 
 
 class ExThread(threading.Thread):

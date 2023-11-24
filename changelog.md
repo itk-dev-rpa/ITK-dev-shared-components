@@ -9,8 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Function 'opret_kundekontakter' made more stable.
-- Function 'spawn_session' is no longer hardcoded to 1080p screen size.
+- sap.opret_kundekontakt: Function 'opret_kundekontakter' made more stable.
+- sap.multi_session: Function 'spawn_session' is no longer hardcoded to 1080p screen size.
+- sap.multi_session: Arrange session windows moved to separate function.
 
 ### Added
 
@@ -18,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Critical bug in 'run_batches'.
+- sap.multi_session: Critical bug in 'run_batches'.
 
 ## [1.0.0] - 2023-11-14
 
