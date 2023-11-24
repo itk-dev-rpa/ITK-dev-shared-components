@@ -18,7 +18,7 @@ class TestTreeUtil(unittest.TestCase):
         sap_login.kill_sap()
 
     def test_get_node_key_by_text(self):
-        """Test get_node_key_by_test. 
+        """Test get_node_key_by_test.
         Test that strict search and fuzzy search works
         and throws errors on nonsense input.
         """
@@ -38,7 +38,7 @@ class TestTreeUtil(unittest.TestCase):
             tree_util.get_node_key_by_text(tree, "Foo Bar", True)
 
     def test_get_item_by_text(self):
-        """Test get_item_by_text. 
+        """Test get_item_by_text.
         Test that strict search and fuzzy search works
         and throws errors on nonsense input.
         """
