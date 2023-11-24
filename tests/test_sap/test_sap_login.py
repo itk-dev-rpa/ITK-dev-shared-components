@@ -44,7 +44,9 @@ class TestSapLogin(unittest.TestCase):
             raise unittest.SkipTest("Test not run because new_password was missing.")
 
         sap_login.change_password(self.username, self.password, self.new_password)
+        # Change password for all coming tests
         self.password = self.new_password
+        os.environ['SAP Login'] = f"{self.username};{self.password}"
 
         with self.assertRaises(ValueError):
             sap_login.change_password(self.username, "Foo", self.new_password)
