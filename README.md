@@ -2,9 +2,9 @@
 
 ## Links
 
-[Documentation](!https://itk-dev-rpa.github.io/itk-dev-shared-components-docs/)
+[Documentation](https://itk-dev-rpa.github.io/itk-dev-shared-components-docs/)
 
-[Pypi](!https://pypi.org/project/ITK-dev-shared-components/)
+[Pypi](https://pypi.org/project/ITK-dev-shared-components/)
 
 ## Installation
 
@@ -15,7 +15,7 @@ pip install itk-dev-shared-components
 ## Intro
 
 This python library contains helper modules for RPA development.
-It's based on the need of [ITK Dev](!https://itk.aarhus.dk/), but it has been
+It's based on the need of [ITK Dev](https://itk.aarhus.dk/), but it has been
 generalized to be useful for others as well.
 
 ## Integrations
