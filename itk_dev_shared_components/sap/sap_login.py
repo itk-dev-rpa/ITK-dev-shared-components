@@ -14,7 +14,7 @@ import win32com.client
 from itk_dev_shared_components.sap import multi_session
 
 
-def login_using_portal(username:str, password:str):
+def login_using_portal(username: str, password: str):
     """Open KMD Portal in Edge, login and start SAP GUI.
     Args:
         user: KMD Portal username.
@@ -25,7 +25,7 @@ def login_using_portal(username:str, password:str):
     driver.get('https://portal.kmd.dk/irj/portal')
     driver.maximize_window()
 
-    #Login
+    # Login
     user_field = driver.find_element(By.ID, 'logonuidfield')
     pass_field = driver.find_element(By.ID, 'logonpassfield')
     login_button = driver.find_element(By.ID, 'buttonLogon')
@@ -35,11 +35,11 @@ def login_using_portal(username:str, password:str):
     pass_field.send_keys(password)
     login_button.click()
 
-    #Opus
+    # Opus
     mine_genveje = driver.find_element(By.CSS_SELECTOR, "div[title='Mine Genveje']")
     mine_genveje.click()
 
-    #Wait for download and launch file
+    # Wait for download and launch file
     _wait_for_download()
 
     driver.quit()
@@ -63,7 +63,7 @@ def _wait_for_download():
     raise TimeoutError(f".sap file not found in {downloads_folder}")
 
 
-def login_using_cli(username: str, password: str, client:str='751', system:str='P02', timeout:int=10) -> None:
+def login_using_cli(username: str, password: str, client: str = '751', system: str = 'P02', timeout: int = 10) -> None:
     """Open and login to SAP with commandline expressions.
     Args:
         username: AZ username
@@ -90,7 +90,7 @@ def login_using_cli(username: str, password: str, client:str='751', system:str='
         raise ValueError("Unable to log in. Please check username and password.")
 
 
-def _wait_for_sap_session(timeout:int) -> None:
+def _wait_for_sap_session(timeout: int) -> None:
     """Check every second if the SAP Gui scripting engine is available until timeout is reached.
     Args:
         timeout: The time in seconds to wait for SAP Logon to start. Defaults to 10.
@@ -120,10 +120,10 @@ def _check_for_splash_screen() -> bool:
     return image is not None
 
 
-def change_password(username:str, old_password:str, new_password:str,
-                    client:str='751',
-                    system:str='...KMD OPUS Produktion [P02]',
-                    timeout:int=10) -> None:
+def change_password(username: str, old_password: str, new_password: str,
+                    client: str = '751',
+                    system: str = '...KMD OPUS Produktion [P02]',
+                    timeout: int = 10) -> None:
     """Change the password of a user in SAP Gui. Closes SAP when done.
     Args:
         username: The username of the user.
@@ -136,10 +136,9 @@ def change_password(username:str, old_password:str, new_password:str,
         TimeoutError: If the connection couldn't be established within the timeout limit.
         ValueError: If the current credentials are not valid or if the password can't be changed.
         ValueError: If the new password is not valid.
-    
     """
 
-    subprocess.Popen(r"C:\Program Files (x86)\SAP\FrontEnd\SAPgui\saplogon.exe") #pylint: disable=consider-using-with
+    subprocess.Popen(r"C:\Program Files (x86)\SAP\FrontEnd\SAPgui\saplogon.exe")  # pylint: disable=consider-using-with
 
     # Wait for SAP Logon to open
     for _ in range(timeout):
