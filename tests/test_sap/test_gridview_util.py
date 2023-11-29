@@ -4,7 +4,8 @@ import unittest
 import os
 from itk_dev_shared_components.sap import gridview_util, sap_login, multi_session
 
-# Some tests might look similiar, and we want this. pylint: disable=duplicate-code
+# Some tests might look similar, and we want this. pylint: disable=duplicate-code
+
 
 class TestGridviewUtil(unittest.TestCase):
     """Tests relating to the module SAP.gridview_util."""
@@ -35,7 +36,7 @@ class TestGridviewUtil(unittest.TestCase):
         gridview_util.scroll_entire_table(self.table, True)
 
     def test_get_all_rows(self):
-        """Test get all rows of table. 
+        """Test get all rows of table.
         Assume success if any rows and columns are loaded.
         """
         result = gridview_util.get_all_rows(self.table)

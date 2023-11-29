@@ -6,6 +6,7 @@ from tkinter import simpledialog
 
 from itk_dev_shared_components.sap import sap_login
 
+
 class TestSapLogin(unittest.TestCase):
     """Tests relating to the module SAP.sap_login."""
 
@@ -43,7 +44,9 @@ class TestSapLogin(unittest.TestCase):
             raise unittest.SkipTest("Test not run because new_password was missing.")
 
         sap_login.change_password(self.username, self.password, self.new_password)
+        # Change password for all coming tests
         self.password = self.new_password
+        os.environ['SAP Login'] = f"{self.username};{self.password}"
 
         with self.assertRaises(ValueError):
             sap_login.change_password(self.username, "Foo", self.new_password)

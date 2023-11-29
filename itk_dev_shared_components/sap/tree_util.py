@@ -1,6 +1,7 @@
 """This module provides static functions to perform common tasks with SAP GuiTree COM objects."""
 
-def get_node_key_by_text(tree, text: str, fuzzy: bool=False) -> str:
+
+def get_node_key_by_text(tree, text: str, fuzzy: bool = False) -> str:
     """Get the node key of a node based on its text.
 
     Args:
@@ -23,17 +24,17 @@ def get_node_key_by_text(tree, text: str, fuzzy: bool=False) -> str:
     raise ValueError(f"No node with the text '{text}' was found.")
 
 
-def get_item_by_text(tree, text: str, fuzzy: bool=False) -> tuple[str,str]:
+def get_item_by_text(tree, text: str, fuzzy: bool = False) -> tuple[str, str]:
     """Get the node key and item name of an item based on its text.
 
     Args:
         tree: A SAP GuiTree object.
         text: The text to search for.
         fuzzy: Whether to check if the item text just contains the search text.
-    
+
     Raises:
         ValueError: If no tem is found with the given text.
-    
+
     Returns:
         tuple[str,str]: The node key and item name of the found item.
     """

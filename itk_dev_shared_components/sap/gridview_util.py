@@ -1,5 +1,6 @@
 """This module provides static functions to perform common tasks with SAP GuiGridView COM objects."""
 
+
 def scroll_entire_table(grid_view, return_to_top=False) -> None:
     """This function scrolls through the entire table to load all cells.
 
@@ -23,7 +24,7 @@ def get_all_rows(grid_view, pre_load=True) -> tuple[tuple[str]]:
     Args:
         grid_view: A SAP GuiGridView object.
         pre_load: Whether to first scroll through the table to load all values.
-                  If a row hasn't been loaded before reading, the row data will be empty. 
+                  If a row hasn't been loaded before reading, the row data will be empty.
 
     Returns:
         tuple[tuple[str]]: A 2D tuple of all cell values in the gridview.
@@ -48,14 +49,14 @@ def get_all_rows(grid_view, pre_load=True) -> tuple[tuple[str]]:
     return tuple(output)
 
 
-def get_row(grid_view, row:int, scroll_to_row=False) -> tuple[str]:
+def get_row(grid_view, row: int, scroll_to_row=False) -> tuple[str]:
     """Returns the data of a single row.
 
     Args:
         grid_view: A SAP GuiGridView object.
         row: The zero-based index of the row.
         scroll_to_row: Whether to scroll to the row before reading the data.
-                       This ensures the data of the row has been loaded before reading. 
+                       This ensures the data of the row has been loaded before reading.
 
     Returns:
         tuple[str]: A tuple of the row's data.
@@ -108,7 +109,7 @@ def get_column_titles(grid_view) -> tuple[str]:
     return tuple(grid_view.GetColumnTitles(c)[0] for c in grid_view.ColumnOrder)
 
 
-def find_row_index_by_value(grid_view, column:str, value:str) -> int:
+def find_row_index_by_value(grid_view, column: str, value: str) -> int:
     """Find the index of the first row where the given column's value
     matches the given value. Returns -1 if no row is found.
 
@@ -137,7 +138,8 @@ def find_row_index_by_value(grid_view, column:str, value:str) -> int:
 
     return -1
 
-def find_all_row_indices_by_value(grid_view, column:str, value:str) -> list[int]:
+
+def find_all_row_indices_by_value(grid_view, column: str, value: str) -> list[int]:
     """Find all indices of the rows where the given column's value
     match the given value. Returns an empty list if no row is found.
 

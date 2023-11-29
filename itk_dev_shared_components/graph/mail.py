@@ -162,15 +162,15 @@ def get_attachment_data(attachment: Attachment, graph_access: GraphAccess) -> io
     """
     email = attachment.email
     endpoint = f"https://graph.microsoft.com/v1.0/users/{email.user}/messages/{email.id}/attachments/{attachment.id}/$value"
-    response =  _get_request(endpoint, graph_access)
+    response = _get_request(endpoint, graph_access)
     data_bytes = response.content
     return io.BytesIO(data_bytes)
 
 
-def move_email(email: Email, folder_path: str, graph_access: GraphAccess, *, well_known_folder: bool=False) -> None:
+def move_email(email: Email, folder_path: str, graph_access: GraphAccess, *, well_known_folder: bool = False) -> None:
     """Move an email to another folder under the same user.
     If well_known_folder is true, the folder path is assumed to be a well defined folder.
-    See https://learn.microsoft.com/en-us/graph/api/resources/mailfolder?view=graph-rest-1.0 
+    See https://learn.microsoft.com/en-us/graph/api/resources/mailfolder?view=graph-rest-1.0
     for a list of well defined folder names.
 
     Args:
@@ -208,7 +208,7 @@ def move_email(email: Email, folder_path: str, graph_access: GraphAccess, *, wel
     email.id = new_id
 
 
-def delete_email(email: Email, graph_access: GraphAccess, *, permanent: bool=False) -> None:
+def delete_email(email: Email, graph_access: GraphAccess, *, permanent: bool = False) -> None:
     """Delete an email from the mailbox.
     If permanent is true the email is completely removed from the user's mailbox.
     If permanent is false the email is instead moved to the Deleted Items folder.
@@ -235,7 +235,7 @@ def delete_email(email: Email, graph_access: GraphAccess, *, permanent: bool=Fal
 
 
 def _find_folder(response: dict, target_folder: str) -> str:
-    """Find the target folder in 
+    """Find the target folder in
 
     Args:
         response: The json dict of the HTTP response.
@@ -300,7 +300,7 @@ def _get_request(endpoint: str, graph_access: GraphAccess) -> requests.models.Re
 
     Returns:
         Response: The response object of the GET request.
-    
+
     Raises:
         HTTPError: Any errors raised while performing GET request.
     """

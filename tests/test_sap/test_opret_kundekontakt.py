@@ -4,6 +4,7 @@ import unittest
 import os
 from itk_dev_shared_components.sap import sap_login, multi_session, opret_kundekontakt
 
+
 class TestOpretKundekontakt(unittest.TestCase):
     """Test relating to the module SAP.opret_kundekontakt."""
     def setUp(self):
@@ -13,7 +14,6 @@ class TestOpretKundekontakt(unittest.TestCase):
 
     def tearDown(self):
         sap_login.kill_sap()
-
 
     def test_opret_kundekontakt(self):
         """Test the function opret_kundekontakter."""

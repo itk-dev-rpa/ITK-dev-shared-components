@@ -5,6 +5,7 @@ import os
 
 from itk_dev_shared_components.sap import tree_util, sap_login, multi_session
 
+
 class TestTreeUtil(unittest.TestCase):
     """Tests relating to the module SAP.tree_util."""
     @classmethod
@@ -16,9 +17,8 @@ class TestTreeUtil(unittest.TestCase):
     def tearDownClass(cls):
         sap_login.kill_sap()
 
-
     def test_get_node_key_by_text(self):
-        """Test get_node_key_by_test. 
+        """Test get_node_key_by_test.
         Test that strict search and fuzzy search works
         and throws errors on nonsense input.
         """
@@ -37,9 +37,8 @@ class TestTreeUtil(unittest.TestCase):
         with self.assertRaises(ValueError):
             tree_util.get_node_key_by_text(tree, "Foo Bar", True)
 
-
     def test_get_item_by_text(self):
-        """Test get_item_by_text. 
+        """Test get_item_by_text.
         Test that strict search and fuzzy search works
         and throws errors on nonsense input.
         """
@@ -57,7 +56,6 @@ class TestTreeUtil(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             tree_util.get_item_by_text(tree, "Foo Bar", True)
-
 
     def test_check_uncheck_all_check_boxes(self):
         """Test check_all_check_boxes and uncheck_all_check_boxes."""
@@ -87,6 +85,7 @@ def navigate_to_test_page():
     session.startTransaction("fmcacov")
     session.findById("wnd[0]/usr/ctxtGPART_DYN").text = "25564617"
     session.findById("wnd[0]").sendVKey(0)
+
 
 if __name__ == '__main__':
     unittest.main()
