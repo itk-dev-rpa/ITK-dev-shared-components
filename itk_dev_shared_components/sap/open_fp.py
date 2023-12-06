@@ -1,5 +1,6 @@
 """Method for opening Forretnignspartneroversigt in SAP"""
 
+
 def find_forretningspartner(session, fp) -> None:
     """Start a transaction FMCACOV and open the fp. Dismiss pop-up where user must select CPR or CVR.
     The process will open Forretningspartneroversigt for the given fp.
