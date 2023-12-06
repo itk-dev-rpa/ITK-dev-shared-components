@@ -11,10 +11,8 @@ class IntegratonTestFp(unittest.TestCase):
         user, password = os.environ['SAP Login'].split(';')
         sap_login.login_using_cli(user, password)
 
-
     def tearDown(self):
         sap_login.kill_sap()
-
 
     def test_open_fp(self):
         """Test opening Forretnignspartneroversigt in SAP"""
