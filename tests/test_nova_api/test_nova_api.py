@@ -3,7 +3,9 @@ import unittest
 import os
 from itk_dev_shared_components.kmd_nova import api
 
+
 class IntegrationTestNovaApi(unittest.TestCase):
+    """Integration test of KMD Nova API"""
     def setUp(self):
         credentials = os.getenv('nova_api_credentials')
         credentials = credentials.split(',')
@@ -17,7 +19,7 @@ class IntegrationTestNovaApi(unittest.TestCase):
 
         The test attempts to obtain a bearer token.
         """
-        self.assertNotEqual("", self.nova.bearer_token)
+        self.assertNotEqual("", self.nova.get_bearer_token())
 
     def test_get_address(self):
         """Test the API for getting an address.
@@ -39,11 +41,21 @@ class IntegrationTestNovaApi(unittest.TestCase):
         self.assertTrue('name' in address_response)
         self.assertTrue('address' in address_response)
 
+    def test_get_cases(self):
+        """
+        Test the API for getting cases on a given case number.
+        """
+        case_number = ""
+        cases_response = self.nova.get_cases_by_case_number(case_number=case_number)
+        self.assertTrue('cases' in cases_response)
+
 
 class TestMockedRequests(unittest.TestCase):
+    """Unittest of KMD Nova API, using mocked requests library."""
     def test_refresh_token(self):
         # TODO mock api and ensure retry happens.
         pass
+
 
 if __name__ == '__main__':
     unittest.main()
