@@ -59,7 +59,7 @@ class NovaESDH:
         Args:
             cpr: cpr of the citizen
 
-        Returns: dictionary with the address information
+        Returns: dict with the address information
 
         Raises: requests.exceptions.HTTPError if the request failed.
         """
