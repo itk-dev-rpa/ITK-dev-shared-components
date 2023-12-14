@@ -11,6 +11,7 @@ class NovaESDH:
     This class gives access to the KMD Nova ESDH API. Get read/write access to documents and journal notes in the system.
     A bearer token is automatically created and updated when the class is instantiated.
     Using api version 1.0.
+    The api docs can be found here: https://novaapi.kmd.dk/swagger/index.html
     """
 
     DOMAIN = "https://cap-novaapi.kmd.dk"
@@ -85,19 +86,24 @@ class NovaESDH:
         address = response.json()
         return address
 
-    def get_cases_by_case_number(self, case_number: str, paginate_start=1, paginate_cound=5) -> dict:
+    def get_cases_by_case_number(self, case_number: str, case_manifest=None, paginate_start=1, paginate_count=5) -> dict:
         """
         Gets all the cases on a given case number. Default pagination is page 1 through 5.
+        Modify caseGetOutput to get a different output.
         A UUID is generated as part of the request.
         Args:
-            case_number: Case number from Nova ESDH. E.g. "S2022-12345"
+            case_number: Case number from Nova ESDH. E.g. "S2022-12345" (dummy data)
+            case_manifest: dictionary defining which case data should be returned by the API. Defaults to None.
+            paginate_start: integer specifying the first page of results.
+            paginate_count: integer specifying the number of results to return.
 
-        Returns: dict with the cases
+        Returns:
+            dict with the cases
         """
 
         url = f"{self.DOMAIN}/api/Case/GetList?api-version=1.0-Case"
 
-        payload = json.dumps({
+        payload = {
             "common":
                 {
                     "transactionId": str(uuid.uuid4())
@@ -105,7 +111,7 @@ class NovaESDH:
             "paging":
                 {
                     "startRow": paginate_start,
-                    "numberOfRows": paginate_cound
+                    "numberOfRows": paginate_count
                 },
             "caseAttributes":
                 {
@@ -126,10 +132,16 @@ class NovaESDH:
                     "caseAttributes":
                         {
                             "title": True,
-                            "userFriendlyCaseNumber": True
+                            "userFriendlyCaseNumber": True,
                         }
                 }
-        })
+        }
+
+        if case_manifest is not None:
+            payload['caseGetOutput'] = case_manifest
+
+        payload = json.dumps(payload)
+
         headers = {'Content-Type': 'application/json', 'Authorization': f"Bearer {self.get_bearer_token()}"}
 
         response = requests.put(url, headers=headers, data=payload, timeout=self.TIMEOUT)
