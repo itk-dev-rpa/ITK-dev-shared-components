@@ -50,12 +50,5 @@ class IntegrationTestNovaApi(unittest.TestCase):
         self.assertTrue('cases' in cases_response)
 
 
-class TestMockedRequests(unittest.TestCase):
-    """Unittest of KMD Nova API, using mocked requests library."""
-    def test_refresh_token(self):
-        # TODO mock api and ensure retry happens.
-        pass
-
-
 if __name__ == '__main__':
     unittest.main()
