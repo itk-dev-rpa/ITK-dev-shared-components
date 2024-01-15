@@ -21,6 +21,7 @@ class IntegrationTestNovaApi(unittest.TestCase):
         """
         self.assertNotEqual("", self.nova.get_bearer_token())
 
+    @unittest.skip("Needs test data")
     def test_get_address(self):
         """Test the API for getting an address.
         Enter a valid CPR and assert the response.
@@ -45,9 +46,34 @@ class IntegrationTestNovaApi(unittest.TestCase):
         """
         Test the API for getting cases on a given case number.
         """
-        case_number = ""
-        cases_response = self.nova.get_cases_by_case_number(case_number=case_number)
-        self.assertTrue('cases' in cases_response)
+        cpr = "6101009805"
+        case_title = "Meget_Unik_Case_Overskrift"
+        case_number = "S2023-61078"
+
+        def assert_case(cases_response: dict):
+            self.assertIn('cases', cases_response)
+            self.assertEqual(len(cases_response['cases']), 1)
+            self.assertEqual(cases_response['cases'][0]['caseParties'][0]['identification'], cpr)
+            self.assertEqual(cases_response['cases'][0]['caseAttributes']['userFriendlyCaseNumber'], case_number)
+            self.assertEqual(cases_response['cases'][0]['caseAttributes']['title'], case_title)
+
+        cases_response = self.nova.get_cases(cpr=cpr)
+        assert_case(cases_response)
+
+        cases_response = self.nova.get_cases(case_number=case_number)
+        assert_case(cases_response)
+
+        cases_response = self.nova.get_cases(case_title=case_title)
+        assert_case(cases_response)
+
+        cases_response = self.nova.get_cases(cpr=cpr, case_title=case_title)
+        assert_case(cases_response)
+
+        cases_response = self.nova.get_cases(cpr=cpr, case_number=case_number)
+        assert_case(cases_response)
+
+        with self.assertRaises(ValueError):
+            self.nova.get_cases()
 
 
 if __name__ == '__main__':

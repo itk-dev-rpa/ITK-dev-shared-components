@@ -76,7 +76,7 @@ class NovaESDH:
         """
 
         url = (f"{self.DOMAIN}/api/Cpr/GetAddressByCpr"
-               f"?TransactionId=08d1bfed-703e-49a2-bf5c-933bc35ff127"
+               f"?TransactionId={uuid.uuid4()}"
                f"&Cpr={cpr}"
                f"&api-version=1.0-Cpr")
         headers = {'Authorization': f"Bearer {self.get_bearer_token()}"}
@@ -86,20 +86,28 @@ class NovaESDH:
         address = response.json()
         return address
 
-    def get_cases_by_case_number(self, case_number: str, case_manifest=None, paginate_start=1, paginate_count=5) -> dict:
-        """
-        Gets all the cases on a given case number. Default pagination is page 1 through 5.
-        Modify caseGetOutput to get a different output.
-        A UUID is generated as part of the request.
+    def get_cases(self, cpr: str = None, case_number: str = None, case_title: str = None, case_output: dict = None, offset: int = 1, row_count: int = 500) -> dict:
+        """Search for cases on different search terms.
+        Currently supports search on cpr number, case number and case title. At least one search term should be given.
+
         Args:
-            case_number: Case number from Nova ESDH. E.g. "S2022-12345" (dummy data)
-            case_manifest: dictionary defining which case data should be returned by the API. Defaults to None.
-            paginate_start: integer specifying the first page of results.
-            paginate_count: integer specifying the number of results to return.
+            cpr: The cpr number to search on. E.g. "0123456789"
+            case_number: The case number to search on. E.g. "S2022-12345"
+            case_title: The case title to search on.
+            case_output: A dictionary defining which case data should be returned by the API.
+                Defaults to None in which case a default definition will be used.
+            offset: The number of results to skip.
+            row_count: The max number of cases to return.
 
         Returns:
-            dict with the cases
+            A dict of cases according to case_output.
+
+        Raises:
+            ValueError: If no search terms are given.
         """
+
+        if all(term is None for term in (cpr, case_number, case_title)):
+            raise ValueError("No search terms given.")
 
         url = f"{self.DOMAIN}/api/Case/GetList?api-version=1.0-Case"
 
@@ -110,12 +118,18 @@ class NovaESDH:
                 },
             "paging":
                 {
-                    "startRow": paginate_start,
-                    "numberOfRows": paginate_count
+                    "startRow": offset,
+                    "numberOfRows": row_count
                 },
             "caseAttributes":
                 {
-                    "userFriendlyCaseNumber": case_number
+                    "userFriendlyCaseNumber": case_number,
+                    "title": case_title
+                },
+            "caseParty":
+                {
+                    "identificationType": "CprNummer",
+                    "identification": cpr
                 },
             "caseGetOutput":
                 {
@@ -133,12 +147,15 @@ class NovaESDH:
                         {
                             "title": True,
                             "userFriendlyCaseNumber": True,
+                            "caseDate": True,
+                            "numberOfJournalNotes": True,
+                            "numberOfDocuments": True
                         }
                 }
         }
 
-        if case_manifest is not None:
-            payload['caseGetOutput'] = case_manifest
+        if case_output is not None:
+            payload['caseGetOutput'] = case_output
 
         payload = json.dumps(payload)
 
