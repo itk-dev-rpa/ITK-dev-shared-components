@@ -106,7 +106,7 @@ class NovaESDH:
             ValueError: If no search terms are given.
         """
 
-        if all(term is None for term in (cpr, case_number, case_title)):
+        if not any((cpr, case_number, case_title)):
             raise ValueError("No search terms given.")
 
         url = f"{self.DOMAIN}/api/Case/GetList?api-version=1.0-Case"
