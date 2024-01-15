@@ -1,7 +1,10 @@
 """Integration test of KMD Nova API"""
 import unittest
 import os
-from itk_dev_shared_components.kmd_nova import api
+
+from itk_dev_shared_components.kmd_nova.api import NovaESDH
+from itk_dev_shared_components.kmd_nova.case import NovaCase
+
 
 
 class IntegrationTestNovaApi(unittest.TestCase):
@@ -9,7 +12,7 @@ class IntegrationTestNovaApi(unittest.TestCase):
     def setUp(self):
         credentials = os.getenv('nova_api_credentials')
         credentials = credentials.split(',')
-        nova = api.NovaESDH(client_id=credentials[0], client_secret=credentials[1])
+        nova = NovaESDH(client_id=credentials[0], client_secret=credentials[1])
         self.nova = nova
 
     def test_endpoint(self):
@@ -50,27 +53,30 @@ class IntegrationTestNovaApi(unittest.TestCase):
         case_title = "Meget_Unik_Case_Overskrift"
         case_number = "S2023-61078"
 
-        def assert_case(cases_response: dict):
-            self.assertIn('cases', cases_response)
-            self.assertEqual(len(cases_response['cases']), 1)
-            self.assertEqual(cases_response['cases'][0]['caseParties'][0]['identification'], cpr)
-            self.assertEqual(cases_response['cases'][0]['caseAttributes']['userFriendlyCaseNumber'], case_number)
-            self.assertEqual(cases_response['cases'][0]['caseAttributes']['title'], case_title)
+        def assert_cases(cases: list[NovaCase]):
+            self.assertEqual(len(cases), 1)
+            self.assertIsInstance(cases[0], NovaCase)
+            self.assertEqual(cases[0].case_parties[0].identification, cpr)
+            self.assertEqual(cases[0].case_number, case_number)
+            self.assertEqual(cases[0].title, case_title)
 
-        cases_response = self.nova.get_cases(cpr=cpr)
-        assert_case(cases_response)
+        cases = self.nova.get_cases(cpr=cpr)
+        assert_cases(cases)
 
-        cases_response = self.nova.get_cases(case_number=case_number)
-        assert_case(cases_response)
+        cases = self.nova.get_cases(case_number=case_number)
+        assert_cases(cases)
 
-        cases_response = self.nova.get_cases(case_title=case_title)
-        assert_case(cases_response)
+        cases = self.nova.get_cases(case_title=case_title)
+        assert_cases(cases)
 
-        cases_response = self.nova.get_cases(cpr=cpr, case_title=case_title)
-        assert_case(cases_response)
+        cases = self.nova.get_cases(cpr=cpr, case_title=case_title)
+        assert_cases(cases)
 
-        cases_response = self.nova.get_cases(cpr=cpr, case_number=case_number)
-        assert_case(cases_response)
+        cases = self.nova.get_cases(cpr=cpr, case_number=case_number)
+        assert_cases(cases)
+
+        cases = self.nova.get_cases(case_number=case_number, case_title=case_title)
+        assert_cases(cases)
 
         with self.assertRaises(ValueError):
             self.nova.get_cases()

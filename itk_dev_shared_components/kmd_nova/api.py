@@ -5,6 +5,8 @@ import uuid
 import json
 import requests
 
+from itk_dev_shared_components.kmd_nova.case import NovaCase, CaseParty
+
 
 class NovaESDH:
     """
@@ -86,21 +88,18 @@ class NovaESDH:
         address = response.json()
         return address
 
-    def get_cases(self, cpr: str = None, case_number: str = None, case_title: str = None, case_output: dict = None, offset: int = 1, row_count: int = 500) -> dict:
+    def get_cases(self, cpr: str = None, case_number: str = None, case_title: str = None) -> list[NovaCase]:
         """Search for cases on different search terms.
         Currently supports search on cpr number, case number and case title. At least one search term should be given.
+        Currently limited to find 100 cases.
 
         Args:
             cpr: The cpr number to search on. E.g. "0123456789"
             case_number: The case number to search on. E.g. "S2022-12345"
             case_title: The case title to search on.
-            case_output: A dictionary defining which case data should be returned by the API.
-                Defaults to None in which case a default definition will be used.
-            offset: The number of results to skip.
-            row_count: The max number of cases to return.
 
         Returns:
-            A dict of cases according to case_output.
+            A list of NovaCase objects.
 
         Raises:
             ValueError: If no search terms are given.
@@ -118,8 +117,8 @@ class NovaESDH:
                 },
             "paging":
                 {
-                    "startRow": offset,
-                    "numberOfRows": row_count
+                    "startRow": 1,
+                    "numberOfRows": 100
                 },
             "caseAttributes":
                 {
@@ -139,23 +138,16 @@ class NovaESDH:
                             "identificationType": True,
                             "identification": True,
                             "partyRole": True,
-                            "name": True,
-                            "participantContactInformation": True,
-                            "partyRoleName": True
+                            "name": True
                         },
                     "caseAttributes":
                         {
                             "title": True,
                             "userFriendlyCaseNumber": True,
-                            "caseDate": True,
-                            "numberOfJournalNotes": True,
-                            "numberOfDocuments": True
+                            "caseDate": True
                         }
                 }
         }
-
-        if case_output is not None:
-            payload['caseGetOutput'] = case_output
 
         payload = json.dumps(payload)
 
@@ -163,5 +155,28 @@ class NovaESDH:
 
         response = requests.put(url, headers=headers, data=payload, timeout=self.TIMEOUT)
         response.raise_for_status()
-        cases = response.json()
+
+        # Convert json to NovaCase objects
+        cases = []
+        for case_dict in response.json()['cases']:
+            parties = []
+            for party_dict in case_dict['caseParties']:
+                party = CaseParty(
+                    identification_type = party_dict['identificationType'],
+                    identification = party_dict['identification'],
+                    role = party_dict['partyRole'],
+                    name = party_dict['name'],
+                )
+                parties.append(party)
+
+            case = NovaCase(
+                uuid = case_dict['common']['uuid'],
+                title = case_dict['caseAttributes']['title'],
+                case_date = case_dict['caseAttributes']['caseDate'],
+                case_number = case_dict['caseAttributes']['userFriendlyCaseNumber'],
+                case_parties=parties
+            )
+
+            cases.append(case)
+
         return cases
