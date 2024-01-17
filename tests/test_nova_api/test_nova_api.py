@@ -3,8 +3,7 @@ import unittest
 import os
 
 from itk_dev_shared_components.kmd_nova.api import NovaESDH
-from itk_dev_shared_components.kmd_nova.case import NovaCase
-
+from itk_dev_shared_components.kmd_nova.nova_objects import NovaCase
 
 
 class IntegrationTestNovaApi(unittest.TestCase):
@@ -49,7 +48,7 @@ class IntegrationTestNovaApi(unittest.TestCase):
         """
         Test the API for getting cases on a given case number.
         """
-        cpr = "6101009805"
+        cpr = "8412893981"
         case_title = "Meget_Unik_Case_Overskrift"
         case_number = "S2023-61078"
 
