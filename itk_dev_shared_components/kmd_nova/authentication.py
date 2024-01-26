@@ -1,3 +1,4 @@
+"""This module contains functionality to authenticate against the KMD Nova api."""
 
 from datetime import datetime, timedelta
 
