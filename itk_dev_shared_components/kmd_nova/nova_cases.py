@@ -3,13 +3,12 @@ to the KMD Nova api."""
 
 import os
 import uuid
-import json
 import base64
 
 import requests
 
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
-from itk_dev_shared_components.kmd_nova.nova_objects import NovaCase, Document, CaseParty, JournalNote
+from itk_dev_shared_components.kmd_nova.nova_objects import NovaCase, CaseParty, JournalNote
 
 
 def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None, case_title: str = None, limit: int = 100) -> list[NovaCase]:
@@ -69,7 +68,12 @@ def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None,
                 "progressState": True
             },
             "numberOfDocuments": True,
-            "numberOfJournalNotes": True
+            "numberOfJournalNotes": True,
+            "caseClassification": {
+                "kleNumber": {
+                    "code": True
+                }
+            }
         }
     }
 
@@ -90,7 +94,8 @@ def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None,
             progress_state = case_dict['state']['progressState'],
             case_parties = _extract_case_parties(case_dict),
             document_count = case_dict['numberOfDocuments'],
-            note_count = case_dict['numberOfJournalNotes']
+            note_count = case_dict['numberOfJournalNotes'],
+            kle_number = case_dict['caseClassification']['kleNumber']['code']
         )
 
         cases.append(case)
@@ -134,6 +139,10 @@ if __name__ == '__main__':
         nova_access = NovaAccess(client_id=credentials[0], client_secret=credentials[1])
 
         cases = get_cases(nova_access, case_number="S2023-61078")
-        print("hej")
+
+        from itk_dev_shared_components.kmd_nova.nova_tasks import get_tasks
+        get_tasks(cases[0].uuid, nova_access)
+
+        print(cases)
 
     main()
