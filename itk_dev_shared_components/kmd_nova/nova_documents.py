@@ -5,6 +5,7 @@ import os
 import uuid
 from datetime import datetime
 import mimetypes
+from typing import BinaryIO
 
 import requests
 
@@ -76,7 +77,7 @@ def download_document_file(document_uuid: str, nova_access: NovaAccess, checkout
     Returns:
         The document file as raw bytes.
     """
-    url = f"{nova_access.DOMAIN}/api/Document/GetFile?api-version=1.0-Case"
+    url = f"{nova_access.domain}/api/Document/GetFile?api-version=1.0-Case"
 
     payload = {
         "common": {
@@ -94,12 +95,13 @@ def download_document_file(document_uuid: str, nova_access: NovaAccess, checkout
     return response.content
 
 
-def upload_document(document_path: str, nova_access: NovaAccess) -> str:
+def upload_document(file: BinaryIO, file_name: str, nova_access: NovaAccess) -> str:
     """Upload a document to Nova. This only uploads the document file.
     To attach the document to a case use attach_document_to_case.
 
     Args:
-        document_path: The path to the file on the system.
+        file: The file to upload as a file-like object in binary mode.
+        file_name: The name of the file including the file extension.
         nova_access: The NovaAccess object used to authenticate.
 
     Returns:
@@ -108,19 +110,17 @@ def upload_document(document_path: str, nova_access: NovaAccess) -> str:
     transaction_id = str(uuid.uuid4())
     document_id = str(uuid.uuid4())
 
-    url = f"{nova_access.DOMAIN}/api/Document/UploadFile/{transaction_id}/{document_id}?api-version=1.0-Case"
+    url = f"{nova_access.domain}/api/Document/UploadFile/{transaction_id}/{document_id}?api-version=1.0-Case"
 
     headers = {'Authorization': f"Bearer {nova_access.get_bearer_token()}", 'accept': '*/*'}
 
-    file_name = os.path.basename(document_path)
-    mime_type = mimetypes.guess_type(document_path)[0]
+    mime_type = mimetypes.guess_type(file_name)[0]
 
     if mime_type is None:
         mime_type = 'application/octet-stream'
 
-    with open(document_path, 'rb') as file:
-        files = {"file": (file_name, file, mime_type)}
-        response = requests.post(url, headers=headers, files=files, timeout=60)
+    files = {"file": (file_name, file, mime_type)}
+    response = requests.post(url, headers=headers, files=files, timeout=60)
 
     response.raise_for_status()
 
@@ -129,7 +129,8 @@ def upload_document(document_path: str, nova_access: NovaAccess) -> str:
 
 def attach_document_to_case(case_uuid: str, document: Document, nova_access: NovaAccess, security_unit_id: int = 818485, security_unit_name: str = "Borgerservice") -> None:
     """Attach a document to a case in Nova.
-    The document file first needs to be uploaded using upload_document.
+    The document file first needs to be uploaded using upload_document,
+    which also creates the document uuid.
 
     Args:
         case_uuid: The uuid of the case to attach the document to.
@@ -138,7 +139,7 @@ def attach_document_to_case(case_uuid: str, document: Document, nova_access: Nov
         security_unit_id: The id of the security unit that has access to the document. Defaults to 818485.
         security_unit_name: The name of the security unit that has access to the document. Defaults to "Borgerservice".
     """
-    url = f"{nova_access.DOMAIN}/api/Document/Import?api-version=1.0-Case"
+    url = f"{nova_access.domain}/api/Document/Import?api-version=1.0-Case"
 
     payload = {
         "common": {
@@ -173,7 +174,19 @@ if __name__ == '__main__':
         nova_access = NovaAccess(client_id=credentials[0], client_secret=credentials[1])
 
         case_uuid = '38d0d60a-8185-421b-9dfa-a366646c88f7'
-        documents = get_documents(case_uuid, nova_access)
-        print("Hej")
+
+        with open(r"C:\Users\az68933\Desktop\temp\Pdf document.pdf", 'rb') as file:
+            document_uuid = upload_document(file, "Hej.pdf", nova_access)
+
+        document = Document(
+            uuid=document_uuid,
+            approved=True,
+            description="Et super officielt dokument!",
+            document_type="Internt",
+            sensitivity="Fortrolige",
+            title="Super dokument! V3"
+        )
+
+        attach_document_to_case(case_uuid, document, nova_access)
 
     main()
