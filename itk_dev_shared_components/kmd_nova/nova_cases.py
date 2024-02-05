@@ -1,7 +1,6 @@
 """This module has functions to do with case related calls
 to the KMD Nova api."""
 
-import os
 import uuid
 import base64
 
@@ -9,6 +8,7 @@ import requests
 
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
 from itk_dev_shared_components.kmd_nova.nova_objects import NovaCase, CaseParty, JournalNote
+from itk_dev_shared_components.kmd_nova.util import datetime_from_iso_string
 
 
 def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None, case_title: str = None, limit: int = 100) -> list[NovaCase]:
@@ -27,6 +27,7 @@ def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None,
 
     Raises:
         ValueError: If no search terms are given.
+        requests.exceptions.HTTPError: If the request failed.
     """
 
     if not any((cpr, case_number, case_title)):
@@ -55,8 +56,9 @@ def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None,
             "caseParty": {
                 "identificationType": True,
                 "identification": True,
-                "partyRole": True,
-                "name": True
+                "participantRole": True,
+                "name": True,
+                "index": True
             },
             "caseAttributes": {
                 "title": True,
@@ -72,7 +74,13 @@ def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None,
             "caseClassification": {
                 "kleNumber": {
                     "code": True
+                },
+                "proceedingFacet": {
+                    "code": True
                 }
+            },
+            "sensitivity": {
+                "sensitivity": True
             }
         }
     }
@@ -82,20 +90,25 @@ def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None,
     response = requests.put(url, headers=headers, json=payload, timeout=60)
     response.raise_for_status()
 
+    if response.json()['pagingInformation']['numberOfRows'] == 0:
+        return []
+
     # Convert json to NovaCase objects
     cases = []
     for case_dict in response.json()['cases']:
         case = NovaCase(
             uuid = case_dict['common']['uuid'],
             title = case_dict['caseAttributes']['title'],
-            case_date = case_dict['caseAttributes']['caseDate'],
+            case_date = datetime_from_iso_string(case_dict['caseAttributes']['caseDate']),
             case_number = case_dict['caseAttributes']['userFriendlyCaseNumber'],
             active_code = case_dict['state']['activeCode'],
             progress_state = case_dict['state']['progressState'],
             case_parties = _extract_case_parties(case_dict),
             document_count = case_dict['numberOfDocuments'],
             note_count = case_dict['numberOfJournalNotes'],
-            kle_number = case_dict['caseClassification']['kleNumber']['code']
+            kle_number = case_dict['caseClassification']['kleNumber']['code'],
+            proceeding_facet = case_dict['caseClassification']['proceedingFacet']['code'],
+            sensitivity = case_dict["sensitivity"]["sensitivity"]
         )
 
         cases.append(case)
@@ -104,12 +117,21 @@ def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None,
 
 
 def _extract_case_parties(case_dict: dict) -> list[CaseParty]:
+    """Extract the case parties from a HTTP request response.
+
+    Args:
+        case_dict: The dictionary describing the case party.
+
+    Returns:
+        A case party object describing the case party.
+    """
     parties = []
     for party_dict in case_dict['caseParties']:
         party = CaseParty(
+            uuid = party_dict['index'],
             identification_type = party_dict['identificationType'],
             identification = party_dict['identification'],
-            role = party_dict['partyRole'],
+            role = party_dict['participantRole'],
             name = party_dict.get('name', None)
         )
         parties.append(party)
@@ -118,6 +140,14 @@ def _extract_case_parties(case_dict: dict) -> list[CaseParty]:
 
 
 def _extract_journal_notes(case_dict: dict) -> list:
+    """Extract the journal notes from a HTTP request response.
+
+    Args:
+        case_dict: The dictionary describing the journal note.
+
+    Returns:
+        A journal note object describing the journal note.
+    """
     notes = []
     for note_dict in case_dict['journalNotes']['journalNotes']:
         note = JournalNote(
@@ -132,17 +162,64 @@ def _extract_journal_notes(case_dict: dict) -> list:
     return notes
 
 
-if __name__ == '__main__':
-    def main():
-        credentials = os.getenv('nova_api_credentials')
-        credentials = credentials.split(',')
-        nova_access = NovaAccess(client_id=credentials[0], client_secret=credentials[1])
+def add_case(case: NovaCase, nova_access: NovaAccess, security_unit_id: int = 818485, security_unit_name: str = "Borgerservice"):
+    """Add a case to KMD Nova. The case will be created as 'Active'.
 
-        cases = get_cases(nova_access, case_number="S2023-61078")
+    Args:
+        case: The case object describing the case.
+        nova_access: The NovaAccess object used to authenticate.
+        security_unit_id: The id of the security unit that has access to the case. Defaults to 818485.
+        security_unit_name: The name of the security unit that has access to the case. Defaults to "Borgerservice".
 
-        from itk_dev_shared_components.kmd_nova.nova_tasks import get_tasks
-        get_tasks(cases[0].uuid, nova_access)
+    Raises:
+        requests.exceptions.HTTPError: If the request failed.
+    """
+    url = f"{nova_access.domain}/api/Case/Import?api-version=1.0-Case"
 
-        print(cases)
+    payload = {
+        "common": {
+            "transactionId": str(uuid.uuid4()),
+            "uuid": case.uuid
+        },
+        "caseAttributes": {
+            "title": case.title,
+            "caseDate": case.case_date.isoformat()
+        },
+        "caseClassification": {
+                "kleNumber": {
+                    "code": case.kle_number
+                },
+                "proceedingFacet": {
+                    "code": case.proceeding_facet
+                }
+        },
+        "state": case.progress_state,
+        "sensitivity": case.sensitivity,
+        "caseParties": [
+            {
+                "name": party.name,
+                "identificationType": party.identification_type,
+                "identification": party.identification,
+                "participantRole": party.role
+            } for party in case.case_parties
+        ],
+        "securityUnit": {
+            "losIdentity": {
+                "administrativeUnitId": security_unit_id,
+                "fullName": security_unit_name,
+            }
+        },
+        "SensitivityCtrlBy": "Bruger",
+        "SecurityUnitCtrlBy": "Regler",
+        "ResponsibleDepartmentCtrlBy": "Regler",
+        "caseAvailability": {
+            "unit": "År",
+            "scale": 5
+        },
+        "AvailabilityCtrlBy": "Regler"
+    }
 
-    main()
+    headers = {'Content-Type': 'application/json', 'Authorization': f"Bearer {nova_access.get_bearer_token()}"}
+
+    response = requests.post(url, headers=headers, json=payload, timeout=60)
+    response.raise_for_status()
