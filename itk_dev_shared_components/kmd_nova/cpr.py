@@ -10,14 +10,15 @@ from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
 
 def get_address_by_cpr(cpr: str, nova_access: NovaAccess) -> dict:
     """Gets the street address of a citizen by their CPR number.
+
     Args:
-        cpr: CPR of the citizen
+        cpr: CPR number of the citizen.
 
     Returns:
-        dict with the address information
+        A dict with the address information.
 
     Raises:
-        requests.exceptions.HTTPError if the request failed.
+        requests.exceptions.HTTPError: If the request failed.
     """
 
     url = f"{nova_access.domain}/api/Cpr/GetAddressByCpr?TransactionId={uuid.uuid4()}&Cpr={cpr}&api-version=1.0-Cpr"
@@ -25,5 +26,5 @@ def get_address_by_cpr(cpr: str, nova_access: NovaAccess) -> dict:
 
     response = requests.get(url, headers=headers, timeout=60)
     response.raise_for_status()
-    address = response.json()  # TODO: Test this
+    address = response.json()
     return address

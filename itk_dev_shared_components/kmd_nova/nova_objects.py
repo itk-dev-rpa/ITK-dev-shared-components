@@ -8,16 +8,17 @@ from datetime import datetime
 # pylint: disable=too-many-instance-attributes
 
 
-@dataclass(frozen=True, slots=True, kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CaseParty:
     """A dataclass representing a case party in a KMD Nova case."""
-    identification_type: str
-    identification: str
+    uuid: Optional[str] = None
     role: str
-    name: str
+    identification_type: Optional[str] = None
+    identification: Optional[str] = None
+    name: Optional[str] = None
 
 
-@dataclass(frozen=True, slots=True, kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class Document:
     """A dataclass representing a KMD Nova Document."""
     uuid: str
@@ -29,9 +30,11 @@ class Document:
     document_number: Optional[str] = None
     document_date: Optional[str] = None
     file_extension: Optional[str] = None
+    category_name: Optional[str] = None
+    category_uuid: Optional[str] = None
 
 
-@dataclass(frozen=True, slots=True, kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class JournalNote:
     """A dataclass representing a KMD Nova journal note."""
     uuid: str
@@ -42,31 +45,33 @@ class JournalNote:
     approved: bool
 
 
-@dataclass(frozen=True, slots=True, kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class Task:
     """A dataclass representing a KMD Nova task."""
     uuid: str
     title: str
-    description: Optional[str]
-    case_worker_ident: Optional[str]
+    description: Optional[str] = None
+    case_worker_ident: Optional[str] = None
     case_worker_uuid: str
-    status_code: Literal['F', 'N', 'S']  # Finished, Not Started, Started
+    status_code: Literal['N', 'S', 'F']  # Not Started, Started, Finished
     deadline: datetime
-    created_date: Optional[datetime]
-    started_date: Optional[datetime]
-    closed_date: Optional[datetime]
+    created_date: Optional[datetime] = None
+    started_date: Optional[datetime] = None
+    closed_date: Optional[datetime] = None
 
 
-@dataclass(frozen=True, slots=True, kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class NovaCase:
     """A dataclass representing a KMD Nova case."""
     uuid: str
     title: str
-    case_number: str
-    case_date: str
-    active_code: str
-    progress_state: str
+    case_number: Optional[str] = None
+    case_date: datetime
+    active_code: Optional[str] = None
+    progress_state: Literal["Opstaaet", "Oplyst", "Afgjort", "Bestilt", "Udfoert", "Afsluttet"]
     case_parties: list[CaseParty]
-    document_count: int
-    note_count: int
+    document_count: Optional[int] = 0
+    note_count: Optional[int] = 0
     kle_number: str
+    proceeding_facet: str
+    sensitivity: Literal["Fortrolige", "IkkeFortrolige", "SærligFølsomme", "Følsomme"]

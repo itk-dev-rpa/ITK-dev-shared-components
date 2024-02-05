@@ -23,7 +23,7 @@ class NovaAccess:
             tuple: token and expiry datetime
 
         Raises:
-            requests.exceptions.HTTPError if the request failed.
+            requests.exceptions.HTTPError: If the request failed.
         """
 
         url = "https://novaauth.kmd.dk/realms/NovaIntegration/protocol/openid-connect/token"

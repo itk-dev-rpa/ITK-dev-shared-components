@@ -1,7 +1,6 @@
 """This module has functions to do with document related calls
 to the KMD Nova api."""
 
-import os
 import uuid
 from datetime import datetime
 import mimetypes
@@ -22,7 +21,10 @@ def get_documents(case_uuid: str, nova_access: NovaAccess) -> list[Document]:
         nova_access: The NovaAccess object used to authenticate.
 
     Returns:
-        _description_
+        A list of Document objects describing the documents.
+
+    Raises:
+        requests.exceptions.HTTPError: If the request failed.
     """
     url = f"{nova_access.domain}/api/Document/GetList?api-version=1.0-Case"
 
@@ -38,7 +40,8 @@ def get_documents(case_uuid: str, nova_access: NovaAccess) -> list[Document]:
             "description": True,
             "approved": True,
             "documentDate": True,
-            "fileExtension": True
+            "fileExtension": True,
+            "documentCategory": True
         }
     }
 
@@ -58,7 +61,9 @@ def get_documents(case_uuid: str, nova_access: NovaAccess) -> list[Document]:
             description = document_dict.get('description', None),
             approved = document_dict['approved'],
             document_date = document_dict['documentDate'],
-            file_extension = document_dict['fileExtension']
+            file_extension = document_dict['fileExtension'],
+            category_name = document_dict['documentCategoryName'],
+            category_uuid = document_dict['documentCategoryUuid']
         )
         documents.append(doc)
 
@@ -76,6 +81,9 @@ def download_document_file(document_uuid: str, nova_access: NovaAccess, checkout
 
     Returns:
         The document file as raw bytes.
+
+    Raises:
+        requests.exceptions.HTTPError: If the request failed.
     """
     url = f"{nova_access.domain}/api/Document/GetFile?api-version=1.0-Case"
 
@@ -97,7 +105,8 @@ def download_document_file(document_uuid: str, nova_access: NovaAccess, checkout
 
 def upload_document(file: BinaryIO, file_name: str, nova_access: NovaAccess) -> str:
     """Upload a document to Nova. This only uploads the document file.
-    To attach the document to a case use attach_document_to_case.
+    To attach the document to a case use attach_document_to_case after calling this.
+    The uuid returned should be used to create a new Document object.
 
     Args:
         file: The file to upload as a file-like object in binary mode.
@@ -106,6 +115,9 @@ def upload_document(file: BinaryIO, file_name: str, nova_access: NovaAccess) -> 
 
     Returns:
         The uuid identifying the document in Nova.
+
+    Raises:
+        requests.exceptions.HTTPError: If the request failed.
     """
     transaction_id = str(uuid.uuid4())
     document_id = str(uuid.uuid4())
@@ -138,6 +150,9 @@ def attach_document_to_case(case_uuid: str, document: Document, nova_access: Nov
         nova_access: The NovaAccess object used to authenticate.
         security_unit_id: The id of the security unit that has access to the document. Defaults to 818485.
         security_unit_name: The name of the security unit that has access to the document. Defaults to "Borgerservice".
+
+    Raises:
+        requests.exceptions.HTTPError: If the request failed.
     """
     url = f"{nova_access.domain}/api/Document/Import?api-version=1.0-Case"
 
@@ -152,6 +167,7 @@ def attach_document_to_case(case_uuid: str, document: Document, nova_access: Nov
         "documentDate": datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
         "documentType": document.document_type,
         "description": document.description,
+        "documentCategoryUuid": document.category_uuid,
         "securityUnit": {
             "losIdentity": {
                 "administrativeUnitId": security_unit_id,
@@ -165,28 +181,3 @@ def attach_document_to_case(case_uuid: str, document: Document, nova_access: Nov
     headers = {'Content-Type': 'application/json', 'Authorization': f"Bearer {nova_access.get_bearer_token()}"}
     response = requests.post(url, headers=headers, json=payload, timeout=60)
     response.raise_for_status()
-
-
-if __name__ == '__main__':
-    def main():
-        credentials = os.getenv('nova_api_credentials')
-        credentials = credentials.split(',')
-        nova_access = NovaAccess(client_id=credentials[0], client_secret=credentials[1])
-
-        case_uuid = '38d0d60a-8185-421b-9dfa-a366646c88f7'
-
-        with open(r"C:\Users\az68933\Desktop\temp\Pdf document.pdf", 'rb') as file:
-            document_uuid = upload_document(file, "Hej.pdf", nova_access)
-
-        document = Document(
-            uuid=document_uuid,
-            approved=True,
-            description="Et super officielt dokument!",
-            document_type="Internt",
-            sensitivity="Fortrolige",
-            title="Super dokument! V3"
-        )
-
-        attach_document_to_case(case_uuid, document, nova_access)
-
-    main()
