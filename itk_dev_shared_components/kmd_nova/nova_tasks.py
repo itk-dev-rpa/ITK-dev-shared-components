@@ -13,7 +13,7 @@ def attach_task_to_case(case_uuid: str, task: Task, nova_access: NovaAccess) -> 
     """Attach a Task object to a case in Nova.
 
     The Task object must have the following values set:
-    uuid, title, statusCode, deadline.
+    uuid, title, status_code, deadline, case_worker_uuid.
 
     Args:
         case_uuid: The id of the case to attach the task to.
