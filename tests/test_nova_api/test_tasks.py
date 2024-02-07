@@ -3,9 +3,10 @@ import unittest
 import os
 import uuid
 from datetime import datetime, date
+import random
 
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
-from itk_dev_shared_components.kmd_nova.nova_objects import NovaCase, CaseParty, Task
+from itk_dev_shared_components.kmd_nova.nova_objects import Task
 from itk_dev_shared_components.kmd_nova import nova_cases, nova_tasks
 
 
@@ -18,9 +19,9 @@ class NovaCasesTest(unittest.TestCase):
 
     def test_get_tasks(self):
         """Test getting tasks from a case."""
-        case = nova_cases.get_cases(self.nova_access, case_number="S2023-61078")[0]
+        case = self._get_test_case()
         tasks = nova_tasks.get_tasks(case.uuid, self.nova_access)
-        task = self._find_task_by_name(tasks, "Test opgave")
+        task = self._find_task_by_title(tasks, "Test opgave")
 
         self.assertIsInstance(task, Task)
         self.assertEqual(task.deadline.date(), date(2024, 2, 6))
@@ -33,7 +34,7 @@ class NovaCasesTest(unittest.TestCase):
 
     def test_add_task_minimal(self):
         """Test adding a Task to Nova with minimal information set."""
-        case = nova_cases.get_cases(self.nova_access, case_number="S2023-61078")[0]
+        case = self._get_test_case()
 
         # Test with minimal attributes set
         new_task = Task(
@@ -48,7 +49,7 @@ class NovaCasesTest(unittest.TestCase):
 
         # Check if it got created by finding it in Nova
         tasks = nova_tasks.get_tasks(case.uuid, self.nova_access)
-        nova_task = self._find_task_by_name(tasks, new_task.title)
+        nova_task = self._find_task_by_title(tasks, new_task.title)
 
         self.assertEqual(nova_task.title, new_task.title)
         self.assertEqual(nova_task.uuid, new_task.uuid)
@@ -58,7 +59,7 @@ class NovaCasesTest(unittest.TestCase):
 
     def test_add_task_full(self):
         """Test adding a Task to Nova with all information set."""
-        case = nova_cases.get_cases(self.nova_access, case_number="S2023-61078")[0]
+        case = self._get_test_case()
 
         # Test with minimal attributes set
         new_task = Task(
@@ -77,7 +78,7 @@ class NovaCasesTest(unittest.TestCase):
 
         # Check if it got created by finding it in Nova
         tasks = nova_tasks.get_tasks(case.uuid, self.nova_access)
-        nova_task = self._find_task_by_name(tasks, new_task.title)
+        nova_task = self._find_task_by_title(tasks, new_task.title)
 
         self.assertEqual(nova_task.title, new_task.title)
         self.assertEqual(nova_task.uuid, new_task.uuid)
@@ -89,13 +90,48 @@ class NovaCasesTest(unittest.TestCase):
         self.assertEqual(nova_task.status_code, new_task.status_code)
         self.assertEqual(nova_task.description, new_task.description)
 
-    def _find_task_by_name(self, tasks: list[Task], title: str) -> Task:
+    def test_update_task(self):
+        """Test updating values on an existing task in Nova."""
+        # Create a new task to test on
+        case = self._get_test_case()
+        title = f"Test Update Task {datetime.now()}"
+
+        task = Task(
+            uuid=str(uuid.uuid4()),
+            title=title,
+            status_code="N",
+            deadline=datetime.now(),
+            case_worker_uuid="6874a25c-201b-4328-9cf5-4b2a7d5e707a"
+        )
+
+        nova_tasks.attach_task_to_case(case.uuid, task, self.nova_access)
+
+        # Change some values and update them
+        new_deadline = datetime(year=random.randint(2020, 2025), month=random.randint(1, 12), day=random.randint(1, 25))
+        task.deadline = new_deadline
+        task.status_code = "F"
+        task.description = "Updated Description"
+
+        nova_tasks.update_task(task, case.uuid, self.nova_access)
+
+        # Check if it got updated by finding it in Nova
+        tasks = nova_tasks.get_tasks(case.uuid, self.nova_access)
+        nova_task = self._find_task_by_title(tasks, title)
+
+        self.assertEqual(nova_task.deadline.date(), task.deadline.date())
+        self.assertEqual(nova_task.status_code,  task.status_code)
+        self.assertEqual(nova_task.description, task.description)
+
+    def _find_task_by_title(self, tasks: list[Task], title: str) -> Task:
         """Find a task by its title in a list of tasks."""
         for task in tasks:
             if task.title == title:
                 return task
 
         raise ValueError("No task with the given title exists.")
+
+    def _get_test_case(self):
+        return nova_cases.get_cases(self.nova_access, case_number="S2023-61078")[0]
 
 
 if __name__ == '__main__':
