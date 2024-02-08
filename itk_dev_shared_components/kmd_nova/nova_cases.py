@@ -33,7 +33,8 @@ def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None,
     if not any((cpr, case_number, case_title)):
         raise ValueError("No search terms given.")
 
-    url = f"{nova_access.domain}/api/Case/GetList?api-version=1.0-Case"
+    url = f"{nova_access.domain}/api/Case/GetList"
+    params = {"api-version": "1.0-Case"}
 
     payload = {
         "common": {
@@ -87,7 +88,7 @@ def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None,
 
     headers = {'Content-Type': 'application/json', 'Authorization': f"Bearer {nova_access.get_bearer_token()}"}
 
-    response = requests.put(url, headers=headers, json=payload, timeout=60)
+    response = requests.put(url, params=params, headers=headers, json=payload, timeout=60)
     response.raise_for_status()
 
     if response.json()['pagingInformation']['numberOfRows'] == 0:
@@ -174,7 +175,8 @@ def add_case(case: NovaCase, nova_access: NovaAccess, security_unit_id: int = 81
     Raises:
         requests.exceptions.HTTPError: If the request failed.
     """
-    url = f"{nova_access.domain}/api/Case/Import?api-version=1.0-Case"
+    url = f"{nova_access.domain}/api/Case/Import"
+    params = {"api-version": "1.0-Case"}
 
     payload = {
         "common": {
@@ -221,5 +223,5 @@ def add_case(case: NovaCase, nova_access: NovaAccess, security_unit_id: int = 81
 
     headers = {'Content-Type': 'application/json', 'Authorization': f"Bearer {nova_access.get_bearer_token()}"}
 
-    response = requests.post(url, headers=headers, json=payload, timeout=60)
+    response = requests.post(url, params=params, headers=headers, json=payload, timeout=60)
     response.raise_for_status()

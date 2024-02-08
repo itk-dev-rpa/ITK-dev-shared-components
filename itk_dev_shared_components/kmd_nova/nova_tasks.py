@@ -23,7 +23,8 @@ def attach_task_to_case(case_uuid: str, task: Task, nova_access: NovaAccess) -> 
     Raises:
         requests.exceptions.HTTPError: If the request failed.
     """
-    url = f"{nova_access.domain}/api/Task/Import?api-version=1.0-Task"
+    url = f"{nova_access.domain}/api/Task/Import"
+    params = {"api-version": "1.0-Task"}
 
     payload = {
         "common": {
@@ -42,7 +43,7 @@ def attach_task_to_case(case_uuid: str, task: Task, nova_access: NovaAccess) -> 
     }
 
     headers = {'Content-Type': 'application/json', 'Authorization': f"Bearer {nova_access.get_bearer_token()}"}
-    response = requests.post(url, headers=headers, json=payload, timeout=60)
+    response = requests.post(url, params=params, headers=headers, json=payload, timeout=60)
     response.raise_for_status()
 
 
@@ -60,7 +61,8 @@ def get_tasks(case_uuid: str, nova_access: NovaAccess, limit: int = 100) -> list
     Raises:
         requests.exceptions.HTTPError: If the request failed.
     """
-    url = f"{nova_access.domain}/api/Task/GetList?api-version=1.0-Task"
+    url = f"{nova_access.domain}/api/Task/GetList"
+    params = {"api-version": "1.0-Task"}
 
     payload = {
         "common": {
@@ -74,7 +76,7 @@ def get_tasks(case_uuid: str, nova_access: NovaAccess, limit: int = 100) -> list
     }
 
     headers = {'Content-Type': 'application/json', 'Authorization': f"Bearer {nova_access.get_bearer_token()}"}
-    response = requests.put(url, headers=headers, json=payload, timeout=60)
+    response = requests.put(url, params=params, headers=headers, json=payload, timeout=60)
     response.raise_for_status()
 
     if 'taskList' not in response.json():
@@ -111,7 +113,8 @@ def update_task(task: Task, case_uuid: str, nova_access: NovaAccess):
     Raises:
         requests.exceptions.HTTPError: If the request failed.
     """
-    url = f"{nova_access.domain}/api/Task/Update?api-version=1.0-Task"
+    url = f"{nova_access.domain}/api/Task/Update"
+    params = {"api-version": "1.0-Task"}
 
     payload = {
         "common": {
@@ -130,5 +133,5 @@ def update_task(task: Task, case_uuid: str, nova_access: NovaAccess):
     }
 
     headers = {'Content-Type': 'application/json', 'Authorization': f"Bearer {nova_access.get_bearer_token()}"}
-    response = requests.put(url, headers=headers, json=payload, timeout=60)
+    response = requests.put(url, params=params, headers=headers, json=payload, timeout=60)
     response.raise_for_status()

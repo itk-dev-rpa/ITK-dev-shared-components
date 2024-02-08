@@ -27,7 +27,8 @@ def get_documents(case_uuid: str, nova_access: NovaAccess) -> list[Document]:
     Raises:
         requests.exceptions.HTTPError: If the request failed.
     """
-    url = f"{nova_access.domain}/api/Document/GetList?api-version=1.0-Case"
+    url = f"{nova_access.domain}/api/Document/GetList"
+    params = {"api-version": "1.0-Case"}
 
     payload = {
         "common": {
@@ -48,7 +49,7 @@ def get_documents(case_uuid: str, nova_access: NovaAccess) -> list[Document]:
 
     headers = {'Content-Type': 'application/json', 'Authorization': f"Bearer {nova_access.get_bearer_token()}"}
 
-    response = requests.put(url, headers=headers, json=payload, timeout=60)
+    response = requests.put(url, params=params, headers=headers, json=payload, timeout=60)
     response.raise_for_status()
 
     documents = []
@@ -86,7 +87,8 @@ def download_document_file(document_uuid: str, nova_access: NovaAccess, checkout
     Raises:
         requests.exceptions.HTTPError: If the request failed.
     """
-    url = f"{nova_access.domain}/api/Document/GetFile?api-version=1.0-Case"
+    url = f"{nova_access.domain}/api/Document/GetFile"
+    params = {"api-version": "1.0-Case"}
 
     payload = {
         "common": {
@@ -98,7 +100,7 @@ def download_document_file(document_uuid: str, nova_access: NovaAccess, checkout
     }
 
     headers = {'Content-Type': 'application/json', 'Authorization': f"Bearer {nova_access.get_bearer_token()}"}
-    response = requests.put(url, headers=headers, json=payload, timeout=60)
+    response = requests.put(url, params=params, headers=headers, json=payload, timeout=60)
     response.raise_for_status()
 
     return response.content
@@ -123,7 +125,8 @@ def upload_document(file: BinaryIO, file_name: str, nova_access: NovaAccess) -> 
     transaction_id = str(uuid.uuid4())
     document_id = str(uuid.uuid4())
 
-    url = f"{nova_access.domain}/api/Document/UploadFile/{transaction_id}/{document_id}?api-version=1.0-Case"
+    url = f"{nova_access.domain}/api/Document/UploadFile/{transaction_id}/{document_id}"
+    params = {"api-version": "1.0-Case"}
 
     headers = {'Authorization': f"Bearer {nova_access.get_bearer_token()}", 'accept': '*/*'}
 
@@ -133,7 +136,7 @@ def upload_document(file: BinaryIO, file_name: str, nova_access: NovaAccess) -> 
         mime_type = 'application/octet-stream'
 
     files = {"file": (file_name, file, mime_type)}
-    response = requests.post(url, headers=headers, files=files, timeout=60)
+    response = requests.post(url, params=params, headers=headers, files=files, timeout=60)
 
     response.raise_for_status()
 
@@ -155,7 +158,8 @@ def attach_document_to_case(case_uuid: str, document: Document, nova_access: Nov
     Raises:
         requests.exceptions.HTTPError: If the request failed.
     """
-    url = f"{nova_access.domain}/api/Document/Import?api-version=1.0-Case"
+    url = f"{nova_access.domain}/api/Document/Import"
+    params = {"api-version": "1.0-Case"}
 
     payload = {
         "common": {
@@ -180,5 +184,5 @@ def attach_document_to_case(case_uuid: str, document: Document, nova_access: Nov
     }
 
     headers = {'Content-Type': 'application/json', 'Authorization': f"Bearer {nova_access.get_bearer_token()}"}
-    response = requests.post(url, headers=headers, json=payload, timeout=60)
+    response = requests.post(url, params=params, headers=headers, json=payload, timeout=60)
     response.raise_for_status()
