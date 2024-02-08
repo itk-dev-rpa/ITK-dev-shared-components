@@ -19,3 +19,7 @@ class NovaAuthTest(unittest.TestCase):
         credentials = credentials.split(',')
         nova_access = NovaAccess(client_id=credentials[0], client_secret=credentials[1])
         self.assertNotEqual("", nova_access.get_bearer_token())
+
+
+if __name__ == '__main__':
+    unittest.main()
