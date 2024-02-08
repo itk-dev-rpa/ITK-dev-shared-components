@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Hooks for KMD Nova cases.
+- Hooks for KMD Nova tasks.
+- Hooks for KMD Nova documents.
+- Hooks for CPR address lookup via KMD Nova API.
+
 ## [1.1.0] - 2023-11-28
 
 ### Changed
