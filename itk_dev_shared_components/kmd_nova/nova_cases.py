@@ -3,6 +3,7 @@ to the KMD Nova api."""
 
 import uuid
 import base64
+import urllib.parse
 
 import requests
 
@@ -33,7 +34,7 @@ def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None,
     if not any((cpr, case_number, case_title)):
         raise ValueError("No search terms given.")
 
-    url = f"{nova_access.domain}/api/Case/GetList"
+    url = urllib.parse.urljoin(nova_access.domain, "api/Case/GetList")
     params = {"api-version": "1.0-Case"}
 
     payload = {
@@ -175,7 +176,7 @@ def add_case(case: NovaCase, nova_access: NovaAccess, security_unit_id: int = 81
     Raises:
         requests.exceptions.HTTPError: If the request failed.
     """
-    url = f"{nova_access.domain}/api/Case/Import"
+    url = urllib.parse.urljoin(nova_access.domain, "api/Case/Import")
     params = {"api-version": "1.0-Case"}
 
     payload = {

@@ -1,6 +1,7 @@
 """This module has functions to do with task related calls
 to the KMD Nova api."""
 import uuid
+import urllib.parse
 
 import requests
 
@@ -23,7 +24,7 @@ def attach_task_to_case(case_uuid: str, task: Task, nova_access: NovaAccess) -> 
     Raises:
         requests.exceptions.HTTPError: If the request failed.
     """
-    url = f"{nova_access.domain}/api/Task/Import"
+    url = urllib.parse.urljoin(nova_access.domain, "api/Task/Import")
     params = {"api-version": "1.0-Task"}
 
     payload = {
@@ -61,7 +62,7 @@ def get_tasks(case_uuid: str, nova_access: NovaAccess, limit: int = 100) -> list
     Raises:
         requests.exceptions.HTTPError: If the request failed.
     """
-    url = f"{nova_access.domain}/api/Task/GetList"
+    url = urllib.parse.urljoin(nova_access.domain, "api/Task/GetList")
     params = {"api-version": "1.0-Task"}
 
     payload = {
@@ -113,7 +114,7 @@ def update_task(task: Task, case_uuid: str, nova_access: NovaAccess):
     Raises:
         requests.exceptions.HTTPError: If the request failed.
     """
-    url = f"{nova_access.domain}/api/Task/Update"
+    url = urllib.parse.urljoin(nova_access.domain, "api/Task/Update")
     params = {"api-version": "1.0-Task"}
 
     payload = {

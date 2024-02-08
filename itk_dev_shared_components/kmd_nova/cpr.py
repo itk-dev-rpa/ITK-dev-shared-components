@@ -2,6 +2,7 @@
 to the KMD Nova api."""
 
 import uuid
+import urllib.parse
 
 import requests
 
@@ -21,7 +22,7 @@ def get_address_by_cpr(cpr: str, nova_access: NovaAccess) -> dict:
         requests.exceptions.HTTPError: If the request failed.
     """
 
-    url = f"{nova_access.domain}/api/Cpr/GetAddressByCpr"
+    url = urllib.parse.urljoin(nova_access.domain, "api/Cpr/GetAddressByCpr")
     params = {
         "TransactionId": str(uuid.uuid4()),
         "Cpr": cpr,
