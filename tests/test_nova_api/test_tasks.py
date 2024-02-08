@@ -12,10 +12,11 @@ from itk_dev_shared_components.kmd_nova import nova_cases, nova_tasks
 
 class NovaCasesTest(unittest.TestCase):
     """Test the part of the API to do with tasks."""
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         credentials = os.getenv('nova_api_credentials')
         credentials = credentials.split(',')
-        self.nova_access = NovaAccess(client_id=credentials[0], client_secret=credentials[1])
+        cls.nova_access = NovaAccess(client_id=credentials[0], client_secret=credentials[1])
 
     def test_get_tasks(self):
         """Test getting tasks from a case."""
