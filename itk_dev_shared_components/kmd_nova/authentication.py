@@ -1,6 +1,7 @@
 """This module contains functionality to authenticate against the KMD Nova api."""
 
 from datetime import datetime, timedelta
+import urllib
 
 import requests
 
@@ -27,7 +28,13 @@ class NovaAccess:
         """
 
         url = "https://novaauth.kmd.dk/realms/NovaIntegration/protocol/openid-connect/token"
-        payload = f"client_secret={self.client_secret}&grant_type=client_credentials&client_id={self.client_id}&scope=client"
+        payload = {
+            "client_secret": self.client_secret,
+            "grant_type": "client_credentials",
+            "client_id": self.client_id,
+            "scope": "client"
+        }
+        payload = urllib.parse.urlencode(payload)
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
 
         response = requests.post(url, headers=headers, data=payload, timeout=60)
