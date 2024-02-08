@@ -32,8 +32,9 @@ class NovaAccess:
 
         response = requests.post(url, headers=headers, data=payload, timeout=60)
         response.raise_for_status()
-        bearer_token = response.json()['access_token']
-        token_life_seconds = response.json()['expires_in']
+        response_json = response.json()
+        bearer_token = response_json['access_token']
+        token_life_seconds = response_json['expires_in']
         token_expiry_date = datetime.now() + timedelta(seconds=int(token_life_seconds))
         return bearer_token, token_expiry_date
 
