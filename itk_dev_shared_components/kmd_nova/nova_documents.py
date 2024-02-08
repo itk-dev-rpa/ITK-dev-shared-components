@@ -10,6 +10,7 @@ import requests
 
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
 from itk_dev_shared_components.kmd_nova.nova_objects import Document
+from itk_dev_shared_components.kmd_nova. util import datetime_from_iso_string
 
 
 def get_documents(case_uuid: str, nova_access: NovaAccess) -> list[Document]:
@@ -60,10 +61,10 @@ def get_documents(case_uuid: str, nova_access: NovaAccess) -> list[Document]:
             document_type = document_dict['documentType'],
             description = document_dict.get('description', None),
             approved = document_dict['approved'],
-            document_date = document_dict['documentDate'],
+            document_date = datetime_from_iso_string(document_dict['documentDate']),
             file_extension = document_dict['fileExtension'],
-            category_name = document_dict['documentCategoryName'],
-            category_uuid = document_dict['documentCategoryUuid']
+            category_name = document_dict.get('documentCategoryName'),
+            category_uuid = document_dict.get('documentCategoryUuid')
         )
         documents.append(doc)
 
@@ -164,7 +165,7 @@ def attach_document_to_case(case_uuid: str, document: Document, nova_access: Nov
         "caseUuid": case_uuid,
         "title": document.title,
         "sensitivity": document.sensitivity,
-        "documentDate": datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
+        "documentDate": datetime.now().isoformat(),
         "documentType": document.document_type,
         "description": document.description,
         "documentCategoryUuid": document.category_uuid,
