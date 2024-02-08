@@ -12,9 +12,9 @@ from datetime import datetime
 class CaseParty:
     """A dataclass representing a case party in a KMD Nova case."""
     uuid: Optional[str] = None
-    role: str
-    identification_type: Optional[str] = None
-    identification: Optional[str] = None
+    role: Literal["Primær", "Sekundær"]
+    identification_type: Literal["CprNummer", "CvrNummer", "Frit", "PNummer", "EsrNummer", "BfeNummer"]
+    identification: str
     name: Optional[str] = None
 
 
@@ -28,7 +28,7 @@ class Document:
     description: str
     approved: bool
     document_number: Optional[str] = None
-    document_date: Optional[str] = None
+    document_date: Optional[datetime] = None
     file_extension: Optional[str] = None
     category_name: Optional[str] = None
     category_uuid: Optional[str] = None
