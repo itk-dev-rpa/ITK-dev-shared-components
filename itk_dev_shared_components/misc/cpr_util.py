@@ -13,7 +13,7 @@ def get_age(cpr: str, current_date: date = date.today()) -> int:
 
     Returns:
         The age in integer years based on the cpr number.
-    
+
     Raises:
         ValueError: If the given cpr is not in 'ddmmyyxxxx' format.
     """
