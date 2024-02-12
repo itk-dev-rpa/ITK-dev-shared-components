@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- misc/cpr_util: Function to get age from cpr number.
 - Hooks for KMD Nova cases.
 - Hooks for KMD Nova tasks.
 - Hooks for KMD Nova documents.
