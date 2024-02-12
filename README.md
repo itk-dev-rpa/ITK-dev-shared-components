@@ -37,3 +37,11 @@ Some examples are:
 - List and get emails.
 - Get attachment data.
 - Move and delete emails.
+
+### KMD Nova
+
+Helper functions for using the KMD Nova api.
+Some examples are:
+
+- Get cases and documents.
+- Create cases, documents and tasks.
