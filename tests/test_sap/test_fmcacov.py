@@ -24,7 +24,10 @@ class TestFmcacov(unittest.TestCase):
         sap_login.kill_sap()
 
     def test_find_forretningspartner(self):
-        """Find a test-person in fmcacov and check cpr and name."""
+        """Find a test-person in fmcacov and check cpr and name.
+        To properly test it the fp needs to match a cvr number, but that doesn't exist
+        as test data.
+        """
         fmcacov.find_forretningspartner(self.session, "25564617")
 
         cpr = self.session.findById("wnd[0]/usr/txtZDKD_BP_NUM").text
