@@ -70,7 +70,7 @@ class TestGridviewUtil(unittest.TestCase):
     def test_find_row_index_by_value(self):
         """Test finding a single row by column value."""
         # Test finding an actual value.
-        index = gridview_util.find_row_index_by_value(self.table, "TXTU2", "Test Deltrans")
+        index = gridview_util.find_row_index_by_value(self.table, "TXTU2", "Test deltrans")
         self.assertNotEqual(index, -1)
 
         # Test NOT finding a wrong value.
@@ -94,3 +94,7 @@ class TestGridviewUtil(unittest.TestCase):
         # Test error on wrong column name.
         with self.assertRaises(ValueError):
             gridview_util.find_all_row_indices_by_value(self.table, "Foo", "Bar")
+
+
+if __name__ == '__main__':
+    unittest.main()

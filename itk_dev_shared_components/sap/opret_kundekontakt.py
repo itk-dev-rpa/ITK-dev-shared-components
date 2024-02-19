@@ -5,7 +5,7 @@ from datetime import date
 
 import win32clipboard
 
-from itk_dev_shared_components.sap import tree_util
+from itk_dev_shared_components.sap import tree_util, fmcacov
 
 
 def opret_kundekontakter(session, fp: str, aftaler: list[str] | None,
@@ -24,11 +24,7 @@ def opret_kundekontakter(session, fp: str, aftaler: list[str] | None,
     Raises:
         RuntimeError: If the kundekontakt wasn't created.
     """
-    session.StartTransaction('fmcacov')
-
-    # Find forretningspartner
-    session.findById("wnd[0]/usr/ctxtGPART_DYN").text = fp
-    session.findById("wnd[0]").sendVKey(0)
+    fmcacov.open_forretningspartner(session, fp)
 
     # Click 'Opret kundekontakt-flere
     session.findById("wnd[0]/shellcont/shell").nodeContextMenu("GP0000000001")

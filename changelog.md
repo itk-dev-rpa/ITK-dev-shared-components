@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- SAP.fmcacov module 
+  - Function to dismiss "key-popup" in SAP.
+  - Function to reliably open forretningspartners in SAP.
+- Test for all of the above.
+
+### Changed
+
+- opret_kundekontakt uses the new SAP.fmcacov module.
+- Updated Github actions dependencies.
+
+### Removed
+
+- SAP login using web portal. Wasn't used or maintained.
+
 ## [1.2.0] - 2024-02-12
 
 ### Added

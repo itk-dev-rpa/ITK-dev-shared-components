@@ -1,5 +1,7 @@
 """This module provides static functions to perform common tasks with SAP GuiGridView COM objects."""
 
+from typing import Iterator
+
 
 def scroll_entire_table(grid_view, return_to_top=False) -> None:
     """This function scrolls through the entire table to load all cells.
@@ -72,7 +74,7 @@ def get_row(grid_view, row: int, scroll_to_row=False) -> tuple[str]:
     return tuple(row_data)
 
 
-def iterate_rows(grid_view) -> tuple[str]:
+def iterate_rows(grid_view) -> Iterator[tuple[str]]:
     """This generator yields each row of the table in order.
     This is preferable to loading all rows as this will only load a row when it's needed.
     As a side effect this function scrolls the yielded row into view, so the
