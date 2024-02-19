@@ -34,7 +34,7 @@ def open_forretningspartner(session, fp: str) -> None:
 
 
 def dismiss_key_popup(session, fp: str = "25564617") -> None:
-    """Once a day a popup appears asking to generate af new "afstemningsnøgle".
+    """Once a day a popup appears asking to generate a new "afstemningsnøgle".
     This function forces it to appear and clicks "Ja" on it.
     This is done by pretending to do "Kontovedligehold" on the given forretningspartner.
     The function should start and end at the home screen.
