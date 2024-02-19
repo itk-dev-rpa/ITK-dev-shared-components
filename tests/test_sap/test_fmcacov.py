@@ -28,7 +28,7 @@ class TestFmcacov(unittest.TestCase):
         To properly test it the fp needs to match a cvr number, but that doesn't exist
         as test data.
         """
-        fmcacov.find_forretningspartner(self.session, "25564617")
+        fmcacov.open_forretningspartner(self.session, "25564617")
 
         cpr = self.session.findById("wnd[0]/usr/txtZDKD_BP_NUM").text
         self.assertEqual(cpr, '841289-3981')

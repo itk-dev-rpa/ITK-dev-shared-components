@@ -1,7 +1,7 @@
 """This module contains functions to help with actions in the fmcacov transaction."""
 
 
-def find_forretningspartner(session, fp: str) -> None:
+def open_forretningspartner(session, fp: str) -> None:
     """Start the transaction FMCACOV and open the given forretningspartner.
     If the fp-number also matches a cvr-number the fp-number will be opened.
 
@@ -46,7 +46,7 @@ def dismiss_key_popup(session, fp: str = "25564617") -> None:
     Raises:
         RuntimeError: If a popup other than the expected ones appear.
     """
-    find_forretningspartner(session, fp)
+    open_forretningspartner(session, fp)
 
     # Right click the first row in the postliste and click "Kontovedligehold med filter"
     postliste = session.findById("wnd[0]/usr/tabsDATA_DISP/tabpDATA_DISP_FC1/ssubDATA_DISP_SCA:RFMCA_COV:0202/cntlRFMCA_COV_0100_CONT5/shellcont/shell")

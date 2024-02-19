@@ -24,7 +24,7 @@ def opret_kundekontakter(session, fp: str, aftaler: list[str] | None,
     Raises:
         RuntimeError: If the kundekontakt wasn't created.
     """
-    fmcacov.find_forretningspartner(session, fp)
+    fmcacov.open_forretningspartner(session, fp)
 
     # Click 'Opret kundekontakt-flere
     session.findById("wnd[0]/shellcont/shell").nodeContextMenu("GP0000000001")
