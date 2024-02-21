@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.1] - 2024-02-21
+
+### Fixed
+
+- Key error when accessing a Nova Task without a caseworker.
+
 ## [1.3.0] - 2024-02-20
 
 ### Added
@@ -61,7 +67,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased] https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/1.3.0...HEAD
+[Unreleased] https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/1.3.1...HEAD
+[1.3.1] https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/1.3.1
 [1.3.0] https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/1.3.0
 [1.2.0] https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/1.2.0
 [1.1.0] https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/1.1.0
