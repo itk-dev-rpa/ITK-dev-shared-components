@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.1] - 2024-02-21
+
+### Fixed
+
+- Key error when accessing a Nova Task without a caseworker.
+
 ## [1.3.0] - 2024-02-20
 
 ### Added
