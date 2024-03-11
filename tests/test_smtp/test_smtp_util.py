@@ -16,27 +16,7 @@ class TestTreeUtil(unittest.TestCase):
 
     def test_send_html_email(self):
         """Test sending an html email."""
-        html = """
-        <html>
-            <body>
-
-            <h2>HTML Table</h2>
-
-            <table>
-                <tr>
-                    <th>Company</th>
-                    <th>Contact</th>
-                    <th>Country</th>
-                </tr>
-                <tr>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
-                </tr>
-            </table>
-
-            </body>
-        </html>"""
+        html = "<html><head><style> table {font-family: arial, sans-serif; border-collapse: collapse; width: 100%;} td, th { border: 1px solid #dddddd; text-align: left; padding: 8px;}</style></head><body><h2>HTML Table</h2><table><tr><th>Company</th><th>Contact</th><th>Country</th></tr><tr><td>Alfreds Futterkiste</td><td>Maria Anders</td><td>Germany</td></tr><tr><td>Centro comercial Moctezuma</td><td>Francisco Chang</td><td>Mexico</td></tr></table></body></html>"
         smtp_util.send_email("itk-rpa@mkb.aarhus.dk", "idsc@test.dk", "Test html", html, html_body=True)
 
     def test_send_attachments(self):
@@ -52,7 +32,11 @@ class TestTreeUtil(unittest.TestCase):
                 EmailAttachment(file, file_name)
             )
 
-        smtp_util.send_email("itk-rpa@mkb.aarhus.dk", "idsc@test.dk", "Test files", "Three attached txt files.", attachments=attachments)
+        smtp_util.send_email("itk-rpa@mkb.aarhus.dk", "idsc@test.dk", "Test files", "This email has three attached txt files.", attachments=attachments)
+
+    def test_send_multiple(self):
+        """Test sending to multiple receivers."""
+        smtp_util.send_email(["itk-rpa@mkb.aarhus.dk", "itk-rpa@mkb.aarhus.dk"], "idsc@test.dk", "Test multiple", "This email has multiple receivers.")
 
 
 if __name__ == '__main__':
