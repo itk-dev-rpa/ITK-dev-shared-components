@@ -87,7 +87,8 @@ def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None,
             "caseworker": {
                 "kspIdentity": {
                     "novaUserId": True,
-                    "fullName": True
+                    "fullName": True,
+                    "racfId": True
                 }
             }
         }
@@ -117,7 +118,7 @@ def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None,
             kle_number = case_dict['caseClassification']['kleNumber']['code'],
             proceeding_facet = case_dict['caseClassification']['proceedingFacet']['code'],
             sensitivity = case_dict["sensitivity"]["sensitivity"],
-            case_worker = _extract_case_worker(case_dict)
+            caseworker = _extract_case_worker(case_dict)
         )
 
         cases.append(case)
@@ -137,7 +138,8 @@ def _extract_case_worker(case_dict: dict) -> Caseworker | None:
     if 'caseworker' in case_dict:
         return Caseworker(
             id = case_dict['caseworker']['kspIdentity']['novaUserId'],
-            name = case_dict['caseworker']['kspIdentity']['fullName']
+            name = case_dict['caseworker']['kspIdentity']['fullName'],
+            ident = case_dict['caseworker']['kspIdentity']['racfId']
         )
 
     return None
@@ -246,6 +248,14 @@ def add_case(case: NovaCase, nova_access: NovaAccess, security_unit_id: int = 81
         },
         "AvailabilityCtrlBy": "Regler"
     }
+
+    if case.caseworker:
+        payload['caseworker'] = {
+            "kspIdentity": {
+                "racfId": case.caseworker.ident,
+                "fullName": case.caseworker.name
+            }
+        }
 
     headers = {'Content-Type': 'application/json', 'Authorization': f"Bearer {nova_access.get_bearer_token()}"}
 
