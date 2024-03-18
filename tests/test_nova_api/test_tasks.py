@@ -30,7 +30,7 @@ class NovaCasesTest(unittest.TestCase):
         self.assertEqual(task.closed_date.date(), date(2024, 2, 8))
         self.assertEqual(task.description, "Dette er en beskrivelse")
         self.assertEqual(task.caseworker.ident, "AZ68933")
-        self.assertEqual(task.caseworker.id, "6874a25c-201b-4328-9cf5-4b2a7d5e707a")
+        self.assertEqual(task.caseworker.uuid, "6874a25c-201b-4328-9cf5-4b2a7d5e707a")
         self.assertEqual(task.status_code, "F")
 
     def test_add_task_minimal(self):
@@ -40,7 +40,7 @@ class NovaCasesTest(unittest.TestCase):
         caseworker = Caseworker(
             name='svcitkopeno svcitkopeno',
             ident='AZX0080',
-            id='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
+            uuid='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
         )
 
         # Test with minimal attributes set
@@ -61,7 +61,7 @@ class NovaCasesTest(unittest.TestCase):
         self.assertEqual(nova_task.title, new_task.title)
         self.assertEqual(nova_task.uuid, new_task.uuid)
         self.assertEqual(nova_task.deadline.date(), new_task.deadline.date())
-        self.assertEqual(nova_task.caseworker.id, new_task.caseworker.id)
+        self.assertEqual(nova_task.caseworker.uuid, new_task.caseworker.uuid)
         self.assertEqual(nova_task.status_code, new_task.status_code)
 
     def test_add_task_full(self):
@@ -71,7 +71,7 @@ class NovaCasesTest(unittest.TestCase):
         caseworker = Caseworker(
             name='svcitkopeno svcitkopeno',
             ident='AZX0080',
-            id='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
+            uuid='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
         )
 
         # Test with minimal attributes set
@@ -97,7 +97,7 @@ class NovaCasesTest(unittest.TestCase):
         self.assertEqual(nova_task.deadline.date(), new_task.deadline.date())
         self.assertEqual(nova_task.started_date.date(), new_task.started_date.date())
         self.assertEqual(nova_task.closed_date.date(), new_task.closed_date.date())
-        self.assertEqual(nova_task.caseworker.id, new_task.caseworker.id)
+        self.assertEqual(nova_task.caseworker.uuid, new_task.caseworker.uuid)
         self.assertEqual(nova_task.caseworker.ident, new_task.caseworker.ident)
         self.assertEqual(nova_task.status_code, new_task.status_code)
         self.assertEqual(nova_task.description, new_task.description)
@@ -111,7 +111,7 @@ class NovaCasesTest(unittest.TestCase):
         caseworker = Caseworker(
             name='svcitkopeno svcitkopeno',
             ident='AZX0080',
-            id='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
+            uuid='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
         )
 
         task = Task(

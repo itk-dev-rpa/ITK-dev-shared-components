@@ -35,7 +35,7 @@ def attach_task_to_case(case_uuid: str, task: Task, nova_access: NovaAccess) -> 
         "caseUuid": case_uuid,
         "title": task.title,
         "description": task.description,  # Optional
-        "caseworkerPersonId": task.caseworker.id,  # Optional
+        "caseworkerPersonId": task.caseworker.uuid,  # Optional
         "statusCode": task.status_code,
         "deadline": datetime_to_iso_string(task.deadline),
         "startDate": datetime_to_iso_string(task.started_date),  # Optional
@@ -112,7 +112,7 @@ def _extract_caseworker(task_dict: dict) -> Caseworker | None:
     """
     if 'caseWorker' in task_dict:
         return Caseworker(
-            id = task_dict['caseWorker']['id'],
+            uuid = task_dict['caseWorker']['id'],
             ident = task_dict['caseWorker']['ident'],
             name = task_dict['caseWorker']['name']
         )
@@ -143,7 +143,7 @@ def update_task(task: Task, case_uuid: str, nova_access: NovaAccess):
         "caseUuid": case_uuid,
         "title": task.title,
         "description": task.description,
-        "caseworkerPersonId": task.caseworker.id,
+        "caseworkerPersonId": task.caseworker.uuid,
         "statusCode": task.status_code,
         "deadline": datetime_to_iso_string(task.deadline),
         "startDate": datetime_to_iso_string(task.started_date),
