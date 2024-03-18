@@ -9,6 +9,13 @@ from datetime import datetime
 
 
 @dataclass(slots=True, kw_only=True)
+class CaseWorker:
+    """A dataclass representing a case worker in a KMD Nova case."""
+    id: str
+    name: str
+
+
+@dataclass(slots=True, kw_only=True)
 class CaseParty:
     """A dataclass representing a case party in a KMD Nova case."""
     uuid: Optional[str] = None
@@ -70,6 +77,7 @@ class NovaCase:
     active_code: Optional[str] = None
     progress_state: Literal["Opstaaet", "Oplyst", "Afgjort", "Bestilt", "Udfoert", "Afsluttet"]
     case_parties: list[CaseParty]
+    case_worker: Optional[CaseWorker]
     document_count: Optional[int] = 0
     note_count: Optional[int] = 0
     kle_number: str
