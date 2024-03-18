@@ -6,7 +6,7 @@ from datetime import datetime, date
 import random
 
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
-from itk_dev_shared_components.kmd_nova.nova_objects import Task
+from itk_dev_shared_components.kmd_nova.nova_objects import Task, Caseworker
 from itk_dev_shared_components.kmd_nova import nova_cases, nova_tasks
 
 
@@ -29,13 +29,19 @@ class NovaCasesTest(unittest.TestCase):
         self.assertEqual(task.started_date.date(), date(2024, 2, 7))
         self.assertEqual(task.closed_date.date(), date(2024, 2, 8))
         self.assertEqual(task.description, "Dette er en beskrivelse")
-        self.assertEqual(task.case_worker_ident, "AZ68933")
-        self.assertEqual(task.case_worker_uuid, "6874a25c-201b-4328-9cf5-4b2a7d5e707a")
+        self.assertEqual(task.caseworker.ident, "AZ68933")
+        self.assertEqual(task.caseworker.id, "6874a25c-201b-4328-9cf5-4b2a7d5e707a")
         self.assertEqual(task.status_code, "F")
 
     def test_add_task_minimal(self):
         """Test adding a Task to Nova with minimal information set."""
         case = self._get_test_case()
+
+        caseworker = Caseworker(
+            name='svcitkopeno svcitkopeno',
+            ident='AZX0080',
+            id='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
+        )
 
         # Test with minimal attributes set
         new_task = Task(
@@ -43,7 +49,7 @@ class NovaCasesTest(unittest.TestCase):
             title=f"Test Task {datetime.now()}",
             status_code="F",
             deadline=datetime.now(),
-            case_worker_uuid="6874a25c-201b-4328-9cf5-4b2a7d5e707a"
+            caseworker=caseworker
         )
 
         nova_tasks.attach_task_to_case(case.uuid, new_task, self.nova_access)
@@ -55,12 +61,18 @@ class NovaCasesTest(unittest.TestCase):
         self.assertEqual(nova_task.title, new_task.title)
         self.assertEqual(nova_task.uuid, new_task.uuid)
         self.assertEqual(nova_task.deadline.date(), new_task.deadline.date())
-        self.assertEqual(nova_task.case_worker_uuid, new_task.case_worker_uuid)
+        self.assertEqual(nova_task.caseworker.id, new_task.caseworker.id)
         self.assertEqual(nova_task.status_code, new_task.status_code)
 
     def test_add_task_full(self):
         """Test adding a Task to Nova with all information set."""
         case = self._get_test_case()
+
+        caseworker = Caseworker(
+            name='svcitkopeno svcitkopeno',
+            ident='AZX0080',
+            id='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
+        )
 
         # Test with minimal attributes set
         new_task = Task(
@@ -68,8 +80,7 @@ class NovaCasesTest(unittest.TestCase):
             title=f"Test Task {datetime.now()}",
             status_code="F",
             deadline=datetime.now(),
-            case_worker_uuid="6874a25c-201b-4328-9cf5-4b2a7d5e707a",
-            case_worker_ident="AZ68933",
+            caseworker=caseworker,
             started_date=datetime.now(),
             closed_date=datetime.now(),
             description="This is a description."
@@ -86,8 +97,8 @@ class NovaCasesTest(unittest.TestCase):
         self.assertEqual(nova_task.deadline.date(), new_task.deadline.date())
         self.assertEqual(nova_task.started_date.date(), new_task.started_date.date())
         self.assertEqual(nova_task.closed_date.date(), new_task.closed_date.date())
-        self.assertEqual(nova_task.case_worker_uuid, new_task.case_worker_uuid)
-        self.assertEqual(nova_task.case_worker_ident, new_task.case_worker_ident)
+        self.assertEqual(nova_task.caseworker.id, new_task.caseworker.id)
+        self.assertEqual(nova_task.caseworker.ident, new_task.caseworker.ident)
         self.assertEqual(nova_task.status_code, new_task.status_code)
         self.assertEqual(nova_task.description, new_task.description)
 
@@ -97,12 +108,18 @@ class NovaCasesTest(unittest.TestCase):
         case = self._get_test_case()
         title = f"Test Update Task {datetime.now()}"
 
+        caseworker = Caseworker(
+            name='svcitkopeno svcitkopeno',
+            ident='AZX0080',
+            id='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
+        )
+
         task = Task(
             uuid=str(uuid.uuid4()),
             title=title,
             status_code="N",
             deadline=datetime.now(),
-            case_worker_uuid="6874a25c-201b-4328-9cf5-4b2a7d5e707a"
+            caseworker=caseworker
         )
 
         nova_tasks.attach_task_to_case(case.uuid, task, self.nova_access)

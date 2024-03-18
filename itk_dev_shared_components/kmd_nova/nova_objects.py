@@ -13,6 +13,7 @@ class Caseworker:
     """A dataclass representing a caseworker in a KMD Nova case."""
     id: str
     name: str
+    ident: str
 
 
 @dataclass(slots=True, kw_only=True)
@@ -58,8 +59,7 @@ class Task:
     uuid: str
     title: str
     description: Optional[str] = None
-    case_worker_ident: Optional[str] = None
-    case_worker_uuid: str
+    caseworker: Caseworker
     status_code: Literal['N', 'S', 'F']  # Not Started, Started, Finished
     deadline: datetime
     created_date: Optional[datetime] = None
@@ -77,7 +77,7 @@ class NovaCase:
     active_code: Optional[str] = None
     progress_state: Literal["Opstaaet", "Oplyst", "Afgjort", "Bestilt", "Udfoert", "Afsluttet"]
     case_parties: list[CaseParty]
-    case_worker: Optional[Caseworker]
+    caseworker: Optional[Caseworker] = None
     document_count: Optional[int] = 0
     note_count: Optional[int] = 0
     kle_number: str
