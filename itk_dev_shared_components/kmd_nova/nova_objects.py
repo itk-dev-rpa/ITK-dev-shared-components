@@ -9,8 +9,8 @@ from datetime import datetime
 
 
 @dataclass(slots=True, kw_only=True)
-class CaseWorker:
-    """A dataclass representing a case worker in a KMD Nova case."""
+class Caseworker:
+    """A dataclass representing a caseworker in a KMD Nova case."""
     id: str
     name: str
 
@@ -77,7 +77,7 @@ class NovaCase:
     active_code: Optional[str] = None
     progress_state: Literal["Opstaaet", "Oplyst", "Afgjort", "Bestilt", "Udfoert", "Afsluttet"]
     case_parties: list[CaseParty]
-    case_worker: Optional[CaseWorker]
+    case_worker: Optional[Caseworker]
     document_count: Optional[int] = 0
     note_count: Optional[int] = 0
     kle_number: str

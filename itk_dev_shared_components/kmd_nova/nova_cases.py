@@ -8,7 +8,7 @@ import urllib.parse
 import requests
 
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
-from itk_dev_shared_components.kmd_nova.nova_objects import NovaCase, CaseParty, JournalNote, CaseWorker
+from itk_dev_shared_components.kmd_nova.nova_objects import NovaCase, CaseParty, JournalNote, Caseworker
 from itk_dev_shared_components.kmd_nova.util import datetime_from_iso_string
 
 
@@ -125,7 +125,7 @@ def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None,
     return cases
 
 
-def _extract_case_worker(case_dict: dict) -> CaseWorker | None:
+def _extract_case_worker(case_dict: dict) -> Caseworker | None:
     """Extract the case worker from a HTTP request response.
 
     Args:
@@ -135,7 +135,7 @@ def _extract_case_worker(case_dict: dict) -> CaseWorker | None:
         A case worker object describing the case worker if any.
     """
     if 'caseworker' in case_dict:
-        return CaseWorker(
+        return Caseworker(
             id = case_dict['caseworker']['kspIdentity']['novaUserId'],
             name = case_dict['caseworker']['kspIdentity']['fullName']
         )
