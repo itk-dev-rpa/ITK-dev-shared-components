@@ -8,7 +8,7 @@ import urllib.parse
 import requests
 
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
-from itk_dev_shared_components.kmd_nova.nova_objects import NovaCase, CaseParty, JournalNote
+from itk_dev_shared_components.kmd_nova.nova_objects import NovaCase, CaseParty, JournalNote, CaseWorker
 from itk_dev_shared_components.kmd_nova.util import datetime_from_iso_string
 
 
@@ -83,6 +83,12 @@ def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None,
             },
             "sensitivity": {
                 "sensitivity": True
+            },
+            "caseworker": {
+                "kspIdentity": {
+                    "novaUserId": True,
+                    "fullName": True
+                }
             }
         }
     }
@@ -110,12 +116,31 @@ def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None,
             note_count = case_dict['numberOfJournalNotes'],
             kle_number = case_dict['caseClassification']['kleNumber']['code'],
             proceeding_facet = case_dict['caseClassification']['proceedingFacet']['code'],
-            sensitivity = case_dict["sensitivity"]["sensitivity"]
+            sensitivity = case_dict["sensitivity"]["sensitivity"],
+            case_worker = _extract_case_worker(case_dict)
         )
 
         cases.append(case)
 
     return cases
+
+
+def _extract_case_worker(case_dict: dict) -> CaseWorker | None:
+    """Extract the case worker from a HTTP request response.
+
+    Args:
+        case_dict: The dictionary describing the case.
+
+    Returns:
+        A case worker object describing the case worker if any.
+    """
+    if 'caseworker' in case_dict:
+        return CaseWorker(
+            id = case_dict['caseworker']['kspIdentity']['novaUserId'],
+            name = case_dict['caseworker']['kspIdentity']['fullName']
+        )
+
+    return None
 
 
 def _extract_case_parties(case_dict: dict) -> list[CaseParty]:
