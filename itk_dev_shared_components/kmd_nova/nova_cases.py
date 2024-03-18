@@ -8,7 +8,7 @@ import urllib.parse
 import requests
 
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
-from itk_dev_shared_components.kmd_nova.nova_objects import NovaCase, CaseParty, JournalNote, Caseworker
+from itk_dev_shared_components.kmd_nova.nova_objects import NovaCase, CaseParty, JournalNote, Caseworker, Department
 from itk_dev_shared_components.kmd_nova.util import datetime_from_iso_string
 
 
@@ -90,7 +90,23 @@ def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None,
                     "fullName": True,
                     "racfId": True
                 }
-            }
+            },
+            "responsibleDepartment": {
+                "losIdentity": {
+                    "novaUnitId": True,
+                    "administrativeUnitId": True,
+                    "fullName": True,
+                    "userKey": True
+                }
+            },
+            "securityUnit": {
+                "losIdentity": {
+                    "novaUnitId": True,
+                    "administrativeUnitId": True,
+                    "fullName": True,
+                    "userKey": True
+                }
+            },
         }
     }
 
@@ -105,6 +121,7 @@ def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None,
     # Convert json to NovaCase objects
     cases = []
     for case_dict in response.json()['cases']:
+        security_unit, responsible_department = _extract_departments(case_dict)
         case = NovaCase(
             uuid = case_dict['common']['uuid'],
             title = case_dict['caseAttributes']['title'],
@@ -118,12 +135,38 @@ def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None,
             kle_number = case_dict['caseClassification']['kleNumber']['code'],
             proceeding_facet = case_dict['caseClassification']['proceedingFacet']['code'],
             sensitivity = case_dict["sensitivity"]["sensitivity"],
-            caseworker = _extract_case_worker(case_dict)
+            caseworker = _extract_case_worker(case_dict),
+            security_unit=security_unit,
+            responsible_department=responsible_department
         )
 
         cases.append(case)
 
     return cases
+
+
+def _extract_departments(case_dict: dict) -> tuple[Department, Department]:
+    """Extract the departments from a HTTP request response.
+
+    Args:
+        case_dict: The dictionary describing the case.
+
+    Returns:
+        The security unit and the responsible department.
+    """
+    security_unit = Department(
+        id=case_dict['securityUnit']['losIdentity']['administrativeUnitId'],
+        name=case_dict['securityUnit']['losIdentity']['fullName'],
+        user_key=case_dict['securityUnit']['losIdentity']['userKey']
+    )
+
+    responsible_department = Department(
+        id=case_dict['responsibleDepartment']['losIdentity']['administrativeUnitId'],
+        name=case_dict['responsibleDepartment']['losIdentity']['fullName'],
+        user_key=case_dict['responsibleDepartment']['losIdentity']['userKey']
+    )
+
+    return security_unit, responsible_department
 
 
 def _extract_case_worker(case_dict: dict) -> Caseworker | None:
@@ -137,7 +180,7 @@ def _extract_case_worker(case_dict: dict) -> Caseworker | None:
     """
     if 'caseworker' in case_dict:
         return Caseworker(
-            id = case_dict['caseworker']['kspIdentity']['novaUserId'],
+            uuid = case_dict['caseworker']['kspIdentity']['novaUserId'],
             name = case_dict['caseworker']['kspIdentity']['fullName'],
             ident = case_dict['caseworker']['kspIdentity']['racfId']
         )
@@ -191,7 +234,7 @@ def _extract_journal_notes(case_dict: dict) -> list:
     return notes
 
 
-def add_case(case: NovaCase, nova_access: NovaAccess, security_unit_id: int = 818485, security_unit_name: str = "Borgerservice"):
+def add_case(case: NovaCase, nova_access: NovaAccess):
     """Add a case to KMD Nova. The case will be created as 'Active'.
 
     Args:
@@ -235,8 +278,16 @@ def add_case(case: NovaCase, nova_access: NovaAccess, security_unit_id: int = 81
         ],
         "securityUnit": {
             "losIdentity": {
-                "administrativeUnitId": security_unit_id,
-                "fullName": security_unit_name,
+                "administrativeUnitId": case.security_unit.id,
+                "fullName": case.security_unit.name,
+                "userKey": case.security_unit.user_key
+            }
+        },
+        "responsibleDepartment": {
+            "losIdentity": {
+                "administrativeUnitId": case.responsible_department.id,
+                "fullName": case.responsible_department.name,
+                "userKey": case.responsible_department.user_key
             }
         },
         "SensitivityCtrlBy": "Bruger",

@@ -6,7 +6,7 @@ from datetime import datetime
 import time
 
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
-from itk_dev_shared_components.kmd_nova.nova_objects import NovaCase, CaseParty, Caseworker
+from itk_dev_shared_components.kmd_nova.nova_objects import NovaCase, CaseParty, Caseworker, Department
 from itk_dev_shared_components.kmd_nova import nova_cases
 
 
@@ -61,7 +61,13 @@ class NovaCasesTest(unittest.TestCase):
         caseworker = Caseworker(
             name='svcitkopeno svcitkopeno',
             ident='AZX0080',
-            id='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
+            uuid='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
+        )
+
+        department = Department(
+            id=818485,
+            name="Borgerservice",
+            user_key="4BBORGER"
         )
 
         case = NovaCase(
@@ -73,7 +79,9 @@ class NovaCasesTest(unittest.TestCase):
             kle_number="23.05.01",
             proceeding_facet="G01",
             sensitivity="Fortrolige",
-            caseworker=caseworker
+            caseworker=caseworker,
+            responsible_department=department,
+            security_unit=department
         )
 
         nova_cases.add_case(case, self.nova_access)
@@ -96,6 +104,8 @@ class NovaCasesTest(unittest.TestCase):
         self.assertEqual(nova_case.sensitivity, case.sensitivity)
         self.assertEqual(nova_case.caseworker.ident, case.caseworker.ident)
         self.assertEqual(nova_case.case_parties[0].identification, case.case_parties[0].identification)
+        self.assertEqual(nova_case.responsible_department.id, case.responsible_department.id)
+        self.assertEqual(nova_case.security_unit.id, case.security_unit.id)
 
 
 if __name__ == '__main__':

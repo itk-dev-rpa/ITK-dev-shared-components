@@ -9,9 +9,17 @@ from datetime import datetime
 
 
 @dataclass(slots=True, kw_only=True)
+class Department:
+    """A dataclass representing a department in a KMD Nova case."""
+    id: int
+    name: str
+    user_key: str
+
+
+@dataclass(slots=True, kw_only=True)
 class Caseworker:
     """A dataclass representing a caseworker in a KMD Nova case."""
-    id: str
+    uuid: str
     name: str
     ident: str
 
@@ -83,3 +91,5 @@ class NovaCase:
     kle_number: str
     proceeding_facet: str
     sensitivity: Literal["Fortrolige", "IkkeFortrolige", "SærligFølsomme", "Følsomme"]
+    responsible_department: Department
+    security_unit: Department
