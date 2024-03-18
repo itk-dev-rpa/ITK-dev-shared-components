@@ -3,6 +3,7 @@ import unittest
 import os
 import uuid
 from datetime import datetime
+import time
 
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
 from itk_dev_shared_components.kmd_nova.nova_objects import NovaCase, CaseParty
@@ -65,10 +66,19 @@ class NovaCasesTest(unittest.TestCase):
             case_parties=[party],
             kle_number="23.05.01",
             proceeding_facet="G01",
-            sensitivity="Fortrolige"
+            sensitivity="Fortrolige",
         )
 
         nova_cases.add_case(case, self.nova_access)
+
+        # Wait up to 10 seconds for the case to be created in Nova
+        for _ in range(10):
+            time.sleep(1)
+            cases = nova_cases.get_cases(self.nova_access, cpr=party.identification, case_title=case.title)
+            if cases:
+                break
+
+        self.assertEqual(len(cases), 1)
 
 
 if __name__ == '__main__':
