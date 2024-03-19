@@ -29,8 +29,8 @@ class NovaCasesTest(unittest.TestCase):
         self.assertEqual(task.started_date.date(), date(2024, 2, 7))
         self.assertEqual(task.closed_date.date(), date(2024, 2, 8))
         self.assertEqual(task.description, "Dette er en beskrivelse")
-        self.assertEqual(task.caseworker.ident, "AZ68933")
-        self.assertEqual(task.caseworker.uuid, "6874a25c-201b-4328-9cf5-4b2a7d5e707a")
+        self.assertEqual(task.caseworker.ident, "AZX0080")
+        self.assertEqual(task.caseworker.uuid, "0bacdddd-5c61-4676-9a61-b01a18cec1d5")
         self.assertEqual(task.status_code, "F")
 
     def test_add_task_minimal(self):
