@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- smtp_util: For sending emails using the smtp protocol.
+- Tests for smtp_util.
+
 ## [1.3.1] - 2024-02-21
 
 ### Fixed
