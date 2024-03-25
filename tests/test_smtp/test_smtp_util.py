@@ -18,7 +18,7 @@ class TestTreeUtil(unittest.TestCase):
     def setUp(self) -> None:
         url = url = f"http://localhost:{self.http_port}/api/v1/messages"
         response = requests.delete(url, timeout=2)
-        self.assertEqual(response.status_code, 200)
+        response.raise_for_status()
 
     def test_send_simple(self):
         """Test sending a simple email."""
