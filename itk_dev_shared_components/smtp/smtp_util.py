@@ -15,8 +15,8 @@ class EmailAttachment:
     file_name: str
 
 
-def send_email(receiver: str | list[str], sender: str, subject: str, body: str, html_body: bool = False, attachments: Sequence[EmailAttachment] | None = None,
-               smtp_server: str = "smtp.aarhuskommune.local", smtp_port: int = 25) -> None:
+def send_email(receiver: str | list[str], sender: str, subject: str, body: str, smtp_server: str, smtp_port: int,
+               html_body: bool = False, attachments: Sequence[EmailAttachment] | None = None) -> None:
     """Send an email using the SMTP protocol.
 
     Args:
@@ -24,10 +24,10 @@ def send_email(receiver: str | list[str], sender: str, subject: str, body: str, 
         sender: The sender email of the message.
         subject: The message subject.
         body: The message body.
+        smtp_server: The name of the smtp server.
+        smtp_port: The port of the smtp server.
         html_body: Wether the body is html or just plain text. Defaults to False.
         attachments: A list of Attachment objects. Defaults to None.
-        smtp_server: The name of the smtp server. Defaults to "smtp.aarhuskommune.local".
-        smtp_port: The port of the smtp server. Defaults to 25.
     """
     msg = EmailMessage()
     msg['to'] = receiver
