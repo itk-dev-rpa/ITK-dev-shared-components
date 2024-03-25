@@ -19,7 +19,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Security unit not set properly on Nova cases.
 
-
 ## [1.3.1] - 2024-02-21
 
 ### Fixed
