@@ -12,6 +12,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - smtp_util: For sending emails using the smtp protocol.
 - Tests for smtp_util.
 
+### Changed
+
+#### KMD Nova
+
+- Department and Caseworker classes added.
+- Ability to set security unit, department and caseworker on cases.
+- Better tests for cases.
+
+### Fixed
+
+- Security unit not set properly on Nova cases.
+
 ## [1.3.1] - 2024-02-21
 
 ### Fixed
