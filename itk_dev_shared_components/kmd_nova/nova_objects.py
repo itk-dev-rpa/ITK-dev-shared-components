@@ -9,6 +9,22 @@ from datetime import datetime
 
 
 @dataclass(slots=True, kw_only=True)
+class Department:
+    """A dataclass representing a department in a KMD Nova case."""
+    id: int
+    name: str
+    user_key: str
+
+
+@dataclass(slots=True, kw_only=True)
+class Caseworker:
+    """A dataclass representing a caseworker in a KMD Nova case."""
+    uuid: str
+    name: str
+    ident: str
+
+
+@dataclass(slots=True, kw_only=True)
 class CaseParty:
     """A dataclass representing a case party in a KMD Nova case."""
     uuid: Optional[str] = None
@@ -51,8 +67,7 @@ class Task:
     uuid: str
     title: str
     description: Optional[str] = None
-    case_worker_ident: Optional[str] = None
-    case_worker_uuid: str
+    caseworker: Caseworker
     status_code: Literal['N', 'S', 'F']  # Not Started, Started, Finished
     deadline: datetime
     created_date: Optional[datetime] = None
@@ -70,8 +85,11 @@ class NovaCase:
     active_code: Optional[str] = None
     progress_state: Literal["Opstaaet", "Oplyst", "Afgjort", "Bestilt", "Udfoert", "Afsluttet"]
     case_parties: list[CaseParty]
+    caseworker: Optional[Caseworker] = None
     document_count: Optional[int] = 0
     note_count: Optional[int] = 0
     kle_number: str
     proceeding_facet: str
     sensitivity: Literal["Fortrolige", "IkkeFortrolige", "SærligFølsomme", "Følsomme"]
+    responsible_department: Department
+    security_unit: Department
