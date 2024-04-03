@@ -6,7 +6,7 @@ import urllib.parse
 import requests
 
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
-from itk_dev_shared_components.kmd_nova.nova_objects import Task
+from itk_dev_shared_components.kmd_nova.nova_objects import Task, Caseworker
 from itk_dev_shared_components.kmd_nova.util import datetime_from_iso_string, datetime_to_iso_string
 
 
@@ -35,7 +35,7 @@ def attach_task_to_case(case_uuid: str, task: Task, nova_access: NovaAccess) -> 
         "caseUuid": case_uuid,
         "title": task.title,
         "description": task.description,  # Optional
-        "caseworkerPersonId": task.case_worker_uuid,  # Optional
+        "caseworkerPersonId": task.caseworker.uuid,  # Optional
         "statusCode": task.status_code,
         "deadline": datetime_to_iso_string(task.deadline),
         "startDate": datetime_to_iso_string(task.started_date),  # Optional
@@ -89,8 +89,7 @@ def get_tasks(case_uuid: str, nova_access: NovaAccess, limit: int = 100) -> list
             uuid = task_dict['taskUuid'],
             title = task_dict['taskTitle'],
             description = task_dict.get('taskDescription'),
-            case_worker_ident = task_dict['caseWorker']['ident'] if 'caseWorker' in task_dict else None,
-            case_worker_uuid = task_dict['caseWorker']['id'] if 'caseWorker' in task_dict else None,
+            caseworker = _extract_caseworker(task_dict),
             status_code = task_dict['taskStatusCode'],
             deadline = datetime_from_iso_string(task_dict.get('taskDeadline')),
             created_date = datetime_from_iso_string(task_dict.get('taskCreateDate')),
@@ -100,6 +99,25 @@ def get_tasks(case_uuid: str, nova_access: NovaAccess, limit: int = 100) -> list
         tasks.append(task)
 
     return tasks
+
+
+def _extract_caseworker(task_dict: dict) -> Caseworker | None:
+    """Extract the case worker from a HTTP request response.
+
+    Args:
+        case_dict: The dictionary describing the task.
+
+    Returns:
+        A case worker object describing the case worker if any.
+    """
+    if 'caseWorker' in task_dict:
+        return Caseworker(
+            uuid = task_dict['caseWorker']['id'],
+            ident = task_dict['caseWorker']['ident'],
+            name = task_dict['caseWorker']['name']
+        )
+
+    return None
 
 
 def update_task(task: Task, case_uuid: str, nova_access: NovaAccess):
@@ -125,7 +143,7 @@ def update_task(task: Task, case_uuid: str, nova_access: NovaAccess):
         "caseUuid": case_uuid,
         "title": task.title,
         "description": task.description,
-        "caseworkerPersonId": task.case_worker_uuid,
+        "caseworkerPersonId": task.caseworker.uuid,
         "statusCode": task.status_code,
         "deadline": datetime_to_iso_string(task.deadline),
         "startDate": datetime_to_iso_string(task.started_date),
