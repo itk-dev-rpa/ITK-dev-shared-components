@@ -6,8 +6,26 @@ For testing SMTP you need [Mailpit](https://mailpit.axllent.org/) running on loc
 
 Since smtp_util uses STARTTLS you need to configure Mailpit for this. [More info here.](https://mailpit.axllent.org/docs/configuration/smtp/#smtp-with-starttls)
 
-By default the tests use the following ports for Mailpit:
-- smtp: 1025
-- http: 8025
+By default the tests use the following cofigurations for Mailpit:
 
-These can be changed in `test_smtp/test_smtp_util.py`.
+- Host: localhost
+- smtp port: 1025
+- http port: 8025
+
+These can be changed by using the environment variables:
+
+- mailpit_host
+- mailpit_smtp_port
+- mailpit_http_port
+
+Use this command to generate the TLS certificates:
+
+```bash
+openssl req -x509 -newkey rsa:4096 -nodes -keyout key.pem -out cert.pem -sha256
+```
+
+And this command to launch Mailpit:
+
+```bash
+mailpit --smtp-tls-cert /path/to/cert.pem --smtp-tls-key /path/to/key.pem
+```
