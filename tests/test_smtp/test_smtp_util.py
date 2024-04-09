@@ -2,6 +2,7 @@
 
 import unittest
 from io import BytesIO
+import os
 
 import requests
 
@@ -11,9 +12,9 @@ from itk_dev_shared_components.smtp.smtp_util import EmailAttachment
 
 class TestTreeUtil(unittest.TestCase):
     """Tests relating to the module smtp.smtp_util."""
-    smtp_server = "localhost"
-    smtp_port = 1025
-    http_port = 8025
+    smtp_server = os.getenv("mailpit_host", "localhost")
+    smtp_port = os.getenv("mailpit_smtp_port", "1025")
+    http_port = os.getenv("mailpit_http_port", "8025")
 
     def setUp(self) -> None:
         url = url = f"http://localhost:{self.http_port}/api/v1/messages"
