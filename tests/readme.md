@@ -34,5 +34,5 @@ openssl req -x509 -newkey rsa:4096 -nodes -keyout key.pem -out cert.pem -sha256
 And this command to launch Mailpit:
 
 ```bash
-mailpit --smtp-tls-cert /path/to/cert.pem --smtp-tls-key /path/to/key.pem
+mailpit --smtp-tls-cert cert.pem --smtp-tls-key key.pem
 ```
