@@ -1,5 +1,12 @@
 # Test readme
 
+## Running the tests
+
+To run all tests you can use the `run_tests.bat` file in the tests folder.
+This bat file sets up a new virtual environment and installs the package before running all tests.
+
+Alternatively you can run each test file separately by simply running them as Python scripts.
+
 ## SMTP
 
 For testing SMTP you need [Mailpit](https://mailpit.axllent.org/) running on localhost.
