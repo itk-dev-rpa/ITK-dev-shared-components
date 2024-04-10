@@ -6,7 +6,7 @@ from datetime import datetime
 from io import StringIO, BytesIO
 
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
-from itk_dev_shared_components.kmd_nova.nova_objects import Document
+from itk_dev_shared_components.kmd_nova.nova_objects import Document, Caseworker
 from itk_dev_shared_components.kmd_nova import nova_cases, nova_documents
 
 
@@ -36,6 +36,12 @@ class NovaDocumentsTest(unittest.TestCase):
 
         doc_uuid = nova_documents.upload_document(file, "Filename.txt", self.nova_access)
 
+        caseworker = Caseworker(
+            name='svcitkopeno svcitkopeno',
+            ident='AZX0080',
+            uuid='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
+        )
+
         title = f"Test document {datetime.now()}"
         document = Document(
             uuid=doc_uuid,
@@ -44,7 +50,8 @@ class NovaDocumentsTest(unittest.TestCase):
             document_type="Internt",
             description="Description",
             approved=True,
-            category_uuid='aa015e27-669c-4934-a661-46900351f0aa'
+            category_uuid='aa015e27-669c-4934-a661-46900351f0aa',
+            caseworker=caseworker
         )
 
         nova_documents.attach_document_to_case(case.uuid, document, self.nova_access)
@@ -67,6 +74,7 @@ class NovaDocumentsTest(unittest.TestCase):
         self.assertEqual(document.category_uuid, nova_document.category_uuid)
         self.assertEqual(document.description, nova_document.description)
         self.assertEqual(document.sensitivity, nova_document.sensitivity)
+        self.assertEqual(document.caseworker.ident, nova_document.caseworker.ident)
 
         # Download the document file and check its contents
         file_bytes = nova_documents.download_document_file(document.uuid, self.nova_access)

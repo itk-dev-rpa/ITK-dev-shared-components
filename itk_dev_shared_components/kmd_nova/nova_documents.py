@@ -10,7 +10,7 @@ import urllib.parse
 import requests
 
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
-from itk_dev_shared_components.kmd_nova.nova_objects import Document
+from itk_dev_shared_components.kmd_nova.nova_objects import Document, Caseworker
 from itk_dev_shared_components.kmd_nova. util import datetime_from_iso_string
 
 
@@ -44,7 +44,8 @@ def get_documents(case_uuid: str, nova_access: NovaAccess) -> list[Document]:
             "approved": True,
             "documentDate": True,
             "fileExtension": True,
-            "documentCategory": True
+            "documentCategory": True,
+            "caseworker": True
         }
     }
 
@@ -55,6 +56,16 @@ def get_documents(case_uuid: str, nova_access: NovaAccess) -> list[Document]:
 
     documents = []
     for document_dict in response.json()['documents']:
+
+        if 'caseworker' in document_dict:
+            caseworker = Caseworker(
+                uuid = document_dict['caseworker']['kspIdentity']['novaUserId'],
+                name = document_dict['caseworker']['kspIdentity']['fullName'],
+                ident = document_dict['caseworker']['kspIdentity']['racfId']
+            )
+        else:
+            caseworker = None
+
         doc = Document(
             uuid = document_dict['documentUuid'],
             document_number = document_dict['documentNumber'],
@@ -66,7 +77,8 @@ def get_documents(case_uuid: str, nova_access: NovaAccess) -> list[Document]:
             document_date = datetime_from_iso_string(document_dict['documentDate']),
             file_extension = document_dict['fileExtension'],
             category_name = document_dict.get('documentCategoryName'),
-            category_uuid = document_dict.get('documentCategoryUuid')
+            category_uuid = document_dict.get('documentCategoryUuid'),
+            caseworker=caseworker
         )
         documents.append(doc)
 
@@ -183,6 +195,14 @@ def attach_document_to_case(case_uuid: str, document: Document, nova_access: Nov
         "approved": document.approved,
         "accessToDocuments": True
     }
+
+    if document.caseworker:
+        payload['caseworker'] = {
+            "kspIdentity": {
+                "racfId": document.caseworker.ident,
+                "fullName": document.caseworker.name
+            }
+        }
 
     headers = {'Content-Type': 'application/json', 'Authorization': f"Bearer {nova_access.get_bearer_token()}"}
     response = requests.post(url, params=params, headers=headers, json=payload, timeout=60)
