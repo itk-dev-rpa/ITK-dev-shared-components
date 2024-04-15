@@ -48,6 +48,7 @@ class Document:
     file_extension: Optional[str] = None
     category_name: Optional[str] = None
     category_uuid: Optional[str] = None
+    caseworker: Optional[Caseworker] = None
 
 
 @dataclass(slots=True, kw_only=True)
