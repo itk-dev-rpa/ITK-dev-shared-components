@@ -60,6 +60,8 @@ def _encode_text(string: str) -> str:
     """Encode a string to a base64 string.
     Ensure the base64 string doesn't contain padding by
     inserting spaces at the end of the input string.
+    There is a bug in the Nova api that corrupts the string
+    if it contains padding.
 
     Args:
         string: The string to encode.
