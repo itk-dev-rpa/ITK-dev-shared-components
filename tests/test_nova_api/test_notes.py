@@ -24,7 +24,7 @@ class NovaNotesTest(unittest.TestCase):
         title = f"Test title {datetime.today()}"
         text = f"Test note {datetime.today()}"
 
-        nova_notes.add_text_note(case.uuid, title, text, self.nova_access)
+        nova_notes.add_text_note(case.uuid, title, text, False, self.nova_access)
 
         # Get the note back from Nova
         notes = nova_notes.get_notes(case.uuid, self.nova_access, limit=10)

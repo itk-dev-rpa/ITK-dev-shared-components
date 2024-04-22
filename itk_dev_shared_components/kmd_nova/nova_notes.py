@@ -11,13 +11,14 @@ from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
 from itk_dev_shared_components.kmd_nova.nova_objects import JournalNote
 
 
-def add_text_note(case_uuid: str, note_title: str, note_text: str, nova_access: NovaAccess) -> str:
+def add_text_note(case_uuid: str, note_title: str, note_text: str, approved: bool, nova_access: NovaAccess) -> str:
     """Add a text based journal note to a Nova case.
 
     Args:
         case_uuid: The uuid of the case to add the journal note to.
         note_title: The title of the note.
         note_text: The text content of the note.
+        approved: Whether the journal note should be marked as approved in Nova.
         nova_access: The NovaAccess object used to authenticate.
 
     Returns:
@@ -36,7 +37,7 @@ def add_text_note(case_uuid: str, note_title: str, note_text: str, nova_access: 
         "journalNotes": [
             {
                 "uuid": note_uuid,
-                "approved": False,
+                "approved": approved,
                 "journalNoteAttributes": {
                     "journalNoteDate": datetime.today().isoformat(),
                     "title": note_title,
@@ -58,10 +59,9 @@ def add_text_note(case_uuid: str, note_title: str, note_text: str, nova_access: 
 
 def _encode_text(string: str) -> str:
     """Encode a string to a base64 string.
-    Ensure the base64 string doesn't contain padding by
-    inserting spaces at the end of the input string.
-    There is a bug in the Nova api that corrupts the string
-    if it contains padding.
+    Ensure the base64 string doesn't contain padding by inserting spaces at the end of the input string.
+    There is a bug in the Nova api that corrupts the string if it contains padding.
+    The extra spaces will not show up in the Nova user interface.
 
     Args:
         string: The string to encode.
