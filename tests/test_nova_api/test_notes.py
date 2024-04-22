@@ -1,4 +1,4 @@
-"""Test the part of the API to do with cases."""
+"""Test the part of the API to do with journal notes."""
 import unittest
 import os
 from datetime import datetime

@@ -1,3 +1,5 @@
+"""This module has functions to do with journal note related calls to the KMD Nova api."""
+
 import base64
 import uuid
 import urllib.parse
