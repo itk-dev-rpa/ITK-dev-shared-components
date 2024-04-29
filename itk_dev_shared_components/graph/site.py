@@ -50,8 +50,7 @@ def download_file_contents(graph_access: GraphAccess, site_id: str, drive_item_i
     You need to authorize against Graph to get the GraphAccess before using this function
     see the graph.authentication module.
 
-    See https://learn.microsoft.com/en-us/graph/api/driveitem-get-content
-    for a list of possible content_urls to pass as argument.
+    See https://learn.microsoft.com/en-us/graph/api/driveitem-get-content for further documentation
 
     Args:
         graph_access: The GraphAccess object used to authenticate.
