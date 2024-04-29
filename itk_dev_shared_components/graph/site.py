@@ -1,6 +1,7 @@
 """This module is responsible for accessing sites using the Microsoft Graph API."""
 
 from dataclasses import dataclass, field
+from typing import Any
 
 import requests
 
@@ -65,6 +66,26 @@ def download_file_contents(graph_access: GraphAccess, site_id: str, drive_item_i
     return response.content
 
 
+def upload_file_contents(graph_access: GraphAccess, site_id: str, drive_item_path: str, file_contents: bytes):
+    """Given a site_id, a drive_item_path, and file_contents as bytes, uploads a single file to a site
+
+    You need to authorize against Graph to get the GraphAccess before using this function
+    see the graph.authentication module.
+
+    See https://learn.microsoft.com/en-us/graph/api/driveitem-put-content for further documentation
+
+    Args:
+        graph_access: The GraphAccess object used to authenticate.
+        site_id: The id of the site in SharePoint.
+        drive_item_path: The path to upload the file contents to.
+        file_contents: A bytes object containing the file's contents.
+
+    """
+
+    endpoint = f"https://graph.microsoft.com/v1.0/sites/{site_id}/drive/root:/{drive_item_path}:/content"
+    _put_request(endpoint, graph_access, file_contents)
+
+
 def _unpack_site_response(site_raw: dict[str, str]) -> Site:
     """Unpack a json HTTP response and create a Site object.
 
@@ -104,6 +125,30 @@ def _get_request(endpoint: str, graph_access: GraphAccess) -> requests.models.Re
     headers = {"Authorization": f"Bearer {token}"}
 
     response = requests.get(endpoint, headers=headers, timeout=30)
+    response.raise_for_status()
+
+    return response
+
+
+def _put_request(endpoint: str, graph_access: GraphAccess, data: Any) -> requests.models.Response:
+    """Sends a put request to the given Graph endpoint using the GraphAccess
+    and returns the json object of the response.
+
+    Args:
+        endpoint: The URL of the Graph endpoint.
+        data: The data to send in the request.
+        graph_access: The GraphAccess object used to authenticate.
+
+    Returns:
+        Response: The response object of the PUT request.
+
+    Raises:
+        HTTPError: Any errors raised while performing PUT request.
+    """
+    token = graph_access.get_access_token()
+    headers = {"Authorization": f"Bearer {token}"}
+
+    response = requests.put(endpoint, headers=headers, data=data, timeout=30)
     response.raise_for_status()
 
     return response
