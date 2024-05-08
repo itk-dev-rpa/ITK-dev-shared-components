@@ -1,12 +1,9 @@
 """This module is responsible for accessing sites using the Microsoft Graph API."""
 
 from dataclasses import dataclass, field
-from typing import Any
-
-import requests
 
 from itk_dev_shared_components.graph.authentication import GraphAccess
-
+from itk_dev_shared_components.graph.common import get_request, put_request
 
 @dataclass
 class Site:
@@ -39,7 +36,7 @@ def get_site(graph_access: GraphAccess, site_path: str) -> Site:
         A Site object
     """
     endpoint = f"https://graph.microsoft.com/v1.0/sites/{site_path}"
-    response = _get_request(endpoint, graph_access)
+    response = get_request(endpoint, graph_access)
 
     return _unpack_site_response(response.json())
 
@@ -61,7 +58,7 @@ def download_file_contents(graph_access: GraphAccess, site_id: str, drive_item_i
         bytes containing the contents of the file
     """
     endpoint = f"https://graph.microsoft.com/v1.0/sites/{site_id}/drive/items/{drive_item_id}/content"
-    response = _get_request(endpoint, graph_access)
+    response = get_request(endpoint, graph_access)
     return response.content
 
 
@@ -82,7 +79,7 @@ def upload_file_contents(graph_access: GraphAccess, site_id: str, drive_item_pat
     """
 
     endpoint = f"https://graph.microsoft.com/v1.0/sites/{site_id}/drive/root:/{drive_item_path}:/content"
-    _put_request(endpoint, graph_access, file_contents)
+    put_request(endpoint, graph_access, file_contents)
 
 
 def _unpack_site_response(site_raw: dict[str, str]) -> Site:
@@ -104,50 +101,3 @@ def _unpack_site_response(site_raw: dict[str, str]) -> Site:
         created=site_raw["createdDateTime"],
         last_modified=site_raw["lastModifiedDateTime"],
     )
-
-
-def _get_request(endpoint: str, graph_access: GraphAccess) -> requests.models.Response:
-    """Sends a get request to the given Graph endpoint using the GraphAccess
-    and returns the json object of the response.
-
-    Args:
-        endpoint: The URL of the Graph endpoint.
-        graph_access: The GraphAccess object used to authenticate.
-
-    Returns:
-        Response: The response object of the GET request.
-
-    Raises:
-        HTTPError: Any errors raised while performing GET request.
-    """
-    token = graph_access.get_access_token()
-    headers = {"Authorization": f"Bearer {token}"}
-
-    response = requests.get(endpoint, headers=headers, timeout=30)
-    response.raise_for_status()
-
-    return response
-
-
-def _put_request(endpoint: str, graph_access: GraphAccess, data: Any) -> requests.models.Response:
-    """Sends a put request to the given Graph endpoint using the GraphAccess
-    and returns the json object of the response.
-
-    Args:
-        endpoint: The URL of the Graph endpoint.
-        data: The data to send in the request.
-        graph_access: The GraphAccess object used to authenticate.
-
-    Returns:
-        Response: The response object of the PUT request.
-
-    Raises:
-        HTTPError: Any errors raised while performing PUT request.
-    """
-    token = graph_access.get_access_token()
-    headers = {"Authorization": f"Bearer {token}"}
-
-    response = requests.put(endpoint, headers=headers, data=data, timeout=30)
-    response.raise_for_status()
-
-    return response
