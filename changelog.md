@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2024-05-08
+
+### Added
+
+- Module for getting and creating journal notes in Nova.
+- Tests for journal notes.
+
 ## [2.1.1] - 2024-04-10
 
 ### Fixed
@@ -94,7 +101,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased] https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.1.1...HEAD
+[Unreleased] https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.2.0...HEAD
+[2.2.0] https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.2.0
 [2.1.1] https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.1.1
 [2.1.0] https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.1.0
 [2.0.0] https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.0.0
