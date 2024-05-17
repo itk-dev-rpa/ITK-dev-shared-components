@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Function for getting cases based on CVR from KMD Nova.
+- Tests for getting cases based on CVR from KMD Nova.
+
 ## [2.2.0] - 2024-05-08
 
 ### Added
