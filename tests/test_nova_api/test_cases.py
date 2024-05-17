@@ -128,7 +128,7 @@ class NovaCasesTest(unittest.TestCase):
                     break
             if nova_case:
                 break
- 
+
         self.assertIsNotNone(nova_case)
 
         nova_case = cases[0]
