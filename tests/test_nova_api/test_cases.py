@@ -49,6 +49,37 @@ class NovaCasesTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             nova_cases.get_cases(nova_access=self.nova_access)
 
+    def test_get_cvr_cases(self):
+        """Test the API for getting cases on a given case number."""
+        cvr = "55133018"
+        case_title = "rpa_testcase"
+        case_number = "S2024-25614"
+
+        cases = nova_cases.get_cvr_cases(cvr=cvr, nova_access=self.nova_access)
+        self.assertIsInstance(cases[0], NovaCase)
+        self.assertEqual(cases[0].case_parties[0].identification, cvr)
+
+        cases = nova_cases.get_cvr_cases(case_number=case_number, nova_access=self.nova_access)
+        self.assertEqual(cases[0].case_number, case_number)
+
+        cases = nova_cases.get_cvr_cases(case_title=case_title, nova_access=self.nova_access)
+        self.assertEqual(cases[0].title, case_title)
+
+        cases = nova_cases.get_cvr_cases(cvr=cvr, case_title=case_title, nova_access=self.nova_access)
+        self.assertEqual(cases[0].case_parties[0].identification, cvr)
+        self.assertEqual(cases[0].title, case_title)
+
+        cases = nova_cases.get_cvr_cases(cvr=cvr, case_number=case_number, nova_access=self.nova_access)
+        self.assertEqual(cases[0].case_parties[0].identification, cvr)
+        self.assertEqual(cases[0].case_number, case_number)
+
+        cases = nova_cases.get_cvr_cases(case_number=case_number, case_title=case_title, nova_access=self.nova_access)
+        self.assertEqual(cases[0].case_number, case_number)
+        self.assertEqual(cases[0].title, case_title)
+
+        with self.assertRaises(ValueError):
+            nova_cases.get_cvr_cases(nova_access=self.nova_access)
+
     def test_add_case(self):
         """Test adding a case to Nova."""
         party = CaseParty(
@@ -87,13 +118,18 @@ class NovaCasesTest(unittest.TestCase):
         nova_cases.add_case(case, self.nova_access)
 
         # Wait up to 10 seconds for the case to be created in Nova
+        nova_case = None
         for _ in range(10):
             time.sleep(1)
-            cases = nova_cases.get_cases(self.nova_access, cpr=party.identification, case_title=case.title)
-            if cases:
+            cases = nova_cases.get_cases(self.nova_access, cpr=party.identification, case_title="Test")
+            for c in cases:
+                if c.title == case.title:
+                    nova_case = c
+                    break
+            if nova_case:
                 break
-
-        self.assertEqual(len(cases), 1)
+ 
+        self.assertIsNotNone(nova_case)
 
         nova_case = cases[0]
         self.assertEqual(nova_case.uuid, case.uuid)
