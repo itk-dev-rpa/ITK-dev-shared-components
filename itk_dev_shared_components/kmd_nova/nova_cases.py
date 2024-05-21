@@ -28,16 +28,93 @@ def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None,
 
     Raises:
         ValueError: If no search terms are given.
-        requests.exceptions.HTTPError: If the request failed.
     """
 
     if not any((cpr, case_number, case_title)):
         raise ValueError("No search terms given.")
 
+    payload = _create_payload(cpr, "CprNummer", case_number, case_title, limit)
+    return _get_nova_cases(nova_access, payload)
+
+
+def get_cvr_cases(nova_access: NovaAccess, cvr: str = None,  case_number: str = None, case_title: str = None, limit: int = 100) -> list[NovaCase]:
+    """Search for cases on different search terms.
+    Currently supports search on cvr number, case number and case title. At least one search term must be given.
+
+    Args:
+        nova_access: The NovaAccess object used to authenticate.
+        cvr: The cvr number to search on. E.g. "01234567"
+        case_number: The case number to search on. E.g. "S2022-12345"
+        case_title: The case title to search on.
+        limit: The maximum number of cases to find (1-500).
+
+    Returns:
+        A list of NovaCase objects.
+
+    Raises:
+        ValueError: If no search terms are given.
+    """
+
+    if not any((cvr, case_number, case_title)):
+        raise ValueError("No search terms given.")
+
+    payload = _create_payload(cvr, "CvrNummer", case_number, case_title, limit)
+    return _get_nova_cases(nova_access, payload)
+
+
+def _get_nova_cases(nova_access: NovaAccess, payload: dict) -> list[NovaCase]:
+    """Search for cases with a payload of search terms.
+
+    Args:
+        nova_access: The NovaAccess object used to authenticate.
+        payload: A dictionary containing case identifier, identifier type, case number case title and limit
+
+    Returns:
+        A list of NovaCase objects.
+
+    Raises:
+        requests.exceptions.HTTPError: If the request failed.
+    """
     url = urllib.parse.urljoin(nova_access.domain, "api/Case/GetList")
     params = {"api-version": "1.0-Case"}
 
-    payload = {
+    headers = {'Content-Type': 'application/json', 'Authorization': f"Bearer {nova_access.get_bearer_token()}"}
+
+    response = requests.put(url, params=params, headers=headers, json=payload, timeout=60)
+    response.raise_for_status()
+
+    if response.json()['pagingInformation']['numberOfRows'] == 0:
+        return []
+
+    # Convert json to NovaCase objects
+    cases = []
+    for case_dict in response.json()['cases']:
+        security_unit, responsible_department = _extract_departments(case_dict)
+        case = NovaCase(
+            uuid = case_dict['common']['uuid'],
+            title = case_dict['caseAttributes']['title'],
+            case_date = datetime_from_iso_string(case_dict['caseAttributes']['caseDate']),
+            case_number = case_dict['caseAttributes']['userFriendlyCaseNumber'],
+            active_code = case_dict['state']['activeCode'],
+            progress_state = case_dict['state']['progressState'],
+            case_parties = _extract_case_parties(case_dict),
+            document_count = case_dict['numberOfDocuments'],
+            note_count = case_dict['numberOfJournalNotes'],
+            kle_number = case_dict['caseClassification']['kleNumber']['code'],
+            proceeding_facet = case_dict['caseClassification']['proceedingFacet']['code'],
+            sensitivity = case_dict["sensitivity"]["sensitivity"],
+            caseworker = _extract_case_worker(case_dict),
+            security_unit=security_unit,
+            responsible_department=responsible_department
+        )
+
+        cases.append(case)
+
+    return cases
+
+
+def _create_payload(identification: str = None, identification_type: str = "CprNummer", case_number: str = None, case_title: str = None, limit: int = 100) -> dict:
+    return {
         "common": {
             "transactionId": str(uuid.uuid4())
         },
@@ -50,8 +127,8 @@ def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None,
             "title": case_title
         },
         "caseParty": {
-            "identificationType": "CprNummer",
-            "identification": cpr
+            "identificationType": identification_type,
+            "identification": identification
         },
         "caseGetOutput": {
             "numberOfSecondaryParties": True,
@@ -109,40 +186,6 @@ def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None,
             },
         }
     }
-
-    headers = {'Content-Type': 'application/json', 'Authorization': f"Bearer {nova_access.get_bearer_token()}"}
-
-    response = requests.put(url, params=params, headers=headers, json=payload, timeout=60)
-    response.raise_for_status()
-
-    if response.json()['pagingInformation']['numberOfRows'] == 0:
-        return []
-
-    # Convert json to NovaCase objects
-    cases = []
-    for case_dict in response.json()['cases']:
-        security_unit, responsible_department = _extract_departments(case_dict)
-        case = NovaCase(
-            uuid = case_dict['common']['uuid'],
-            title = case_dict['caseAttributes']['title'],
-            case_date = datetime_from_iso_string(case_dict['caseAttributes']['caseDate']),
-            case_number = case_dict['caseAttributes']['userFriendlyCaseNumber'],
-            active_code = case_dict['state']['activeCode'],
-            progress_state = case_dict['state']['progressState'],
-            case_parties = _extract_case_parties(case_dict),
-            document_count = case_dict['numberOfDocuments'],
-            note_count = case_dict['numberOfJournalNotes'],
-            kle_number = case_dict['caseClassification']['kleNumber']['code'],
-            proceeding_facet = case_dict['caseClassification']['proceedingFacet']['code'],
-            sensitivity = case_dict["sensitivity"]["sensitivity"],
-            caseworker = _extract_case_worker(case_dict),
-            security_unit=security_unit,
-            responsible_department=responsible_department
-        )
-
-        cases.append(case)
-
-    return cases
 
 
 def _extract_departments(case_dict: dict) -> tuple[Department, Department]:
