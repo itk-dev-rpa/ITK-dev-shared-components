@@ -39,7 +39,7 @@ def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None,
 
 def get_cvr_cases(nova_access: NovaAccess, cvr: str = None,  case_number: str = None, case_title: str = None, limit: int = 100) -> list[NovaCase]:
     """Search for cases on different search terms.
-    Currently supports search on cpr number, case number and case title. At least one search term must be given.
+    Currently supports search on cvr number, case number and case title. At least one search term must be given.
 
     Args:
         nova_access: The NovaAccess object used to authenticate.
