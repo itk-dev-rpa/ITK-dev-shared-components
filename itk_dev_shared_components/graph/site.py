@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 from itk_dev_shared_components.graph.authentication import GraphAccess
 from itk_dev_shared_components.graph.common import get_request, put_request
 
+
 @dataclass
 class Site:
     """A class representing a Site."""
