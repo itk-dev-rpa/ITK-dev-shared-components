@@ -6,7 +6,6 @@ from itk_dev_shared_components.graph.authentication import GraphAccess
 from itk_dev_shared_components.graph.common import get_request
 
 
-# TODO: Add more properties
 @dataclass
 class DriveItem:
     """A class representing a DriveItem."""
