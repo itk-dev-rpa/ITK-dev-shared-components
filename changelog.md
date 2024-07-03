@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Function for getting cases based on CVR from KMD Nova.
 - Tests for getting cases based on CVR from KMD Nova.
 
+### Changed
+
+- Unexpected format on caseworker in Nova cases results in None.
+
 ## [2.2.0] - 2024-05-08
 
 ### Added
