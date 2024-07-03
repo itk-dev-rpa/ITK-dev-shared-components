@@ -11,10 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Function for getting cases based on CVR from KMD Nova.
 - Tests for getting cases based on CVR from KMD Nova.
+- Module for accessing site and file endpoints in Microsoft Graph.
 
 ### Changed
 
 - Unexpected format on caseworker in Nova cases results in None.
+- Minor refactoring to move common HTTP request wrappers for Microsoft Graph into their own file.
 
 ## [2.2.0] - 2024-05-08
 
@@ -22,8 +24,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Module for getting and creating journal notes in Nova.
 - Tests for journal notes.
-- Module for accessing site and file endpoints in Microsoft Graph.
-- Minor refactoring to move common HTTP request wrappers for Microsoft Graph into their own file.
 
 ## [2.1.1] - 2024-04-10
 
