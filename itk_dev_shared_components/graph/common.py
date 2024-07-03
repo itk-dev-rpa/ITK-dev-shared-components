@@ -14,7 +14,6 @@ def get_request(endpoint: str, graph_access: GraphAccess) -> requests.models.Res
     Args:
         endpoint: The URL of the Graph endpoint.
         graph_access: The GraphAccess object used to authenticate.
-        timeout: Timeout in seconds of the HTTP request. Defaults to 10.
 
     Returns:
         Response: The response object of the GET request.
