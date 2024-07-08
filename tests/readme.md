@@ -12,6 +12,9 @@ You need to setup a .env file in the root directory with the following parameter
 
 GRAPH_API = '{"client_id":"something", "tenant_id":"something", "username":"something", "password":"something"}'
 SAP_LOGIN = 'login;password'
+MAIL_USER = "test@email.dk"
+MAIL_FOLDER1 = "Indbakke/Graph Test/Undermappe"
+MAIL_FOLDER2 = "Indbakke/Graph Test/Undermappe2"
 
 ## SMTP
 

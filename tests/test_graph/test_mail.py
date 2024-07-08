@@ -25,10 +25,9 @@ class EmailTest(unittest.TestCase):
         cls.graph_access = authentication.authorize_by_username_password(username, password, tenant_id=tenant_id, client_id=client_id)
 
         # Define mail user and folders
-        # TODO: Make this a part of a .env file?
-        cls.user = "itk-rpa@mkb.aarhus.dk"
-        cls.folder1 = "Indbakke/Graph Test/Undermappe"
-        cls.folder2 = "Indbakke/Graph Test/Undermappe2"
+        cls.user = os.environ['MAIL_USER']
+        cls.folder1 = os.environ['MAIL_FOLDER1']
+        cls.folder2 = os.environ['MAIL_FOLDER2']
 
     def test_correct_usage(self):
         """Test all functions relating to the mail part of Graph.
