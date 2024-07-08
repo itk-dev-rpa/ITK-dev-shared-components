@@ -9,8 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Caseworker for notes
+- Directions for setting up environment variables for test
 - Function for getting cases based on CVR from KMD Nova.
 - Tests for getting cases based on CVR from KMD Nova.
+
+### Fixed
+- Some SAP tests were failing due to a missing value
 
 ## [2.2.0] - 2024-05-08
 
