@@ -7,6 +7,12 @@ This bat file sets up a new virtual environment and installs the package before 
 
 Alternatively you can run each test file separately by simply running them as Python scripts.
 
+## Environment variables
+You need to setup a .env file in the root directory with the following parameters:
+
+GRAPH_API = '{"client_id":"something", "tenant_id":"something", "username":"something", "password":"something"}'
+SAP_LOGIN = 'login;password'
+
 ## SMTP
 
 For testing SMTP you need [Mailpit](https://mailpit.axllent.org/) running on localhost.

@@ -2,7 +2,12 @@
 
 import unittest
 import os
+
+from dotenv import load_dotenv
+
 from itk_dev_shared_components.sap import gridview_util, sap_login, multi_session
+
+load_dotenv()
 
 # Some tests might look similar, and we want this. pylint: disable=duplicate-code
 
@@ -14,7 +19,7 @@ class TestGridviewUtil(unittest.TestCase):
         """Launch SAP and navigate to fmcacov on FP 25564617 (Test person)."""
         sap_login.kill_sap()
 
-        user, password = os.environ['SAP Login'].split(';')
+        user, password = os.environ['SAP_LOGIN'].split(';')
         sap_login.login_using_cli(user, password)
         session = multi_session.get_all_sap_sessions()[0]
         session.startTransaction("fmcacov")
@@ -70,7 +75,7 @@ class TestGridviewUtil(unittest.TestCase):
     def test_find_row_index_by_value(self):
         """Test finding a single row by column value."""
         # Test finding an actual value.
-        index = gridview_util.find_row_index_by_value(self.table, "TXTU2", "Test deltrans")
+        index = gridview_util.find_row_index_by_value(self.table, "PSOBTYP", "TEST")
         self.assertNotEqual(index, -1)
 
         # Test NOT finding a wrong value.
@@ -84,7 +89,7 @@ class TestGridviewUtil(unittest.TestCase):
     def test_find_all_row_indices_by_value(self):
         """Test finding all rows by column value."""
         # Test finding an actual value.
-        indices = gridview_util.find_all_row_indices_by_value(self.table, "TXTU2", "Gebyr")
+        indices = gridview_util.find_all_row_indices_by_value(self.table, "PSOBTYP", "TEST")
         self.assertGreater(len(indices), 0)
 
         # Test NOT finding a wrong value.

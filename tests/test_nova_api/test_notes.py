@@ -5,7 +5,7 @@ from datetime import datetime
 import base64
 
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
-from itk_dev_shared_components.kmd_nova.nova_objects import JournalNote
+from itk_dev_shared_components.kmd_nova.nova_objects import JournalNote, Caseworker
 from itk_dev_shared_components.kmd_nova import nova_notes, nova_cases
 
 
@@ -24,7 +24,13 @@ class NovaNotesTest(unittest.TestCase):
         title = f"Test title {datetime.today()}"
         text = f"Test note {datetime.today()}"
 
-        nova_notes.add_text_note(case.uuid, title, text, False, self.nova_access)
+        caseworker = Caseworker(
+            name='svcitkopeno svcitkopeno',
+            ident='AZX0080',
+            uuid='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
+        )
+
+        nova_notes.add_text_note(case.uuid, title, text, caseworker, False, self.nova_access)
 
         # Get the note back from Nova
         notes = nova_notes.get_notes(case.uuid, self.nova_access, limit=10)
