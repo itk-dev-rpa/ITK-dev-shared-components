@@ -29,5 +29,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-  "python-dotenv"
+  "python-dotenv",
+  "flake8",
+  "pylint"
 ]
