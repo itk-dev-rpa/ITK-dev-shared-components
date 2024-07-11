@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tests for journal notes.
 - Module for accessing site and file endpoints in Microsoft Graph.
 - Minor refactoring to move common HTTP request wrappers for Microsoft Graph into their own file.
+- Minor doc fixes to get_drive_item.
 
 ## [2.1.1] - 2024-04-10
 
