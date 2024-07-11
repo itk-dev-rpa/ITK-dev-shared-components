@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Minor doc fixes to get_drive_item.
+
 ## [2.3.0] - 2024-07-03
 
 ### Added
@@ -19,7 +23,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Unexpected format on caseworker in Nova cases results in None.
 - Minor refactoring to move common HTTP request wrappers for Microsoft Graph into their own file.
-- Minor doc fixes to get_drive_item.
 
 ## [2.2.0] - 2024-05-08
 
