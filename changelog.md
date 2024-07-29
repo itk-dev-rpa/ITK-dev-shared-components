@@ -7,10 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### TODO
+- Create tests for Eflyt
+
 ### Added
 
 - Function for getting cases based on CVR from KMD Nova.
 - Tests for getting cases based on CVR from KMD Nova.
+- Added modules for use with the Eflyt / Dedalus / Notus address system
 
 ## [2.2.0] - 2024-05-08
 
