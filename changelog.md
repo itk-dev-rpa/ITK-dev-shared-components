@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Some SAP tests were failing due to a missing value
 - Changed department and security units from rules to user control
+- Changed environmental variables to use an .env file
 
 ## [2.2.0] - 2024-05-08
 
