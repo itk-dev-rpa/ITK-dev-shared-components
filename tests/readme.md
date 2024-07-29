@@ -21,8 +21,11 @@ NOVA_PARTY = '6101009805,Test Test'
 NOVA_DEPARTMENT = '{"id": 818485,"name": "Borgerservice","user_key": "4BBORGER"}'
 NOVA_CREDENTIALS = 'nova_login,nova_password'
 NOVA_USER = '{"name": "svcitkopeno svcitkopeno", "ident": "AZX0080", "uuid": "0bacdddd-5c61-4676-9a61-b01a18cec1d5"}'
-NOVA_CVR_CASE = "S2024-25614"
-NOVA_CPR_CASE = "S2023-61078"
+
+NOVA_CVR_CASE = '{"cvr": "55133018", "case_title": "rpa_testcase", "case_number": "S2024-25614"}'
+NOVA_CPR_CASE = '{"cpr": "6101009805", "case_title": "Meget_Unik_Case_Overskrift", "case_number": "S2023-61078"}'
+
+Note: The NOVA_CVR_CASE and NOVA_CPR_CASE variables require cases to be created in Nova, and the parameters set from those cases.
 
 ## SMTP
 
@@ -53,15 +56,3 @@ And this command to launch Mailpit:
 ```bash
 mailpit --smtp-tls-cert cert.pem --smtp-tls-key key.pem
 ```
-
-## System requirements
-### Nova
-To be able to run tests, you must have the following cases created in the system, for a CVR and a CPR:
-
-    cvr = "55133018"
-    case_title = "rpa_testcase"
-    case_number = "S2024-25614"
-
-    cpr = "6101009805"
-    case_title = "Meget_Unik_Case_Overskrift"
-    case_number = "S2023-61078"
