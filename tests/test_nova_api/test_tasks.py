@@ -117,9 +117,7 @@ class NovaCasesTest(unittest.TestCase):
 
         caseworker_dict = json.loads(os.environ['NOVA_USER'])
         caseworker = Caseworker(
-            name = caseworker_dict['name'],
-            ident = caseworker_dict['ident'],
-            uuid = caseworker_dict['uuid']
+            **caseworker_dict
         )
 
         task = Task(
