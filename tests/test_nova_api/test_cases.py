@@ -4,6 +4,7 @@ import os
 import uuid
 from datetime import datetime
 import time
+import json
 
 from dotenv import load_dotenv
 
@@ -18,8 +19,7 @@ class NovaCasesTest(unittest.TestCase):
     """Test the part of the API to do with cases."""
     @classmethod
     def setUpClass(cls):
-        credentials = os.getenv('NOVA_CREDENTIALS')
-        credentials = credentials.split(',')
+        credentials = os.getenv('NOVA_CREDENTIALS').split(',')
         cls.nova_access = NovaAccess(client_id=credentials[0], client_secret=credentials[1])
 
     def test_get_cases(self):
@@ -86,23 +86,26 @@ class NovaCasesTest(unittest.TestCase):
 
     def test_add_case(self):
         """Test adding a case to Nova."""
+        nova_party = os.getenv('NOVA_PARTY').split(',')
         party = CaseParty(
             role="Primær",
             identification_type="CprNummer",
-            identification="6101009805",
-            name="Test Test"
+            identification=nova_party[0],
+            name=nova_party[1]
         )
 
+        caseworker_dict = json.loads(os.environ['NOVA_USER'])
         caseworker = Caseworker(
-            name='svcitkopeno svcitkopeno',
-            ident='AZX0080',
-            uuid='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
+            name = caseworker_dict['name'],
+            ident = caseworker_dict['ident'],
+            uuid = caseworker_dict['uuid']
         )
 
+        department_dict = json.loads(os.environ['NOVA_DEPARTMENT'])
         department = Department(
-            id=818485,
-            name="Borgerservice",
-            user_key="4BBORGER"
+            id=department_dict["id"],
+            name=department_dict["name"],
+            user_key=department_dict["user_key"]
         )
 
         case = NovaCase(

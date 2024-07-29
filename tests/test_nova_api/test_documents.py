@@ -2,6 +2,7 @@
 import unittest
 import os
 import uuid
+import json
 from datetime import datetime
 from io import StringIO, BytesIO
 
@@ -39,10 +40,11 @@ class NovaDocumentsTest(unittest.TestCase):
 
         doc_uuid = nova_documents.upload_document(file, "Filename.txt", self.nova_access)
 
+        caseworker_dict = json.loads(os.environ['NOVA_USER'])
         caseworker = Caseworker(
-            name='svcitkopeno svcitkopeno',
-            ident='AZX0080',
-            uuid='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
+            name = caseworker_dict['name'],
+            ident = caseworker_dict['ident'],
+            uuid = caseworker_dict['uuid']
         )
 
         title = f"Test document {datetime.now()}"

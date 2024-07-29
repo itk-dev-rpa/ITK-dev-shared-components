@@ -18,8 +18,7 @@ class NovaNotesTest(unittest.TestCase):
     """Test the part of the API to do with notes."""
     @classmethod
     def setUpClass(cls):
-        credentials = os.getenv('NOVA_CREDENTIALS')
-        credentials = credentials.split(',')
+        credentials = os.getenv('NOVA_CREDENTIALS').split(',')
         cls.nova_access = NovaAccess(client_id=credentials[0], client_secret=credentials[1])
 
     def test_add_note(self):

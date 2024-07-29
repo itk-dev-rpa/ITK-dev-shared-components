@@ -4,6 +4,7 @@ import os
 import uuid
 from datetime import datetime, date
 import random
+import json
 
 from dotenv import load_dotenv
 
@@ -41,10 +42,11 @@ class NovaCasesTest(unittest.TestCase):
         """Test adding a Task to Nova with minimal information set."""
         case = self._get_test_case()
 
+        caseworker_dict = json.loads(os.environ['NOVA_USER'])
         caseworker = Caseworker(
-            name='svcitkopeno svcitkopeno',
-            ident='AZX0080',
-            uuid='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
+            name = caseworker_dict['name'],
+            ident = caseworker_dict['ident'],
+            uuid = caseworker_dict['uuid']
         )
 
         # Test with minimal attributes set
@@ -72,10 +74,11 @@ class NovaCasesTest(unittest.TestCase):
         """Test adding a Task to Nova with all information set."""
         case = self._get_test_case()
 
+        caseworker_dict = json.loads(os.environ['NOVA_USER'])
         caseworker = Caseworker(
-            name='svcitkopeno svcitkopeno',
-            ident='AZX0080',
-            uuid='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
+            name = caseworker_dict['name'],
+            ident = caseworker_dict['ident'],
+            uuid = caseworker_dict['uuid']
         )
 
         # Test with minimal attributes set
@@ -112,10 +115,11 @@ class NovaCasesTest(unittest.TestCase):
         case = self._get_test_case()
         title = f"Test Update Task {datetime.now()}"
 
+        caseworker_dict = json.loads(os.environ['NOVA_USER'])
         caseworker = Caseworker(
-            name='svcitkopeno svcitkopeno',
-            ident='AZX0080',
-            uuid='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
+            name = caseworker_dict['name'],
+            ident = caseworker_dict['ident'],
+            uuid = caseworker_dict['uuid']
         )
 
         task = Task(
