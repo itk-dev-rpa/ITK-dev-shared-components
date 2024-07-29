@@ -5,16 +5,20 @@ import uuid
 from datetime import datetime, date
 import random
 
+from dotenv import load_dotenv
+
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
 from itk_dev_shared_components.kmd_nova.nova_objects import Task, Caseworker
 from itk_dev_shared_components.kmd_nova import nova_cases, nova_tasks
+
+load_dotenv()
 
 
 class NovaCasesTest(unittest.TestCase):
     """Test the part of the API to do with tasks."""
     @classmethod
     def setUpClass(cls):
-        credentials = os.getenv('nova_api_credentials')
+        credentials = os.getenv('NOVA_CREDENTIALS')
         credentials = credentials.split(',')
         cls.nova_access = NovaAccess(client_id=credentials[0], client_secret=credentials[1])
 

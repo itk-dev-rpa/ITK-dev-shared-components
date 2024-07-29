@@ -3,17 +3,22 @@ import unittest
 import os
 from datetime import datetime
 import base64
+import json
+
+from dotenv import load_dotenv
 
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
 from itk_dev_shared_components.kmd_nova.nova_objects import JournalNote, Caseworker
 from itk_dev_shared_components.kmd_nova import nova_notes, nova_cases
+
+load_dotenv()
 
 
 class NovaNotesTest(unittest.TestCase):
     """Test the part of the API to do with notes."""
     @classmethod
     def setUpClass(cls):
-        credentials = os.getenv('nova_api_credentials')
+        credentials = os.getenv('NOVA_CREDENTIALS')
         credentials = credentials.split(',')
         cls.nova_access = NovaAccess(client_id=credentials[0], client_secret=credentials[1])
 
@@ -24,10 +29,11 @@ class NovaNotesTest(unittest.TestCase):
         title = f"Test title {datetime.today()}"
         text = f"Test note {datetime.today()}"
 
+        caseworker_dict = json.loads(os.environ['NOVA_USER'])
         caseworker = Caseworker(
-            name='svcitkopeno svcitkopeno',
-            ident='AZX0080',
-            uuid='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
+            name = caseworker_dict['name'],
+            ident = caseworker_dict['ident'],
+            uuid = caseworker_dict['uuid']
         )
 
         nova_notes.add_text_note(case.uuid, title, text, caseworker, False, self.nova_access)

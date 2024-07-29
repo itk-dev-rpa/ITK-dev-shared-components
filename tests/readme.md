@@ -15,6 +15,8 @@ SAP_LOGIN = 'login;password'
 MAIL_USER = "test@email.dk"
 MAIL_FOLDER1 = "Indbakke/Graph Test/Undermappe"
 MAIL_FOLDER2 = "Indbakke/Graph Test/Undermappe2"
+NOVA_CREDENTIALS = 'nova_login,nova_password'
+NOVA_USER = '{"name": "svcitkopeno svcitkopeno", "ident": "AZX0080", "uuid": "0bacdddd-5c61-4676-9a61-b01a18cec1d5"}'
 
 ## SMTP
 
