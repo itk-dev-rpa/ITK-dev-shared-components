@@ -21,6 +21,8 @@ NOVA_PARTY = '6101009805,Test Test'
 NOVA_DEPARTMENT = '{"id": 818485,"name": "Borgerservice","user_key": "4BBORGER"}'
 NOVA_CREDENTIALS = 'nova_login,nova_password'
 NOVA_USER = '{"name": "svcitkopeno svcitkopeno", "ident": "AZX0080", "uuid": "0bacdddd-5c61-4676-9a61-b01a18cec1d5"}'
+NOVA_CVR_CASE = "S2024-25614"
+NOVA_CPR_CASE = "S2023-61078"
 
 ## SMTP
 

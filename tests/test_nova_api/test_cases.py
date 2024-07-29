@@ -24,9 +24,10 @@ class NovaCasesTest(unittest.TestCase):
 
     def test_get_cases(self):
         """Test the API for getting cases on a given case number."""
-        cpr = "6101009805"
-        case_title = "Meget_Unik_Case_Overskrift"
-        case_number = "S2023-61078"
+        cpr_case = json.loads(os.environ['NOVA_CPR_CASE'])
+        cpr = cpr_case['cpr']
+        case_title = cpr_case['case_title']
+        case_number = cpr_case['case_number']
 
         cases = nova_cases.get_cases(cpr=cpr, nova_access=self.nova_access)
         self.assertIsInstance(cases[0], NovaCase)
@@ -55,9 +56,10 @@ class NovaCasesTest(unittest.TestCase):
 
     def test_get_cvr_cases(self):
         """Test the API for getting cases on a given case number."""
-        cvr = "55133018"
-        case_title = "rpa_testcase"
-        case_number = "S2024-25614"
+        cvr_case = json.loads(os.environ['NOVA_CVR_CASE'])
+        cvr = cvr_case['cvr']
+        case_title = cvr_case['case_title']
+        case_number = cvr_case['case_number']
 
         cases = nova_cases.get_cvr_cases(cvr=cvr, nova_access=self.nova_access)
         self.assertIsInstance(cases[0], NovaCase)
