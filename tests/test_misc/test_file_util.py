@@ -52,7 +52,7 @@ class TestFileUtil(unittest.TestCase):
             time.sleep(delay)
             file_path = os.path.join(folder_path, file_name)
 
-            with open(file_path, 'w') as file:
+            with open(file_path, 'w', encoding="utf8") as file:
                 file.write("Test")
 
         thread = threading.Thread(target=delayed_write)
