@@ -22,6 +22,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Changed environmental variables to use an .env file
+
+### Fixed
+- Some SAP tests were failing due to a missing value
+- Changed department and security units from rules to user control
 - Minor doc fixes to get_drive_item.
 
 ## [2.3.0] - 2024-07-03
@@ -36,11 +41,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Unexpected format on caseworker in Nova cases results in None.
 - Minor refactoring to move common HTTP request wrappers for Microsoft Graph into their own file.
-
-### Fixed
-- Some SAP tests were failing due to a missing value
-- Changed department and security units from rules to user control
-- Changed environmental variables to use an .env file
 
 ## [2.2.0] - 2024-05-08
 
