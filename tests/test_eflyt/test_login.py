@@ -15,7 +15,7 @@ class LoginTest(unittest.TestCase):
 
     def test_login(self):
         '''Test to see if we can login'''
-        eflyt_credentials = os.getenv("EFLYT_LOGIN")
+        eflyt_credentials = os.getenv("EFLYT_LOGIN").split(",")
 
         # Test login
         login(eflyt_credentials[0], eflyt_credentials[1])

@@ -7,9 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### TODO
-- Create tests for Eflyt
-
 ### Added
 
 - Function for getting cases based on CVR from KMD Nova.
@@ -110,13 +107,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased] https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.2.0...HEAD
-[2.2.0] https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.2.0
-[2.1.1] https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.1.1
-[2.1.0] https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.1.0
-[2.0.0] https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.0.0
-[1.3.1] https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/1.3.1
-[1.3.0] https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/1.3.0
-[1.2.0] https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/1.2.0
-[1.1.0] https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/1.1.0
-[1.0.0] https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/1.0.0
+[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.2.0...HEAD
+[2.2.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.2.0
+[2.1.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.1.1
+[2.1.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.1.0
+[2.0.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.0.0
+[1.3.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/1.3.1
+[1.3.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/1.3.0
+[1.2.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/1.2.0
+[1.1.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/1.1.0
+[1.0.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/1.0.0
