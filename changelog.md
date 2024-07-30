@@ -11,8 +11,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Caseworker for notes
 - Directions for setting up environment variables for test
+- misc.file_util: Wait for download function.
+
+### Changed
+
+- Minor doc fixes to get_drive_item.
+
+## [2.3.0] - 2024-07-03
+
+### Added
+
 - Function for getting cases based on CVR from KMD Nova.
 - Tests for getting cases based on CVR from KMD Nova.
+- Module for accessing site and file endpoints in Microsoft Graph.
+
+### Changed
+
+- Unexpected format on caseworker in Nova cases results in None.
+- Minor refactoring to move common HTTP request wrappers for Microsoft Graph into their own file.
 
 ### Fixed
 - Some SAP tests were failing due to a missing value
@@ -113,7 +129,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased] https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.2.0...HEAD
+[Unreleased] https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.3.0...HEAD
+[2.3.0] https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.3.0
 [2.2.0] https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.2.0
 [2.1.1] https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.1.1
 [2.1.0] https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.1.0

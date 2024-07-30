@@ -7,6 +7,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from itk_dev_shared_components.graph.authentication import GraphAccess
+from itk_dev_shared_components.graph.common import get_request
 
 
 @dataclass
@@ -67,7 +68,7 @@ def get_emails_from_folder(user: str, folder_path: str, graph_access: GraphAcces
 
     endpoint = f"https://graph.microsoft.com/v1.0/users/{user}/mailFolders/{folder_id}/messages?$top=1000"
 
-    response = _get_request(endpoint, graph_access)
+    response = get_request(endpoint, graph_access)
     emails_raw = response.json()['value']
 
     return _unpack_email_response(user, emails_raw)
@@ -84,7 +85,7 @@ def get_email_as_mime(email: Email, graph_access: GraphAccess) -> io.BytesIO:
         io.BytesIO: A file-like object of the MIME file.
     """
     endpoint = f"https://graph.microsoft.com/v1.0/users/{email.user}/messages/{email.id}/$value"
-    response = _get_request(endpoint, graph_access)
+    response = get_request(endpoint, graph_access)
     data = response.content
     return io.BytesIO(data)
 
@@ -113,7 +114,7 @@ def get_folder_id_from_path(user: str, folder_path: str, graph_access: GraphAcce
 
     # Get main folder
     endpoint = f"https://graph.microsoft.com/v1.0/users/{user}/mailFolders"
-    response = _get_request(endpoint, graph_access).json()
+    response = get_request(endpoint, graph_access).json()
     folder_id = _find_folder(response, main_folder)
     if folder_id is None:
         raise ValueError(f"Top level folder '{main_folder}' was not found for user '{user}'.")
@@ -121,7 +122,7 @@ def get_folder_id_from_path(user: str, folder_path: str, graph_access: GraphAcce
     # Get child folders
     for child_folder in child_folders:
         endpoint = f"https://graph.microsoft.com/v1.0/users/{user}/mailFolders/{folder_id}/childFolders"
-        response = _get_request(endpoint, graph_access).json()
+        response = get_request(endpoint, graph_access).json()
         folder_id = _find_folder(response, child_folder)
         if folder_id is None:
             raise ValueError(f"Child folder '{child_folder}' not found under '{main_folder}' for user '{user}'.")
@@ -141,7 +142,7 @@ def list_email_attachments(email: Email, graph_access: GraphAccess) -> tuple[Att
         tuple[Attachment]: A tuple of Attachment objects describing the attachments.
     """
     endpoint = f"https://graph.microsoft.com/v1.0/users/{email.user}/messages/{email.id}/attachments?$select=name,size,id"
-    response = _get_request(endpoint, graph_access).json()
+    response = get_request(endpoint, graph_access).json()
 
     attachments = []
     for att in response['value']:
@@ -162,7 +163,7 @@ def get_attachment_data(attachment: Attachment, graph_access: GraphAccess) -> io
     """
     email = attachment.email
     endpoint = f"https://graph.microsoft.com/v1.0/users/{email.user}/messages/{email.id}/attachments/{attachment.id}/$value"
-    response = _get_request(endpoint, graph_access)
+    response = get_request(endpoint, graph_access)
     data_bytes = response.content
     return io.BytesIO(data_bytes)
 
@@ -287,31 +288,3 @@ def _unpack_email_response(user: str, emails_raw: list[dict[str, str]]) -> tuple
         )
 
     return tuple(emails)
-
-
-def _get_request(endpoint: str, graph_access: GraphAccess) -> requests.models.Response:
-    """Sends a get request to the given Graph endpoint using the GraphAccess
-    and returns the json object of the response.
-
-    Args:
-        endpoint: The URL of the Graph endpoint.
-        graph_access: The GraphAccess object used to authenticate.
-        timeout: Timeout in seconds of the HTTP request. Defaults to 10.
-
-    Returns:
-        Response: The response object of the GET request.
-
-    Raises:
-        HTTPError: Any errors raised while performing GET request.
-    """
-    token = graph_access.get_access_token()
-    headers = {'Authorization': f"Bearer {token}"}
-
-    response = requests.get(
-        endpoint,
-        headers=headers,
-        timeout=30
-    )
-    response.raise_for_status()
-
-    return response
