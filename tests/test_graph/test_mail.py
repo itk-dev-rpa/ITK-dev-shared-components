@@ -4,7 +4,11 @@ import unittest
 import json
 import os
 
+from dotenv import load_dotenv
+
 from itk_dev_shared_components.graph import authentication, mail
+
+load_dotenv()
 
 
 class EmailTest(unittest.TestCase):
@@ -12,7 +16,7 @@ class EmailTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         # Get Graph credentials from the environment variables.
-        credentials = json.loads(os.environ['GraphAPI'])
+        credentials = json.loads(os.environ['GRAPH_API'])
         client_id = credentials['client_id']
         tenant_id = credentials['tenant_id']
         username = credentials['username']
@@ -21,9 +25,9 @@ class EmailTest(unittest.TestCase):
         cls.graph_access = authentication.authorize_by_username_password(username, password, tenant_id=tenant_id, client_id=client_id)
 
         # Define mail user and folders
-        cls.user = "itk-rpa@mkb.aarhus.dk"
-        cls.folder1 = "Indbakke/Graph Test/Undermappe"
-        cls.folder2 = "Indbakke/Graph Test/Undermappe2"
+        cls.user = os.environ['MAIL_USER']
+        cls.folder1 = os.environ['MAIL_FOLDER1']
+        cls.folder2 = os.environ['MAIL_FOLDER2']
 
     def test_correct_usage(self):
         """Test all functions relating to the mail part of Graph.

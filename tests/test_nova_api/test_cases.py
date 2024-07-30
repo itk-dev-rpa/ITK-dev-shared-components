@@ -4,25 +4,30 @@ import os
 import uuid
 from datetime import datetime
 import time
+import json
+
+from dotenv import load_dotenv
 
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
 from itk_dev_shared_components.kmd_nova.nova_objects import NovaCase, CaseParty, Caseworker, Department
 from itk_dev_shared_components.kmd_nova import nova_cases
+
+load_dotenv()
 
 
 class NovaCasesTest(unittest.TestCase):
     """Test the part of the API to do with cases."""
     @classmethod
     def setUpClass(cls):
-        credentials = os.getenv('nova_api_credentials')
-        credentials = credentials.split(',')
+        credentials = os.getenv('NOVA_CREDENTIALS').split(',')
         cls.nova_access = NovaAccess(client_id=credentials[0], client_secret=credentials[1])
 
     def test_get_cases(self):
         """Test the API for getting cases on a given case number."""
-        cpr = "6101009805"
-        case_title = "Meget_Unik_Case_Overskrift"
-        case_number = "S2023-61078"
+        cpr_case = json.loads(os.environ['NOVA_CPR_CASE'])
+        cpr = cpr_case['cpr']
+        case_title = cpr_case['case_title']
+        case_number = cpr_case['case_number']
 
         cases = nova_cases.get_cases(cpr=cpr, nova_access=self.nova_access)
         self.assertIsInstance(cases[0], NovaCase)
@@ -51,9 +56,10 @@ class NovaCasesTest(unittest.TestCase):
 
     def test_get_cvr_cases(self):
         """Test the API for getting cases on a given case number."""
-        cvr = "55133018"
-        case_title = "rpa_testcase"
-        case_number = "S2024-25614"
+        cvr_case = json.loads(os.environ['NOVA_CVR_CASE'])
+        cvr = cvr_case['cvr']
+        case_title = cvr_case['case_title']
+        case_number = cvr_case['case_number']
 
         cases = nova_cases.get_cvr_cases(cvr=cvr, nova_access=self.nova_access)
         self.assertIsInstance(cases[0], NovaCase)
@@ -82,23 +88,22 @@ class NovaCasesTest(unittest.TestCase):
 
     def test_add_case(self):
         """Test adding a case to Nova."""
+        nova_party = os.getenv('NOVA_PARTY').split(',')
         party = CaseParty(
             role="Primær",
             identification_type="CprNummer",
-            identification="6101009805",
-            name="Test Test"
+            identification=nova_party[0],
+            name=nova_party[1]
         )
 
+        caseworker_dict = json.loads(os.environ['NOVA_USER'])
         caseworker = Caseworker(
-            name='svcitkopeno svcitkopeno',
-            ident='AZX0080',
-            uuid='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
+            **caseworker_dict
         )
 
+        department_dict = json.loads(os.environ['NOVA_DEPARTMENT'])
         department = Department(
-            id=818485,
-            name="Borgerservice",
-            user_key="4BBORGER"
+            **department_dict
         )
 
         case = NovaCase(

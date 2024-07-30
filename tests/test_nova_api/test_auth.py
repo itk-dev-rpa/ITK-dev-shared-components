@@ -2,7 +2,11 @@
 import unittest
 import os
 
+from dotenv import load_dotenv
+
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
+
+load_dotenv()
 
 
 class NovaAuthTest(unittest.TestCase):
@@ -15,7 +19,7 @@ class NovaAuthTest(unittest.TestCase):
 
         The test attempts to obtain a bearer token.
         """
-        credentials = os.getenv('nova_api_credentials')
+        credentials = os.getenv('NOVA_CREDENTIALS')
         credentials = credentials.split(',')
         nova_access = NovaAccess(client_id=credentials[0], client_secret=credentials[1])
         self.assertNotEqual("", nova_access.get_bearer_token())

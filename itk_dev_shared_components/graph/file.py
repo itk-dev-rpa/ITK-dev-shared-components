@@ -16,7 +16,7 @@ class DriveItem:
     last_modified: str
 
 
-def get_drive_item(graph_access: GraphAccess, site_id: str, drive_item_path: str) -> str:
+def get_drive_item(graph_access: GraphAccess, site_id: str, drive_item_path: str) -> DriveItem:
     """Given a site id and a drive_item_path, gets the corresponding DriveItem
 
     You need to authorize against Graph to get the GraphAccess before using this function
@@ -28,7 +28,11 @@ def get_drive_item(graph_access: GraphAccess, site_id: str, drive_item_path: str
         graph_access: The GraphAccess object used to authenticate.
         site_id: The id of the site in SharePoint.
         drive_item_path: The path to the DriveItem in SharePoint.
+
+    Returns:
+        DriveItem: A DriveItem object.
     """
+
     endpoint = f"https://graph.microsoft.com/v1.0/sites/{site_id}/drive/root:/{drive_item_path}"
     response = get_request(endpoint, graph_access)
     raw_response = response.json()
