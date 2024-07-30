@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- misc.file_util: handle_save_dialog
+
 ### Changed
 
 ## [2.4.0] - 2024-07-30
