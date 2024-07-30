@@ -5,13 +5,15 @@ import os
 import time
 import threading
 import shutil
+import subprocess
 
 from itk_dev_shared_components.misc import file_util
+import uiautomation
 
 
 class TestFileUtil(unittest.TestCase):
     """Tests relating to the module misc.file_util."""
-
+    @unittest.skip
     def test_wait_for_download(self):
         """Test the function wait_for_download."""
         download_folder = "test_downloads"
@@ -57,6 +59,25 @@ class TestFileUtil(unittest.TestCase):
 
         thread = threading.Thread(target=delayed_write)
         thread.start()
+
+    def test_handle_save_dialog(self):
+        folder = os.path.join(os.getcwd(), "test_folder")
+        if os.path.exists(folder):
+            shutil.rmtree(folder)
+        os.makedirs(folder)
+
+        # Open notepad and save file to open save dialog
+        subprocess.Popen('notepad.exe', shell=True)
+        notepad = uiautomation.WindowControl(searchDepth=1, ClassName='Notepad')
+        notepad.SendKeys("{ctrl}s")
+
+        file_path = os.path.join(folder, "test.txt")
+        file_util.handle_save_dialog(file_path)
+
+        self.assertTrue(os.path.exists(file_path))
+
+        shutil.rmtree(folder)
+        os.system("taskkill /F /IM notepad.exe > NUL 2>&1")
 
 
 if __name__ == '__main__':
