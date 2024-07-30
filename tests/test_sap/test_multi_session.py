@@ -3,7 +3,12 @@
 import unittest
 import os
 import threading
+
+from dotenv import load_dotenv
+
 from itk_dev_shared_components.sap import sap_login, multi_session, opret_kundekontakt
+
+load_dotenv()
 
 
 class TestMultiSession(unittest.TestCase):
@@ -11,7 +16,7 @@ class TestMultiSession(unittest.TestCase):
 
     def setUp(self):
         sap_login.kill_sap()
-        user, password = os.environ['SAP Login'].split(';')
+        user, password = os.environ['SAP_LOGIN'].split(';')
         sap_login.login_using_cli(user, password)
 
     def tearDown(self):

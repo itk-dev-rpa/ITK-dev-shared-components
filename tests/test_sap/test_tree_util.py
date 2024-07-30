@@ -3,7 +3,11 @@
 import unittest
 import os
 
+from dotenv import load_dotenv
+
 from itk_dev_shared_components.sap import tree_util, sap_login, multi_session
+
+load_dotenv()
 
 
 class TestTreeUtil(unittest.TestCase):
@@ -79,7 +83,7 @@ class TestTreeUtil(unittest.TestCase):
 
 def navigate_to_test_page():
     """Launch SAP and navigate to fmcacov on FP 25564617."""
-    user, password = os.environ['SAP Login'].split(';')
+    user, password = os.environ['SAP_LOGIN'].split(';')
     sap_login.login_using_cli(user, password)
     session = multi_session.get_all_sap_sessions()[0]
     session.startTransaction("fmcacov")

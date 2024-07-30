@@ -2,12 +2,16 @@
 import unittest
 import os
 import uuid
+import json
 from datetime import datetime
 from io import StringIO, BytesIO
 
+from dotenv import load_dotenv
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
 from itk_dev_shared_components.kmd_nova.nova_objects import Document, Caseworker
 from itk_dev_shared_components.kmd_nova import nova_cases, nova_documents
+
+load_dotenv()
 
 
 class NovaDocumentsTest(unittest.TestCase):
@@ -15,7 +19,7 @@ class NovaDocumentsTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        credentials = os.getenv('nova_api_credentials')
+        credentials = os.getenv('NOVA_CREDENTIALS')
         credentials = credentials.split(',')
         cls.nova_access = NovaAccess(client_id=credentials[0], client_secret=credentials[1])
 
@@ -36,10 +40,9 @@ class NovaDocumentsTest(unittest.TestCase):
 
         doc_uuid = nova_documents.upload_document(file, "Filename.txt", self.nova_access)
 
+        caseworker_dict = json.loads(os.environ['NOVA_USER'])
         caseworker = Caseworker(
-            name='svcitkopeno svcitkopeno',
-            ident='AZX0080',
-            uuid='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
+            **caseworker_dict
         )
 
         title = f"Test document {datetime.now()}"

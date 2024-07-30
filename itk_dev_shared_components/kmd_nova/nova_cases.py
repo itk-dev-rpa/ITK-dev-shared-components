@@ -338,8 +338,8 @@ def add_case(case: NovaCase, nova_access: NovaAccess):
             }
         },
         "SensitivityCtrlBy": "Bruger",
-        "SecurityUnitCtrlBy": "Regler",
-        "ResponsibleDepartmentCtrlBy": "Regler",
+        "SecurityUnitCtrlBy": "Bruger",
+        "ResponsibleDepartmentCtrlBy": "Bruger",
         "caseAvailability": {
             "unit": "År",
             "scale": 5
