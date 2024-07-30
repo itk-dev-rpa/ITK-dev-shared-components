@@ -1,3 +1,5 @@
+"""This module contains helper functions to do with handling files."""
+
 import os
 import time
 
