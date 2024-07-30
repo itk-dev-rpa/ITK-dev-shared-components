@@ -27,13 +27,21 @@ def super_search(browser: webdriver.Chrome, date_from: date, date_to: date, case
     clear_and_input(browser, "ctl00_ContentPlaceHolder1_searchControl_txtdatoFra", format_date(date_from))
     clear_and_input(browser, "ctl00_ContentPlaceHolder1_searchControl_txtdatoTo", format_date(date_to))
     browser.find_element(By.ID, "ctl00_ContentPlaceHolder1_searchControl_btnSearch").click()
-    # browser.execute_script("__doPostBack('ctl00$ContentPlaceHolder1$searchControl$GridViewSearchResult','cmdRowSelected$0')")
 
     return extract_rows(browser, "ctl00_ContentPlaceHolder1_searchControl_GridViewSearchResult")
 
 
+def select_first_entry(browser: webdriver.Chrome):
+    """Select first element in the currently open list.
+
+    Args:
+        browser: The browser object.
+    """
+    browser.execute_script("__doPostBack('ctl00$ContentPlaceHolder1$searchControl$GridViewSearchResult','cmdRowSelected$0')")
+
+
 def open_cpr(cpr_in: str, elements: list[WebElement]):
-    '''Click a specific CPR in the list
+    '''Click a specific CPR in the list.
 
     Args:
         cpr_in: The CPR to look for
