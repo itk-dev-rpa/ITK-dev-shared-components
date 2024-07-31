@@ -40,7 +40,7 @@ def handle_save_dialog(file_path: str):
     The dialog is assumed to already be open.
 
     Args:
-        file_path: The path to save the file at.
+        file_path: The absolute path to save the file at.
     """
     file_dialog = uiautomation.WindowControl(Name="Gem som", searchDepth=2)
     file_dialog.PaneControl(AutomationId="BackgroundClear", searchDepth=4).EditControl(AutomationId="1001").GetValuePattern().SetValue(file_path)
