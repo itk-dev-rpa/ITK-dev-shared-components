@@ -5,7 +5,7 @@ import unittest
 
 from dotenv import load_dotenv
 
-from itk_dev_shared_components.eflyt.login import login
+from itk_dev_shared_components.eflyt.eflyt_login import login
 
 load_dotenv()
 
