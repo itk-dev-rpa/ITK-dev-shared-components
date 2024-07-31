@@ -13,7 +13,7 @@ import uiautomation
 
 class TestFileUtil(unittest.TestCase):
     """Tests relating to the module misc.file_util."""
-    @unittest.skip
+
     def test_wait_for_download(self):
         """Test the function wait_for_download."""
         download_folder = "test_downloads"
