@@ -7,8 +7,9 @@ import threading
 import shutil
 import subprocess
 
-from itk_dev_shared_components.misc import file_util
 import uiautomation
+
+from itk_dev_shared_components.misc import file_util
 
 
 class TestFileUtil(unittest.TestCase):
@@ -61,13 +62,14 @@ class TestFileUtil(unittest.TestCase):
         thread.start()
 
     def test_handle_save_dialog(self):
+        """Test the function handle_save_dialog."""
         folder = os.path.join(os.getcwd(), "test_folder")
         if os.path.exists(folder):
             shutil.rmtree(folder)
         os.makedirs(folder)
 
         # Open notepad and save file to open save dialog
-        subprocess.Popen('notepad.exe', shell=True)
+        subprocess.Popen('notepad.exe', shell=True)  # pylint: disable=consider-using-with
         notepad = uiautomation.WindowControl(searchDepth=1, ClassName='Notepad')
         notepad.SendKeys("{ctrl}s")
 
