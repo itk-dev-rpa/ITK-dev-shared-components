@@ -2,7 +2,12 @@
 
 import unittest
 import os
+
+from dotenv import load_dotenv
+
 from itk_dev_shared_components.sap import fmcacov, sap_login, multi_session
+
+load_dotenv()
 
 # Some tests might look similar, and we want this. pylint: disable=duplicate-code
 
@@ -14,7 +19,7 @@ class TestFmcacov(unittest.TestCase):
         """Launch SAP and get the main session."""
         sap_login.kill_sap()
 
-        user, password = os.environ['SAP Login'].split(';')
+        user, password = os.environ['SAP_LOGIN'].split(';')
         sap_login.login_using_cli(user, password)
 
         cls.session = multi_session.get_all_sap_sessions()[0]

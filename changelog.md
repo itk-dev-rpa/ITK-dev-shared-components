@@ -5,13 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
 ## [Unreleased]
+
+### Added
+
+- Added modules for use with the Eflyt / Dedalus / Notus address system
+
+### Changed
+
+## [2.4.0] - 2024-07-30
+
+### Added
+
+- Caseworker for notes
+- Directions for setting up environment variables for test
+- misc.file_util: Wait for download function.
+
+### Changed
+
+- Changed environmental variables to use an .env file
+
+### Fixed
+- Some SAP tests were failing due to a missing value
+- Changed department and security units from rules to user control
+- Minor doc fixes to get_drive_item.
+
+## [2.3.0] - 2024-07-03
 
 ### Added
 
 - Function for getting cases based on CVR from KMD Nova.
 - Tests for getting cases based on CVR from KMD Nova.
-- Added modules for use with the Eflyt / Dedalus / Notus address system
+- Module for accessing site and file endpoints in Microsoft Graph.
+
+### Changed
+
+- Unexpected format on caseworker in Nova cases results in None.
+- Minor refactoring to move common HTTP request wrappers for Microsoft Graph into their own file.
 
 ## [2.2.0] - 2024-05-08
 
@@ -107,7 +138,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.2.0...HEAD
+[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.4.0...HEAD
+[2.4.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.4.0
+[2.3.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.3.0
 [2.2.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.2.0
 [2.1.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.1.1
 [2.1.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.1.0

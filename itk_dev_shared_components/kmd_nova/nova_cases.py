@@ -214,6 +214,7 @@ def _extract_departments(case_dict: dict) -> tuple[Department, Department]:
 
 def _extract_case_worker(case_dict: dict) -> Caseworker | None:
     """Extract the case worker from a HTTP request response.
+    If the case worker is in a unexpected format, None is returned.
 
     Args:
         case_dict: The dictionary describing the case.
@@ -222,11 +223,14 @@ def _extract_case_worker(case_dict: dict) -> Caseworker | None:
         A case worker object describing the case worker if any.
     """
     if 'caseworker' in case_dict:
-        return Caseworker(
-            uuid = case_dict['caseworker']['kspIdentity']['novaUserId'],
-            name = case_dict['caseworker']['kspIdentity']['fullName'],
-            ident = case_dict['caseworker']['kspIdentity']['racfId']
-        )
+        try:
+            return Caseworker(
+                uuid = case_dict['caseworker']['kspIdentity']['novaUserId'],
+                name = case_dict['caseworker']['kspIdentity']['fullName'],
+                ident = case_dict['caseworker']['kspIdentity']['racfId']
+            )
+        except KeyError:
+            return None
 
     return None
 
@@ -334,8 +338,8 @@ def add_case(case: NovaCase, nova_access: NovaAccess):
             }
         },
         "SensitivityCtrlBy": "Bruger",
-        "SecurityUnitCtrlBy": "Regler",
-        "ResponsibleDepartmentCtrlBy": "Regler",
+        "SecurityUnitCtrlBy": "Bruger",
+        "ResponsibleDepartmentCtrlBy": "Bruger",
         "caseAvailability": {
             "unit": "År",
             "scale": 5

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "itk_dev_shared_components"
-version = "2.2.0"
+version = "2.4.0"
 authors = [
   { name="ITK Development", email="itk-rpa@mkb.aarhus.dk" },
 ]
@@ -27,3 +27,10 @@ dependencies = [
 [project.urls]
 "Homepage" = "https://github.com/itk-dev-rpa/itk-dev-shared-components"
 "Bug Tracker" = "https://github.com/itk-dev-rpa/itk-dev-shared-components/issues"
+
+[project.optional-dependencies]
+dev = [
+  "python-dotenv",
+  "flake8",
+  "pylint"
+]

@@ -8,10 +8,10 @@ from datetime import datetime
 import requests
 
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
-from itk_dev_shared_components.kmd_nova.nova_objects import JournalNote
+from itk_dev_shared_components.kmd_nova.nova_objects import JournalNote, Caseworker
 
 
-def add_text_note(case_uuid: str, note_title: str, note_text: str, approved: bool, nova_access: NovaAccess) -> str:
+def add_text_note(case_uuid: str, note_title: str, note_text: str, caseworker: Caseworker, approved: bool, nova_access: NovaAccess) -> str:
     """Add a text based journal note to a Nova case.
 
     Args:
@@ -40,6 +40,13 @@ def add_text_note(case_uuid: str, note_title: str, note_text: str, approved: boo
                 "approved": approved,
                 "journalNoteAttributes": {
                     "journalNoteDate": datetime.today().isoformat(),
+                    "journalNoteAuthor": caseworker.ident,
+                    "author": {
+                        "kspIdentity": {
+                            "racfId": caseworker.ident,
+                            "fullName": caseworker.name
+                        }
+                    },
                     "title": note_title,
                     "journalNoteType": "Bruger",
                     "format": "Text",

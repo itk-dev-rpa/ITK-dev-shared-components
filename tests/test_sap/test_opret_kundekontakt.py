@@ -2,14 +2,19 @@
 
 import unittest
 import os
+
+from dotenv import load_dotenv
+
 from itk_dev_shared_components.sap import sap_login, multi_session, opret_kundekontakt
+
+load_dotenv()
 
 
 class TestOpretKundekontakt(unittest.TestCase):
     """Test relating to the module SAP.opret_kundekontakt."""
     def setUp(self):
         sap_login.kill_sap()
-        user, password = os.environ['SAP Login'].split(';')
+        user, password = os.environ['SAP_LOGIN'].split(';')
         sap_login.login_using_cli(user, password)
 
     def tearDown(self):

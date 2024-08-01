@@ -4,17 +4,22 @@ import os
 import uuid
 from datetime import datetime, date
 import random
+import json
+
+from dotenv import load_dotenv
 
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
 from itk_dev_shared_components.kmd_nova.nova_objects import Task, Caseworker
 from itk_dev_shared_components.kmd_nova import nova_cases, nova_tasks
+
+load_dotenv()
 
 
 class NovaCasesTest(unittest.TestCase):
     """Test the part of the API to do with tasks."""
     @classmethod
     def setUpClass(cls):
-        credentials = os.getenv('nova_api_credentials')
+        credentials = os.getenv('NOVA_CREDENTIALS')
         credentials = credentials.split(',')
         cls.nova_access = NovaAccess(client_id=credentials[0], client_secret=credentials[1])
 
@@ -37,10 +42,9 @@ class NovaCasesTest(unittest.TestCase):
         """Test adding a Task to Nova with minimal information set."""
         case = self._get_test_case()
 
+        caseworker_dict = json.loads(os.environ['NOVA_USER'])
         caseworker = Caseworker(
-            name='svcitkopeno svcitkopeno',
-            ident='AZX0080',
-            uuid='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
+            **caseworker_dict
         )
 
         # Test with minimal attributes set
@@ -68,10 +72,11 @@ class NovaCasesTest(unittest.TestCase):
         """Test adding a Task to Nova with all information set."""
         case = self._get_test_case()
 
+        caseworker_dict = json.loads(os.environ['NOVA_USER'])
         caseworker = Caseworker(
-            name='svcitkopeno svcitkopeno',
-            ident='AZX0080',
-            uuid='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
+            name = caseworker_dict['name'],
+            ident = caseworker_dict['ident'],
+            uuid = caseworker_dict['uuid']
         )
 
         # Test with minimal attributes set
@@ -108,10 +113,9 @@ class NovaCasesTest(unittest.TestCase):
         case = self._get_test_case()
         title = f"Test Update Task {datetime.now()}"
 
+        caseworker_dict = json.loads(os.environ['NOVA_USER'])
         caseworker = Caseworker(
-            name='svcitkopeno svcitkopeno',
-            ident='AZX0080',
-            uuid='0bacdddd-5c61-4676-9a61-b01a18cec1d5'
+            **caseworker_dict
         )
 
         task = Task(

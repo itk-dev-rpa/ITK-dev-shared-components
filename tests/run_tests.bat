@@ -18,6 +18,7 @@ if errorlevel 2 (
 
     echo Installing package...
     pip install .
+    pip install .[dev]
 )
 
 echo Running unit tests...
