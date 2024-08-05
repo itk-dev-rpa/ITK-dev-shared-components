@@ -20,6 +20,21 @@ class Company:
 
 
 def cvr_lookup(cvr: str, username: str, password: str) -> Company:
+    """Look up a company based on a CVR number.
+
+    Args:
+        cvr: The cvr number of the company to look up.
+        username: The username to the cvr api.
+        password: The password to the cvr api.
+
+    Raises:
+        ValueError: If no company is found on the given cvr number.
+        ValueError: If more than one company is found on the given cpr number.
+        RuntimeError: If a company with a different cvr number is found.
+
+    Returns:
+        A company object describing the found company.
+    """
     url = "http://distribution.virk.dk/cvr-permanent/virksomhed/_search"
     headers = {
         "Content-Type": "application/json"
@@ -35,7 +50,7 @@ def cvr_lookup(cvr: str, username: str, password: str) -> Company:
         }
     }
 
-    response = requests.post(url, headers=headers, auth=auth, json=data)
+    response = requests.post(url, headers=headers, auth=auth, json=data, timeout=5)
     response.raise_for_status()
 
     response_json = response.json()
@@ -54,6 +69,15 @@ def cvr_lookup(cvr: str, username: str, password: str) -> Company:
 
 
 def _unpack_company_dict(company_dict: dict, cvr: str) -> Company:
+    """Unpack a response dict to a company object.
+
+    Args:
+        company_dict: The company dict from the cvr api.
+        cvr: The cvr number of the company.
+
+    Returns:
+        A company object describing the found company.
+    """
     address, postal_code, city = _parse_address(company_dict['nyesteBeliggenhedsadresse'])
     return Company(
         cvr=cvr,
