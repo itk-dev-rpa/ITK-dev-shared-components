@@ -85,7 +85,7 @@ def extract_cases(browser: webdriver.Chrome) -> list[Case]:
 
 
 def open_case(browser: webdriver.Chrome, case: str):
-    """Open a case by searching for it's case number.
+    """Open a case by searching for its case number.
 
     Args:
         browser: The webdriver browser object.
