@@ -1,3 +1,4 @@
+"""Module for handling cases in eFlyt"""
 from dataclasses import dataclass
 from datetime import date, datetime
 
