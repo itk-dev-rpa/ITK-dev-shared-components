@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added modules for use with the Eflyt / Dedalus / Notus address system
+- misc.file_util: handle_save_dialog
 
 ### Changed
 

@@ -5,6 +5,9 @@ import os
 import time
 import threading
 import shutil
+import subprocess
+
+import uiautomation
 
 from itk_dev_shared_components.misc import file_util
 
@@ -57,6 +60,26 @@ class TestFileUtil(unittest.TestCase):
 
         thread = threading.Thread(target=delayed_write)
         thread.start()
+
+    def test_handle_save_dialog(self):
+        """Test the function handle_save_dialog."""
+        folder = os.path.join(os.getcwd(), "test_folder")
+        if os.path.exists(folder):
+            shutil.rmtree(folder)
+        os.makedirs(folder)
+
+        # Open notepad and save file to open save dialog
+        subprocess.Popen('notepad.exe', shell=True)  # pylint: disable=consider-using-with
+        notepad = uiautomation.WindowControl(searchDepth=1, ClassName='Notepad')
+        notepad.SendKeys("{ctrl}s")
+
+        file_path = os.path.join(folder, "test.txt")
+        file_util.handle_save_dialog(file_path)
+
+        self.assertTrue(os.path.exists(file_path))
+
+        shutil.rmtree(folder)
+        os.system("taskkill /F /IM notepad.exe > NUL 2>&1")
 
 
 if __name__ == '__main__':

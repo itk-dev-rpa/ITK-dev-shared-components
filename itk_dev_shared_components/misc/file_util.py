@@ -3,6 +3,8 @@
 import os
 import time
 
+import uiautomation
+
 
 def wait_for_download(folder: str, file_name: str | None, file_extension: str, timeout: int = 10) -> str:
     """Wait for a file to appear in a folder.
@@ -31,3 +33,15 @@ def wait_for_download(folder: str, file_name: str | None, file_extension: str, t
         time.sleep(1)
 
     raise TimeoutError(f"Downloaded file didn't appear within {timeout} seconds.")
+
+
+def handle_save_dialog(file_path: str):
+    """Save a file using the default Windows file dialog.
+    The dialog is assumed to already be open.
+
+    Args:
+        file_path: The absolute path to save the file at.
+    """
+    file_dialog = uiautomation.WindowControl(Name="Gem som", searchDepth=2)
+    file_dialog.PaneControl(AutomationId="BackgroundClear", searchDepth=4).EditControl(AutomationId="1001").GetValuePattern().SetValue(file_path)
+    file_dialog.ButtonControl(Name="Gem", searchDepth=1).GetInvokePattern().Invoke()
