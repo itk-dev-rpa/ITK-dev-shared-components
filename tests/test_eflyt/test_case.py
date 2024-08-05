@@ -1,4 +1,4 @@
-'''Tests related to the Case module'''
+"""Tests related to the Case module"""
 
 import os
 import unittest

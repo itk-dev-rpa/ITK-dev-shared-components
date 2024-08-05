@@ -1,4 +1,4 @@
-'''Tests related to login in Eflyt'''
+"""Tests related to login in Eflyt"""
 
 import os
 import unittest
@@ -11,10 +11,10 @@ load_dotenv()
 
 
 class LoginTest(unittest.TestCase):
-    '''Test login functionality in the Eflyt module'''
+    """Test login functionality in the Eflyt module"""
 
     def test_login(self):
-        '''Test to see if we can login'''
+        """Test to see if we can login"""
         eflyt_credentials = os.getenv("EFLYT_LOGIN").split(",")
 
         # Test login

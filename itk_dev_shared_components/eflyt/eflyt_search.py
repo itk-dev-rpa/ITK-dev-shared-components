@@ -1,4 +1,4 @@
-'''Interface for working with the 'Digital Flytning' section of Eflyt'''
+"""Interface for working with the 'Digital Flytning' section of Eflyt"""
 from datetime import date
 from typing import Literal
 
@@ -36,8 +36,7 @@ def search(browser: webdriver.Chrome, from_date: date | None = None, to_date: da
     """Apply the correct filters in Eflyt and search the case list.
 
     Args:
-        browser: The webdriver browser object.
-    """
+        browser: The webdriver browser object."""
     browser.get("https://notuskommunal.scandihealth.net/web/SearchResulteFlyt.aspx")
     Select(browser.find_element(By.ID, "ctl00_ContentPlaceHolder1_SearchControl_ddlTilstand")).select_by_visible_text(case_state)
     Select(browser.find_element(By.ID, "ctl00_ContentPlaceHolder1_SearchControl_ddlStatus")).select_by_visible_text(case_status)
@@ -45,6 +44,7 @@ def search(browser: webdriver.Chrome, from_date: date | None = None, to_date: da
         browser.find_element(By.ID, "ctl00_ContentPlaceHolder1_SearchControl_txtFlytteStartDato").send_keys(format_date(from_date))
     if to_date:
         browser.find_element(By.ID, "ctl00_ContentPlaceHolder1_SearchControl_txtFlytteEndDato").send_keys(format_date(to_date))
+    browser.find_element(By.XPATH, '//input[contains(@id, "earchControl_btnSearch")]').click()
 
 
 def extract_cases(browser: webdriver.Chrome) -> list[Case]:
@@ -54,8 +54,7 @@ def extract_cases(browser: webdriver.Chrome) -> list[Case]:
         browser: The webdriver browser object.
 
     Returns:
-        A list of filtered case objects.
-    """
+        A list of filtered case objects."""
     browser.find_element(By.ID, "ctl00_ContentPlaceHolder1_SearchControl_btnSearch").click()
     table = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_GridViewSearchResult")
     rows = table.find_elements(By.TAG_NAME, "tr")
@@ -89,8 +88,7 @@ def open_case(browser: webdriver.Chrome, case: str):
 
     Args:
         browser: The webdriver browser object.
-        case: The case to open.
-    """
+        case: The case to open."""
     # The id for both the search field and search button changes based on the current view hence the weird selectors.
     browser.get("https://notuskommunal.scandihealth.net/web/SearchResulteFlyt.aspx")
     case_input = browser.find_element(By.XPATH, '//input[contains(@id, "earchControl_txtSagNr")]')

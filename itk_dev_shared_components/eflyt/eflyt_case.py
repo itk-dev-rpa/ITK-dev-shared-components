@@ -39,8 +39,7 @@ def get_beboere(browser: webdriver.Chrome) -> list[Inhabitant]:
         browser: The webdriver browser object.
 
     Returns:
-        The number of beboere on the address.
-    """
+        The number of beboere on the address."""
     change_tab(browser, 1)
     beboer_table = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_becPersonTab_GridViewBeboere")
     rows = beboer_table.find_elements(By.TAG_NAME, "tr")
@@ -74,23 +73,21 @@ def get_room_count(browser: webdriver.Chrome) -> int:
         browser: The webdriver browser object.
 
     Returns:
-        The number of rooms on the address.
-    """
+        The number of rooms on the address."""
     change_tab(browser, 1)
     area_room_text = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab6_lblAreaText").text
     room_text = area_room_text.split("/")[1]
     return int(room_text)
 
 
-def get_applicants(browser: webdriver.Chrome) -> list[str]:
+def get_applicants(browser: webdriver.Chrome) -> list[Applicant]:
     """Get a list of applicants' cpr numbers from the applicant table.
 
     Args:
         browser: The webdriver browser object.
 
     Returns:
-        A list of cpr numbers.
-    """
+        A list of cpr numbers."""
     table = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_GridViewMovingPersons")
     rows = table.find_elements(By.TAG_NAME, "tr")
 
@@ -113,6 +110,5 @@ def change_tab(browser: webdriver.Chrome, tab_index: int):
 
     Args:
         browser: The webdriver browser object.
-        tab_index: The zero-based index of the tab to select.
-    """
+        tab_index: The zero-based index of the tab to select."""
     browser.execute_script(f"__doPostBack('ctl00$ContentPlaceHolder2$ptFanePerson$ImgJournalMap','{tab_index}')")

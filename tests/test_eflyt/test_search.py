@@ -1,4 +1,4 @@
-'''Tests related to the Move Search Eflyt module'''
+"""Tests related to the Move Search Eflyt module"""
 
 import os
 import unittest
@@ -17,16 +17,16 @@ to_date = date(2024, 1, 1)
 
 
 class MoveSearchTest(unittest.TestCase):
-    '''Test the Move Search functionality of Eflyt integration'''
+    """Test the Move Search functionality of Eflyt integration"""
 
     @classmethod
     def setUpClass(cls):
-        '''Setup test class'''
+        """Setup test class"""
         eflyt_credentials = os.getenv("EFLYT_LOGIN").split(",")
         cls.browser = login(eflyt_credentials[0], eflyt_credentials[1])
 
     def test_search(self):
-        '''Lookup cases and check that they are found'''
+        """Lookup cases and check that they are found"""
         eflyt_search.search(self.browser, from_date, to_date)
 
     def test_extract_cases(self):
