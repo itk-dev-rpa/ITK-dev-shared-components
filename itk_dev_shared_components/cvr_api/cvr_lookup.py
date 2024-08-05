@@ -10,6 +10,7 @@ from requests.auth import HTTPBasicAuth
 
 @dataclass
 class Company:
+    """A dataclass representing a company."""
     cvr: str
     name: str
     founded_date: date
