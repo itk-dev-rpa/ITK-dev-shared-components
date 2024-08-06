@@ -5,6 +5,7 @@ import unittest
 
 from dotenv import load_dotenv
 from selenium.webdriver.common.by import By
+from datetime import date
 
 from itk_dev_shared_components.eflyt.eflyt_login import login
 from itk_dev_shared_components.eflyt.eflyt_search import open_case
@@ -36,12 +37,17 @@ class CaseTest(unittest.TestCase):
         inhabitants = eflyt_case.get_beboere(self.browser)
 
         self.assertGreater(len(inhabitants), 0, "No inhabitants found on address")
-        self.assertRegex(inhabitants[0].cpr, "\\d{6}-\\d{4}")
+        inhabitant = inhabitants[0]
+        self.assertRegex(inhabitant.cpr, "\\d{6}-\\d{4}")
+        self.assertIsInstance(inhabitant.move_in_date, date)
+        self.assertIsInstance(inhabitant.relations, list)
+        self.assertIsInstance(inhabitant.name, str)
 
         open_case(self.browser, test_no_inhabitants_case)
         inhabitants = eflyt_case.get_beboere(self.browser)
 
         self.assertEqual(len(inhabitants), 0, "Some inhabitants found when none was expected")
+
 
     def test_get_applicants(self):
         """Get list of applicants and make sure they match expected value"""
