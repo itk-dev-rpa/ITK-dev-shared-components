@@ -30,7 +30,7 @@ def cvr_lookup(cvr: str, username: str, password: str) -> Company:
 
     Raises:
         ValueError: If no company is found on the given cvr number.
-        ValueError: If more than one company is found on the given cpr number.
+        ValueError: If more than one company is found on the given cvr number.
         RuntimeError: If a company with a different cvr number is found.
 
     Returns:
