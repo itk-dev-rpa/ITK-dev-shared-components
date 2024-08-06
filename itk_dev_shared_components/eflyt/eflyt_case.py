@@ -21,7 +21,6 @@ class Inhabitant:
     cpr: str
     name: str
     move_in_date: date
-    move_out_from: date
     relations: list[str]
 
 
@@ -56,11 +55,7 @@ def get_beboere(browser: webdriver.Chrome) -> list[Inhabitant]:
             relations = inhabitant.find_element(By.XPATH, "td[4]/span").text.split("<br>")
         except NoSuchElementException:
             relations = []
-        try:
-            moving_from = datetime.strptime(inhabitant.find_element(By.XPATH, "td[5]/a").text, "%d-%m-%Y").date()
-        except NoSuchElementException:
-            moving_from = ""
-        new_inhabitant = Inhabitant(cpr, name, moving_in, moving_from, relations)
+        new_inhabitant = Inhabitant(cpr, name, moving_in, relations)
         inhabitants.append(new_inhabitant)
 
     return inhabitants
