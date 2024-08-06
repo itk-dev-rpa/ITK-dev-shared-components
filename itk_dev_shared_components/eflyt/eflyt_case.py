@@ -11,7 +11,7 @@ from selenium.common.exceptions import NoSuchElementException
 class Case:
     """A dataclass representing an Eflyt case."""
     case_number: str
-    deadline: str
+    deadline: date | None
     case_types: list[str]
 
 
@@ -21,7 +21,7 @@ class Inhabitant:
     cpr: str
     name: str
     move_in_date: date
-    move_out_from: str
+    move_out_from: date
     relations: list[str]
 
 
@@ -57,7 +57,7 @@ def get_beboere(browser: webdriver.Chrome) -> list[Inhabitant]:
         except NoSuchElementException:
             relations = []
         try:
-            moving_from = inhabitant.find_element(By.XPATH, "td[5]/a").text
+            moving_from = datetime.strptime(inhabitant.find_element(By.XPATH, "td[5]/a").text, "%d-%m-%Y").date()
         except NoSuchElementException:
             moving_from = ""
         new_inhabitant = Inhabitant(cpr, name, moving_in, moving_from, relations)

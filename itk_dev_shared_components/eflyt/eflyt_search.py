@@ -55,7 +55,6 @@ def extract_cases(browser: webdriver.Chrome) -> list[Case]:
 
     Returns:
         A list of filtered case objects."""
-    browser.find_element(By.ID, "ctl00_ContentPlaceHolder1_SearchControl_btnSearch").click()
     table = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_GridViewSearchResult")
     rows = table.find_elements(By.TAG_NAME, "tr")
     # Remove header row
@@ -68,6 +67,8 @@ def extract_cases(browser: webdriver.Chrome) -> list[Case]:
         if deadline:
             day, month, year = deadline.split("-")
             deadline = date(int(year), int(month), int(day))
+        else:
+            deadline = None
 
         case_number = row.find_element(By.XPATH, "td[4]").text
         case_types_text = row.find_element(By.XPATH, "td[5]").text

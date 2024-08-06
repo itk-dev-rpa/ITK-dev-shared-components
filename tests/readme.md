@@ -57,6 +57,7 @@ NOVA_CPR_CASE = '{"cpr": "6101009805", "case_title": "Meget_Unik_Case_Overskrift
 
 EFLYT_LOGIN = 'username,password'
 TEST_CPR = 'XXXXXXXXXX'
-TEST_CASE = '123456'
+TEST_CASE = '123456' # A test case with multiple current inhabitants, with relations registered
+TEST_CASE_NOONE = '56789' # A test case without any current inhabitants
 
 Note: The NOVA_CVR_CASE and NOVA_CPR_CASE variables require cases to be created in Nova, and the parameters set from those cases.
