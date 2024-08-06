@@ -49,7 +49,7 @@ def get_beboere(browser: webdriver.Chrome) -> list[Inhabitant]:
     inhabitants = []
     for inhabitant in rows:
         moving_in = datetime.strptime(inhabitant.find_element(By.XPATH, "td[1]/span | td[1]/a").text, "%d-%m-%Y").date()
-        cpr = inhabitant.find_element(By.XPATH, "td[2]").text
+        cpr = inhabitant.find_element(By.XPATH, "td[2]").text.replace("-", "")
         name = inhabitant.find_element(By.XPATH, "td[3]").text
         try:
             relations = inhabitant.find_element(By.XPATH, "td[4]/span").text.split("<br>")

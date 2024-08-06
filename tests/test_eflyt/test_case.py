@@ -38,7 +38,7 @@ class CaseTest(unittest.TestCase):
 
         self.assertGreater(len(inhabitants), 0, "No inhabitants found on address")
         inhabitant = inhabitants[0]
-        self.assertRegex(inhabitant.cpr, "\\d{6}-\\d{4}")
+        self.assertRegex(inhabitant.cpr, "\\d{10}")
         self.assertIsInstance(inhabitant.move_in_date, date)
         self.assertIsInstance(inhabitant.relations, list)
         self.assertIsInstance(inhabitant.name, str)
@@ -48,7 +48,6 @@ class CaseTest(unittest.TestCase):
 
         self.assertEqual(len(inhabitants), 0, "Some inhabitants found when none was expected")
 
-
     def test_get_applicants(self):
         """Get list of applicants and make sure they match expected value"""
 
@@ -56,6 +55,8 @@ class CaseTest(unittest.TestCase):
         found_expected = any(applicant.cpr == test_cpr for applicant in applicants)
 
         self.assertTrue(found_expected, f"Applicant {test_cpr} not found among case applicants. Make sure your .env is setup correctly with a case matching the test cpr")
+        self.assertIsInstance(applicants[0].name, str)
+        self.assertRegex(applicants[0].cpr, "\\d{10}")
 
     def test_change_tab(self):
         """Change tab and check the view changed"""
