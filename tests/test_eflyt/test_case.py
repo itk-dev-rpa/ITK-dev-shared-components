@@ -2,10 +2,10 @@
 
 import os
 import unittest
+from datetime import date
 
 from dotenv import load_dotenv
 from selenium.webdriver.common.by import By
-from datetime import date
 
 from itk_dev_shared_components.eflyt.eflyt_login import login
 from itk_dev_shared_components.eflyt.eflyt_search import open_case
