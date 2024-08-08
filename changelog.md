@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - misc.file_util: handle_save_dialog
-- cvr_api.cvr_lookup: Look up cvr number.
+- misc.cvr_lookup: Look up cvr number.
+- misc.address_lookup: Look up addresses.
 
 ### Changed
 
