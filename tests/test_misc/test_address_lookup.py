@@ -1,7 +1,6 @@
 """Tests relating to the module misc.address_lookup."""
 
 import unittest
-from datetime import date
 
 from itk_dev_shared_components.misc import address_lookup
 from itk_dev_shared_components.misc.address_lookup import Address

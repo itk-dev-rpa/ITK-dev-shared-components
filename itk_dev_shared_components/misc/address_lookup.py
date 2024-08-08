@@ -8,7 +8,9 @@ import requests
 
 
 @dataclass
+# pylint: disable-next=too-many-instance-attributes
 class Address:
+    """A dataclass representing an address."""
     street: str
     number: str
     floor: str
@@ -56,7 +58,7 @@ def search_address(query: str | None = None, street: str | None = None, number: 
     if municipality_code:
         params['kommunekode'] = municipality_code
 
-    response = requests.get(url, params=params)
+    response = requests.get(url, params=params, timeout=10)
     response.raise_for_status()
 
     addresses = []
