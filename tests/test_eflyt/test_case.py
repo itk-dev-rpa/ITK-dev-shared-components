@@ -12,9 +12,6 @@ from itk_dev_shared_components.eflyt.eflyt_search import open_case
 from itk_dev_shared_components.eflyt import eflyt_case
 
 load_dotenv()
-test_cpr = os.getenv("TEST_CPR")
-test_case = os.getenv("TEST_CASE")
-test_no_inhabitants_case = os.getenv("TEST_CASE_NOONE")
 
 
 class CaseTest(unittest.TestCase):
@@ -28,13 +25,14 @@ class CaseTest(unittest.TestCase):
 
     def setUp(self):
         """Go to a clean case state"""
-
+        test_case = os.getenv("TEST_CASE")
         open_case(self.browser, test_case)
 
     def test_get_beboere(self):
         """Test inhabitant functions"""
 
         inhabitants = eflyt_case.get_beboere(self.browser)
+        test_no_inhabitants_case = os.getenv("TEST_CASE_NOONE")
 
         self.assertGreater(len(inhabitants), 0, "No inhabitants found on address")
         inhabitant = inhabitants[0]
@@ -52,6 +50,7 @@ class CaseTest(unittest.TestCase):
         """Get list of applicants and make sure they match expected value"""
 
         applicants = eflyt_case.get_applicants(self.browser)
+        test_cpr = os.getenv("TEST_CPR")
         found_expected = any(applicant.cpr == test_cpr for applicant in applicants)
 
         self.assertTrue(found_expected, f"Applicant {test_cpr} not found among case applicants. Make sure your .env is setup correctly with a case matching the test cpr")

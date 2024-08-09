@@ -1,11 +1,10 @@
 """Interface for working with the 'Digital Flytning' section of Eflyt"""
-from datetime import date
+from datetime import date, datetime
 from typing import Literal
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
-from selenium.webdriver.remote.webelement import WebElement
 
 from itk_dev_shared_components.eflyt.eflyt_util import format_date
 from itk_dev_shared_components.eflyt.eflyt_case import Case
@@ -32,11 +31,12 @@ CaseStatus = Literal[
 ]
 
 
-def search(browser: webdriver.Chrome, from_date: date | None = None, to_date: date | None = None, case_state: CaseState = "Alle", case_status: CaseStatus = "(vælg status)") -> list[WebElement]:
+def search(browser: webdriver.Chrome, from_date: date | None = None, to_date: date | None = None, case_state: CaseState = "Alle", case_status: CaseStatus = "(vælg status)"):
     """Apply the correct filters in Eflyt and search the case list.
 
     Args:
-        browser: The webdriver browser object."""
+        browser: The webdriver browser object.
+    """
     browser.get("https://notuskommunal.scandihealth.net/web/SearchResulteFlyt.aspx")
     Select(browser.find_element(By.ID, "ctl00_ContentPlaceHolder1_SearchControl_ddlTilstand")).select_by_visible_text(case_state)
     Select(browser.find_element(By.ID, "ctl00_ContentPlaceHolder1_SearchControl_ddlStatus")).select_by_visible_text(case_status)
@@ -48,13 +48,14 @@ def search(browser: webdriver.Chrome, from_date: date | None = None, to_date: da
 
 
 def extract_cases(browser: webdriver.Chrome) -> list[Case]:
-    """Extract and filter cases from the case table.
+    """Extract and filter cases from the case table. Requires a search to have been performed immediately before.
 
     Args:
         browser: The webdriver browser object.
 
     Returns:
-        A list of filtered case objects."""
+        A list of filtered case objects.
+    """
     table = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_GridViewSearchResult")
     rows = table.find_elements(By.TAG_NAME, "tr")
     # Remove header row
@@ -65,8 +66,7 @@ def extract_cases(browser: webdriver.Chrome) -> list[Case]:
 
         # Convert deadline to date object
         if deadline:
-            day, month, year = deadline.split("-")
-            deadline = date(int(year), int(month), int(day))
+            deadline = datetime.strptime(deadline, "%d-%m-%Y")
         else:
             deadline = None
 
@@ -89,7 +89,8 @@ def open_case(browser: webdriver.Chrome, case: str):
 
     Args:
         browser: The webdriver browser object.
-        case: The case to open."""
+        case: The case to open.
+    """
     # The id for both the search field and search button changes based on the current view hence the weird selectors.
     browser.get("https://notuskommunal.scandihealth.net/web/SearchResulteFlyt.aspx")
     case_input = browser.find_element(By.XPATH, '//input[contains(@id, "earchControl_txtSagNr")]')

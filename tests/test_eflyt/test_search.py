@@ -1,4 +1,4 @@
-"""Tests related to the Move Search Eflyt module"""
+"""Tests related to the Eflyt Search module"""
 
 import os
 import unittest
@@ -11,11 +11,9 @@ from itk_dev_shared_components.eflyt.eflyt_login import login
 from itk_dev_shared_components.eflyt import eflyt_search
 
 load_dotenv()
-test_cpr = os.getenv("TEST_CPR")
-test_case = os.getenv("TEST_CASE")
 
 
-class MoveSearchTest(unittest.TestCase):
+class SearchTest(unittest.TestCase):
     """Test the Move Search functionality of Eflyt integration"""
 
     @classmethod
@@ -37,11 +35,13 @@ class MoveSearchTest(unittest.TestCase):
         self.assertIsInstance(case.deadline, (date, None))
 
     def test_open_case(self):
-        """Open a case and check we moved to another view"""
+        """Open a case and check the browser opened the case view"""
+        test_case = os.getenv("TEST_CASE")
         eflyt_search.open_case(self.browser, test_case)
 
         # Check to see the view changed
-        self.browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_lblMainheading")
+        open_case = self.browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_lblMainheading").text
+        self.assertTrue(test_case in open_case)
 
 
 if __name__ == '__main__':

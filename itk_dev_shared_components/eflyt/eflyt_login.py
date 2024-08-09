@@ -5,11 +5,12 @@ from selenium.common.exceptions import NoSuchElementException
 
 
 def login(username: str, password: str) -> webdriver.Chrome:
-    """Log into Eflyt using a password and username
+    """Log into Eflyt using a password and username.
 
     Args:
-        username: Username for login
-        password: Password for login"""
+        username: Username for login.
+        password: Password for login.
+    """
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("--disable-search-engine-choice-screen")
     browser = webdriver.Chrome(options=chrome_options)
