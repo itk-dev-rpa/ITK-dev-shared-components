@@ -6,8 +6,8 @@ from datetime import date
 
 from dotenv import load_dotenv
 
-from itk_dev_shared_components.cvr_api import cvr_lookup
-from itk_dev_shared_components.cvr_api.cvr_lookup import Company
+from itk_dev_shared_components.misc import cvr_lookup
+from itk_dev_shared_components.misc.cvr_lookup import Company
 
 
 load_dotenv()
