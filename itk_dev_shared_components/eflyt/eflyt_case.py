@@ -32,13 +32,13 @@ class Applicant:
 
 
 def get_beboere(browser: webdriver.Chrome) -> list[Inhabitant]:
-    """Count the number of beboere living on the address.
+    """Get a list of current inhabitants on the case currently open.
 
     Args:
         browser: The webdriver browser object.
 
     Returns:
-        The number of beboere on the address.
+        A list of Inhabitants.
     """
     change_tab(browser, 1)
     beboer_table = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_becPersonTab_GridViewBeboere")
