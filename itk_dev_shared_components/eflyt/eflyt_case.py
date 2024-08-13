@@ -4,7 +4,6 @@ from datetime import date, datetime
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException
 
 
 @dataclass
@@ -40,6 +39,7 @@ def get_beboere(browser: webdriver.Chrome) -> list[Inhabitant]:
     Returns:
         A list of Inhabitants.
     """
+    # Go to the correct tab and scrape data
     change_tab(browser, 1)
     beboer_table = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_becPersonTab_GridViewBeboere")
     rows = beboer_table.find_elements(By.TAG_NAME, "tr")
@@ -49,13 +49,18 @@ def get_beboere(browser: webdriver.Chrome) -> list[Inhabitant]:
 
     inhabitants = []
     for inhabitant in rows:
+        # Get date for moving in, CPR and name
         moving_in = datetime.strptime(inhabitant.find_element(By.XPATH, "td[1]/span | td[1]/a").text, "%d-%m-%Y").date()
         cpr = inhabitant.find_element(By.XPATH, "td[2]").text.replace("-", "")
         name = inhabitant.find_element(By.XPATH, "td[3]").text
-        try:
-            relations = inhabitant.find_element(By.XPATH, "td[4]/span").text.replace("<br>", " ").replace("\n", " ").split()
-        except NoSuchElementException:
-            relations = []
+
+        # Check for a list of relations
+        relations = []
+        elements = inhabitant.find_elements(By.XPATH, "td[4]/span")
+        if elements:
+            relations = relations[0].text.replace("<br>", " ").replace("\n", " ").split()
+
+        # Create an Inhabitant and add to list
         new_inhabitant = Inhabitant(cpr, name, moving_in, relations)
         inhabitants.append(new_inhabitant)
 
