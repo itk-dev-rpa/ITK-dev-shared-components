@@ -12,18 +12,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Conversion of ÆØÅ to Ae Oe Aa when uploading notes to Nova
-- Added modules for use with the Eflyt / Dedalus / Notus address system
-- misc.file_util: handle_save_dialog
+- Added modules for use with the Eflyt / Dedalus / Notus address system.
+- misc.file_util: handle_save_dialog.
 - misc.cvr_lookup: Look up cvr number.
 - misc.address_lookup: Look up addresses.
+
+### Fixed
+
+- Conversion of ÆØÅ to Ae Oe Aa when uploading notes to Nova.
 
 ## [2.4.0] - 2024-07-30
 
 ### Added
 
-- Caseworker for notes
-- Directions for setting up environment variables for test
+- Caseworker for notes.
+- Directions for setting up environment variables for test.
 - misc.file_util: Wait for download function.
 
 ### Changed
