@@ -58,7 +58,7 @@ def get_beboere(browser: webdriver.Chrome) -> list[Inhabitant]:
         relations = []
         elements = inhabitant.find_elements(By.XPATH, "td[4]/span")
         if elements:
-            relations = elements[0].text.replace("<br>", " ").replace("\n", " ").split()
+            relations = elements[0].text.replace("<br>", ";").replace("\n", ";").split(";")
 
         # Create an Inhabitant and add to list
         new_inhabitant = Inhabitant(cpr, name, moving_in, relations)

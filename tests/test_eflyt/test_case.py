@@ -41,6 +41,9 @@ class CaseTest(unittest.TestCase):
         self.assertIsInstance(inhabitant.relations, list)
         self.assertIsInstance(inhabitant.name, str)
 
+        for relation in inhabitant.relations:
+            self.assertRegex(relation, r"\d{6}-\d{4}")
+
         open_case(self.browser, test_no_inhabitants_case)
         inhabitants = eflyt_case.get_beboere(self.browser)
 
