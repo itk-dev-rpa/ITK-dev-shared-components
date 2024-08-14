@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Conversion of ÆØÅ to Ae Oe Aa when uploading notes to Nova
 
 ### Changed
 
