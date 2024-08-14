@@ -97,4 +97,4 @@ def open_case(browser: webdriver.Chrome, case: str):
     case_input.clear()
     case_input.send_keys(case)
 
-    browser.find_element(By.XPATH, '//input[contains(@id, "earchControl_btnSearch")]').click()
+    browser.find_element(By.ID, 'ctl00_ContentPlaceHolder1_SearchControl_btnSearch').click()
