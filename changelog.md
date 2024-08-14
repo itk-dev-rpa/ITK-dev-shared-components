@@ -14,8 +14,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - misc.file_util: handle_save_dialog
 - cvr_api.cvr_lookup: Look up cvr number.
 
-### Changed
-
 ## [2.4.0] - 2024-07-30
 
 ### Added
