@@ -10,11 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added modules for use with the Eflyt / Dedalus / Notus address system
 - misc.file_util: handle_save_dialog
 - misc.cvr_lookup: Look up cvr number.
 - misc.address_lookup: Look up addresses.
-
-### Changed
 
 ## [2.4.0] - 2024-07-30
 
