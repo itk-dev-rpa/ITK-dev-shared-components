@@ -93,7 +93,7 @@ def open_case(browser: webdriver.Chrome, case: str):
     """
     # The id for both the search field and search button changes based on the current view hence the weird selectors.
     browser.get("https://notuskommunal.scandihealth.net/web/SearchResulteFlyt.aspx")
-    case_input = browser.find_element(By.XPATH, '//input[contains(@id, "earchControl_txtSagNr")]')
+    case_input = browser.find_element(By.ID, 'ctl00_ContentPlaceHolder1_SearchControl_txtSagNr')
     case_input.clear()
     case_input.send_keys(case)
 
