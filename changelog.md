@@ -11,8 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.5.0] - 2024-08-14
 
 ### Added
-- Conversion of ÆØÅ to Ae Oe Aa when uploading notes to Nova
 
+- Conversion of ÆØÅ to Ae Oe Aa when uploading notes to Nova
 - Added modules for use with the Eflyt / Dedalus / Notus address system
 - misc.file_util: handle_save_dialog
 - misc.cvr_lookup: Look up cvr number.
@@ -143,7 +143,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial release
 
 [Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.5.0...HEAD
-[2.4.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.5.0
+[2.5.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.5.0
 [2.4.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.4.0
 [2.3.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.3.0
 [2.2.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.2.0
