@@ -69,6 +69,7 @@ def _encode_text(string: str) -> str:
     Ensure the base64 string doesn't contain padding by inserting spaces at the end of the input string.
     There is a bug in the Nova api that corrupts the string if it contains padding.
     The extra spaces will not show up in the Nova user interface.
+    A necessary hack has been implemented to convert Æ, Ø and Å to ae, oe and aa.
 
     Args:
         string: The string to encode.
@@ -76,6 +77,8 @@ def _encode_text(string: str) -> str:
     Returns:
         A base64 string containing no padding.
     """
+    string = string.replace('æ', 'ae').replace('ø', 'oe').replace('å', 'aa').replace('Æ', 'Ae').replace('Ø', 'Oe').replace('Å', 'Aa')
+
     def b64(s: str) -> str:
         """Helper function to convert a string to base64."""
         return base64.b64encode(s.encode()).decode()
