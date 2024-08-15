@@ -115,4 +115,10 @@ def change_tab(browser: webdriver.Chrome, tab_index: int):
         browser: The webdriver browser object.
         tab_index: The zero-based index of the tab to select.
     """
-    browser.execute_script(f"__doPostBack('ctl00$ContentPlaceHolder2$ptFanePerson$ImgJournalMap','{tab_index}')")
+    # Use the src of the tab image to determine if the tab needs to be changed
+    tab_image = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ImgJournalMap")
+    image_src = tab_image.get_attribute("src")
+    current_index = int(image_src[-5]) - 1
+
+    if current_index != tab_index:
+        browser.execute_script(f"__doPostBack('ctl00$ContentPlaceHolder2$ptFanePerson$ImgJournalMap','{tab_index}')")
