@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added fields to Case dataclass for status, cpr, name, case_worker
+
 ### Changed
 
 - eflyt.eflyt_case.change_tab now checks if the tab needs to be changed before doing it.
