@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added fields to Case dataclass for status, cpr, name, case_worker
+- Added fields to the eflyt Case dataclass for status, cpr, name, case_worker
 
 ### Changed
 
