@@ -5,8 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-
 ## [Unreleased]
+
+## [2.6.0] - 2024-09-04
+
+### Added
+
+- Added fields to the eflyt Case dataclass for status, cpr, name, case_worker
+
+### Changed
+
+- eflyt.eflyt_case.change_tab now checks if the tab needs to be changed before doing it.
 
 ## [2.5.0] - 2024-08-14
 
@@ -145,7 +154,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.5.0...HEAD
+[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.6.0...HEAD
+[2.6.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.6.0
 [2.5.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.5.0
 [2.4.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.4.0
 [2.3.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.3.0
