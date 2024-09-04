@@ -33,6 +33,10 @@ class SearchTest(unittest.TestCase):
         self.assertIsInstance(case.case_number, str)
         self.assertIsInstance(case.case_types, list)
         self.assertIsInstance(case.deadline, (date, type(None)))
+        self.assertIsInstance(case.status, (str, type(None)))
+        self.assertIsInstance(case.cpr, (str, type(None)))
+        self.assertIsInstance(case.name, (str, type(None)))
+        self.assertIsInstance(case.case_worker, (str, type(None)))
 
     def test_open_case(self):
         """Open a case and check the browser opened the case view"""

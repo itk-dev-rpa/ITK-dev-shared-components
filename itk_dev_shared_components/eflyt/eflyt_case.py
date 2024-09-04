@@ -12,6 +12,10 @@ class Case:
     case_number: str
     deadline: date | None
     case_types: list[str]
+    status: str | None
+    cpr: str | None
+    name: str | None
+    case_worker: str | None
 
 
 @dataclass
