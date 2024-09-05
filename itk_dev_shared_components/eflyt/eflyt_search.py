@@ -81,7 +81,7 @@ def extract_cases(browser: webdriver.Chrome) -> list[Case]:
         status = row.find_element(By.XPATH, "td[6]").text
         cpr = row.find_element(By.XPATH, "td[7]/a").text
         name = row.find_element(By.XPATH, "td[8]").text
-        case_worker = row.find_element(By.XPATH, "td[9]").text
+        case_worker = row.find_element(By.XPATH, "td[10]").text
 
         case = Case(case_number, deadline, case_types, status, cpr, name, case_worker)
         cases.append(case)

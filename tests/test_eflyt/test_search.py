@@ -35,8 +35,11 @@ class SearchTest(unittest.TestCase):
         self.assertIsInstance(case.deadline, (date, type(None)))
         self.assertIsInstance(case.status, str)
         self.assertIsInstance(case.cpr, str)
+        self.assertRegex(case.cpr, r"\d{6}-\d{4}")
         self.assertIsInstance(case.name, str)
+        self.assertGreater(len(case.name), 0)
         self.assertIsInstance(case.case_worker, str)
+        self.assertGreater(len(case.case_worker), 0)
 
     def test_open_case(self):
         """Open a case and check the browser opened the case view"""
