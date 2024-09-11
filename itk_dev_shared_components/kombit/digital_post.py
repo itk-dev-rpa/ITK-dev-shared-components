@@ -1,10 +1,13 @@
+import urllib.parse
 import uuid
 from datetime import datetime
 from typing import Literal
+import urllib
 
 import requests
 
 from itk_dev_shared_components.kombit.authentication import KombitAccess
+from itk_dev_shared_components.kombit.date_helper import format_datetime
 
 
 def is_registered(cpr: str, service: Literal['digitalpost', 'nemsms'], kombit_access: KombitAccess) -> bool:
@@ -17,9 +20,10 @@ def is_registered(cpr: str, service: Literal['digitalpost', 'nemsms'], kombit_ac
         kombit_access: The KombitAccess object used to authenticate.
 
     Returns:
-        True if the person is registered for Digital Post.
+        True if the person is registered for the selected service.
     """
-    url = f"https://prod.serviceplatformen.dk/service/PostForespoerg_1/{service}"
+    url = urllib.parse.urljoin(kombit_access.environment, "service/PostForespoerg_1/")
+    url = urllib.parse.urljoin(url, service)
 
     parameters = {
         "cprNumber": cpr
@@ -27,7 +31,7 @@ def is_registered(cpr: str, service: Literal['digitalpost', 'nemsms'], kombit_ac
 
     headers = {
         "X-TransaktionsId": str(uuid.uuid4()),
-        "X-TransaktionsTid": datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
+        "X-TransaktionsTid": format_datetime(datetime.now()),
         "authorization": kombit_access.get_access_token("http://entityid.kombit.dk/service/postforespoerg/1")
     }
 
