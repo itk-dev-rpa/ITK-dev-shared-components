@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - eflyt.eflyt_case.change_tab now checks if the tab needs to be changed before doing it.
+- Dependenices are now only locked to major versions.
+- Changed test for change sap password to use dotenv.
 
 ## [2.5.0] - 2024-08-14
 

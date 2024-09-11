@@ -38,12 +38,15 @@ mailpit --smtp-tls-cert cert.pem --smtp-tls-key key.pem
 ```
 
 ## Environment variables
-You need to setup a .env file in the root directory with the following parameters:
 
+You need to setup a .env file in the root directory with the following parameters:
 
 ### SAP
 
 SAP_LOGIN = 'login;password'
+SAP_NEW_PASSWORD = 'new password'
+
+If SAP_NEW_PASSWORD is not set, the change password test is skipped.
 
 ### GRAPH
 

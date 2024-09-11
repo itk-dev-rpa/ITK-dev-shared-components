@@ -18,11 +18,11 @@ classifiers = [
 ]
 dependencies = [
   "pywin32 >= 306",
-  "msal >= 1.24.1",
-  "requests >= 2.31.0",
-  "beautifulsoup4 >= 4.12.2",
-  "selenium==4.16.0",
-  "uiautomation == 2.0.18"
+  "msal == 1.*",
+  "requests == 2.*",
+  "beautifulsoup4 == 4.*",
+  "selenium == 4.*",
+  "uiautomation == 2.*"
 ]
 
 [project.urls]
