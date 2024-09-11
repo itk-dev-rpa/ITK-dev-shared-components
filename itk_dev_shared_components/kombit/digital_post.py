@@ -6,7 +6,6 @@ import urllib.parse
 import uuid
 from datetime import datetime
 from typing import Literal
-import urllib
 
 import requests
 

@@ -11,6 +11,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 
 
+# pylint: disable-next=too-few-public-methods
 class KombitAccess:
     """An object that handles access to the Kombit api."""
     cvr: str
