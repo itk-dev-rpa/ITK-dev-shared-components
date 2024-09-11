@@ -2,7 +2,6 @@
 
 import os
 import unittest
-from tkinter import simpledialog
 
 from dotenv import load_dotenv, set_key
 
@@ -20,7 +19,6 @@ class TestSapLogin(unittest.TestCase):
         used in the following tests.
         """
         cls.username, cls.password = os.environ['SAP_LOGIN'].split(';')
-        cls.new_password = simpledialog.askstring("Enter new password", "Enter the new password to be used in testing the change SAP password function.\nRemember to write down the new password!\nLeave empty to skip test_change_password.")
 
     def setUp(self) -> None:
         sap_login.kill_sap()
@@ -44,17 +42,19 @@ class TestSapLogin(unittest.TestCase):
         Due to a limit in SAP you can only run this function once per day.
         If no new_password is entered in the setup, test is skipped.
         """
-        if not self.new_password:
-            raise unittest.SkipTest("Test not run because new_password was missing.")
+        new_password = os.getenv('SAP_NEW_PASSWORD')
+        if not new_password:
+            raise unittest.SkipTest("Test skipped because SAP_NEW_PASSWORD was missing.")
 
-        sap_login.change_password(self.username, self.password, self.new_password)
+        sap_login.change_password(self.username, self.password, new_password)
+
         # Change password for all coming tests
-        self.password = self.new_password
-        os.environ['SAP_LOGIN'] = f"{self.username};{self.password}"
-        set_key(".env", 'SAP_LOGIN', self.password)
+        self.password = new_password
+        set_key(".env", 'SAP_LOGIN', f"{self.username};{self.password}")
+        set_key(".env", 'SAP_NEW_PASSWORD', '')
 
         with self.assertRaises(ValueError):
-            sap_login.change_password(self.username, "Foo", self.new_password)
+            sap_login.change_password(self.username, "Foo", new_password)
 
         with self.assertRaises(ValueError):
             sap_login.change_password(self.username, self.password, "")

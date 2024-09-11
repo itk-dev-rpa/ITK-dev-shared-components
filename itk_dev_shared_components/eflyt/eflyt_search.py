@@ -76,9 +76,14 @@ def extract_cases(browser: webdriver.Chrome) -> list[Case]:
         # If the case types ends with '...' we need to get the title instead
         if case_types_text.endswith("..."):
             case_types_text = row.find_element(By.XPATH, "td[5]").get_attribute("Title")
-
         case_types = case_types_text.split(", ")
-        case = Case(case_number, deadline, case_types)
+
+        status = row.find_element(By.XPATH, "td[6]").text
+        cpr = row.find_element(By.XPATH, "td[7]/a").text
+        name = row.find_element(By.XPATH, "td[8]").text
+        case_worker = row.find_element(By.XPATH, "td[10]").text
+
+        case = Case(case_number, deadline, case_types, status, cpr, name, case_worker)
         cases.append(case)
 
     return cases
