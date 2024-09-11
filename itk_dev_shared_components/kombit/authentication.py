@@ -1,3 +1,7 @@
+"""This module contains the KombitAccess class used to authenticate against the
+Kombit API.
+"""
+
 from datetime import datetime, timedelta
 
 import requests

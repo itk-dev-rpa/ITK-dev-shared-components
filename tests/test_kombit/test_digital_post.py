@@ -11,8 +11,8 @@ from itk_dev_shared_components.kombit import digital_post
 load_dotenv()
 
 
-class KombitAuthTest(unittest.TestCase):
-    """Test authentication against the Kombit API."""
+class DigitalPostTest(unittest.TestCase):
+    """Test Digital Post functionality in the Kombit API."""
 
     def test_is_registered(self):
         """Test authentication."""
