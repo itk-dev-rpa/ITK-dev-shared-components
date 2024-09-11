@@ -75,3 +75,8 @@ EFLYT_LOGIN = 'username,password'
 TEST_CPR = 'XXXXXXXXXX'
 TEST_CASE = '123456' # A test case with multiple current inhabitants, with relations registered
 TEST_CASE_NOONE = '56789' # A test case without any current inhabitants
+
+### Kombit API
+
+KOMBIT_TEST_CVR = "55133018"  # The cvr number of the organisation that owns the certificate.
+KOMBIT_TEST_CERT_PATH = "C:\something\Certificate.pem"  # The path to the certificate file containing public and private keys.
