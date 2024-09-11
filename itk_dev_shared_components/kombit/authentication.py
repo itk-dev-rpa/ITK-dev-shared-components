@@ -29,7 +29,7 @@ class KombitAccess:
         """
         self.cvr = cvr
         self.cert_path = cert_path
-        self._access_tokens = dict()
+        self._access_tokens = {}
         self.test = test
 
         if test:
@@ -155,4 +155,4 @@ def _extract_first_certificate(pem_file: str) -> str:
         first_cert_single_line = "".join(first_cert.splitlines()[1:-1])
         return first_cert_single_line
     except Exception as e:
-        raise ValueError("Error parsing certificate: " + str(e))
+        raise ValueError("Error parsing certificate") from e

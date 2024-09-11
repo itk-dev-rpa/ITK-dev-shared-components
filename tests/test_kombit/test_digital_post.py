@@ -7,8 +7,10 @@ from dotenv import load_dotenv
 from itk_dev_shared_components.kombit.authentication import KombitAccess
 from itk_dev_shared_components.kombit import digital_post
 
-
 load_dotenv()
+
+# We don't care about duplicate code in tests
+# pylint: disable=R0801
 
 
 class DigitalPostTest(unittest.TestCase):

@@ -8,6 +8,9 @@ from itk_dev_shared_components.kombit.authentication import KombitAccess
 
 load_dotenv()
 
+# We don't care about duplicate code in tests
+# pylint: disable=R0801
+
 
 class KombitAuthTest(unittest.TestCase):
     """Test authentication against the Kombit API."""
