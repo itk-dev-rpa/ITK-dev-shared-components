@@ -74,6 +74,26 @@ class CaseTest(unittest.TestCase):
         self.assertIsInstance(room_count, int, "Room count is not a number")
         self.assertGreater(room_count, 0, "Room count is less than 1")
 
+    def test_write_note(self):
+        """Test writing a note to a case. Check if the note is added and that the existing note is preserved.
+        """
+        existing_note = eflyt_case.get_note_text(self.browser)
+
+        note_text = "Test"
+        eflyt_case.add_note(self.browser, note_text)
+
+        new_note = eflyt_case.get_note_text(self.browser)
+
+        # Reset note to original text
+        self.browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ncPersonTab_ButtonVisOpdater").click()
+        self.browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ncPersonTab_txtVisOpdaterNote").clear()
+        self.browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ncPersonTab_txtVisOpdaterNote").send_keys(existing_note)
+        self.browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ncPersonTab_btnLongNoteUpdater").click()
+
+        self.assertNotEqual(existing_note, new_note)
+        self.assertEqual(existing_note, new_note[:len(existing_note)])
+        self.assertEqual(note_text, new_note[-len(note_text):])
+
 
 if __name__ == '__main__':
     unittest.main()
