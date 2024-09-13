@@ -131,6 +131,8 @@ def change_tab(browser: webdriver.Chrome, tab_index: int):
 
 def approve_case(browser: webdriver.Chrome):
     """Approve a case, even if blocked by a note."""
+    change_tab(browser, 0)
+
     deadline_field = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ncPersonTab_txtDeadline")
     deadline_field.clear()
     note_field = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ncPersonTab_txtDeadlineNote")
