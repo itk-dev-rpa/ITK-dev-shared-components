@@ -174,7 +174,7 @@ def check_all_approved(browser: webdriver.Chrome) -> bool:
 
 def add_note(browser: webdriver.Chrome, message: str):
     """Add a note to a case."""
-    message = f"{date.today().strftime("%Y-%m-%d")} Besked fra Robot: {message}"
+    message = f"{date.today().strftime('%Y-%m-%d')} Besked fra Robot: {message}"
     browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ncPersonTab_ButtonVisOpdater").click()
 
     existing_note = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ncPersonTab_txtVisOpdaterNote").text
