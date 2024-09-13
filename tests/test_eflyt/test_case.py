@@ -7,9 +7,7 @@ from datetime import date
 from dotenv import load_dotenv
 from selenium.webdriver.common.by import By
 
-from itk_dev_shared_components.eflyt.eflyt_login import login
-from itk_dev_shared_components.eflyt.eflyt_search import open_case
-from itk_dev_shared_components.eflyt import eflyt_case
+from itk_dev_shared_components.eflyt import eflyt_case, eflyt_login, eflyt_search
 
 load_dotenv()
 
@@ -21,12 +19,12 @@ class CaseTest(unittest.TestCase):
     def setUpClass(cls):
         """Setup test class"""
         eflyt_credentials = os.getenv("EFLYT_LOGIN").split(",")
-        cls.browser = login(eflyt_credentials[0], eflyt_credentials[1])
+        cls.browser = eflyt_login.login(eflyt_credentials[0], eflyt_credentials[1])
 
     def setUp(self):
         """Go to a clean case state"""
         test_case = os.getenv("TEST_CASE")
-        open_case(self.browser, test_case)
+        eflyt_search.open_case(self.browser, test_case)
 
     def test_get_beboere(self):
         """Test inhabitant functions"""
@@ -44,7 +42,7 @@ class CaseTest(unittest.TestCase):
         for relation in inhabitant.relations:
             self.assertRegex(relation, r"\d{6}-\d{4}")
 
-        open_case(self.browser, test_no_inhabitants_case)
+        eflyt_search.open_case(self.browser, test_no_inhabitants_case)
         inhabitants = eflyt_case.get_beboere(self.browser)
 
         self.assertEqual(len(inhabitants), 0, "Some inhabitants found when none was expected")
@@ -93,6 +91,10 @@ class CaseTest(unittest.TestCase):
         self.assertNotEqual(existing_note, new_note)
         self.assertEqual(existing_note, new_note[:len(existing_note)])
         self.assertEqual(note_text, new_note[-len(note_text):])
+
+    @unittest.skip("No test system available for approving dummy cases.")
+    def test_approve_case(self):
+        """Empty test for approve_case"""
 
 
 if __name__ == '__main__':
