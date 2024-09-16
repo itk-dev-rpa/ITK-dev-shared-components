@@ -7,13 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.7.0] - 2024-09-16
+
 ### Added
 
 - Added functionality for approving, checking approval status and noting cases
 
 ## [2.6.1] - 2024-09-04
 
-### Fixed - 2024-09-04
+### Fixed
 
 - Fixed column number on case_worker
 
@@ -166,8 +168,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.6.1...HEAD
-[2.6.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.6.1
+[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.7.0...HEAD
+[2.7.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.7.0
+[2.6.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.6.1
 [2.6.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.6.0
 [2.5.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.5.0
 [2.4.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.4.0
