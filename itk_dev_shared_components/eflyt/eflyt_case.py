@@ -4,6 +4,7 @@ from datetime import date, datetime
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 
 
 @dataclass
@@ -126,3 +127,69 @@ def change_tab(browser: webdriver.Chrome, tab_index: int):
 
     if current_index != tab_index:
         browser.execute_script(f"__doPostBack('ctl00$ContentPlaceHolder2$ptFanePerson$ImgJournalMap','{tab_index}')")
+
+
+def approve_case(browser: webdriver.Chrome):
+    """Approve a case, even if blocked by a note."""
+    change_tab(browser, 0)
+
+    deadline_field = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ncPersonTab_txtDeadline")
+    deadline_field.clear()
+    note_field = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ncPersonTab_txtDeadlineNote")
+    note_field.clear()
+
+    browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_btnGodkend").click()
+    browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_btnApproveYes").click()
+
+    approve_persons_button = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_btnGodkendAlle")
+    if not approve_persons_button.is_enabled():
+
+        person_table = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_GridViewMovingPersons")
+        rows = person_table.find_elements(By.TAG_NAME, "tr")
+        rows.pop(0)
+
+        for row in rows:
+            row.find_element(By.XPATH, "td[2]").click()
+            browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_btnGodkend").click()
+            approve_button = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_btnApproveYes")
+            if approve_button.is_displayed():
+                approve_button.click()
+    else:
+        approve_persons_button.click()
+
+
+def check_all_approved(browser: webdriver.Chrome) -> bool:
+    """Check all inhabiatants in table have a status 'Godkendt'.
+    """
+    person_table = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_GridViewMovingPersons")
+    rows = person_table.find_elements(By.TAG_NAME, "tr")
+    rows.pop(0)
+
+    for row in rows:
+        row_status = row.find_element(By.XPATH, "td[6]").text
+        if row_status != "Godkendt":
+            return False
+    return True
+
+
+def add_note(browser: webdriver.Chrome, message: str):
+    """Add a note to a case."""
+    message = f"{date.today().strftime('%Y-%m-%d')} Besked fra Robot: {message}"
+    browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ncPersonTab_ButtonVisOpdater").click()
+
+    existing_note = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ncPersonTab_txtVisOpdaterNote").text
+    if len(existing_note) > 0:
+        message = "\n\n" + message
+        browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ncPersonTab_txtVisOpdaterNote").send_keys(Keys.CONTROL+Keys.END)
+
+    browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ncPersonTab_txtVisOpdaterNote").send_keys(message)
+    browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ncPersonTab_btnLongNoteUpdater").click()
+
+
+def get_note_text(browser: webdriver.Chrome) -> str:
+    """Read note text and close the window, returning the value.
+    """
+    browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ncPersonTab_ButtonVisOpdater").click()
+    text = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ncPersonTab_txtVisOpdaterNote").text
+    browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ncPersonTab_btnLuk").click()
+    return text
