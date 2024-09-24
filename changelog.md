@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.7.1] - 2024-09-24
+
+### Fixed
+- Will now change tab when adding notes
+
 ## [2.7.0] - 2024-09-16
 
 ### Added
@@ -168,7 +173,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.7.0...HEAD
+[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.7.1...HEAD
+[2.7.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.7.1
 [2.7.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.7.0
 [2.6.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.6.1
 [2.6.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.6.0
