@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.7.1] - 2024-09-24
 
 ### Fixed
-- Will now change tab when adding notes
+
+- eFlyt: Will now change tab when adding notes
 
 ## [2.7.0] - 2024-09-16
 
