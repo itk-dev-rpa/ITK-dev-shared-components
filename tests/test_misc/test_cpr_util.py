@@ -43,7 +43,7 @@ class TestCprUtil(unittest.TestCase):
         with self.assertRaises(ValueError):
             cpr_util.get_age("010190xxxx")
 
-    def test_get_birth_date_from_cpr(self):
+    def test_get_birthdate_from_cpr(self):
         """Test getting the age from a cpr number."""
         # A table of fictional cpr-numbers and the expected birth dates.
         test_data = (
@@ -65,9 +65,9 @@ class TestCprUtil(unittest.TestCase):
             ("0101929000", date(1992, 1, 1)),
         )
 
-        for cpr, birth_date in test_data:
-            with self.subTest(cpr=cpr, birth_date=birth_date):
-                self.assertEqual(cpr_util.get_birthdate(cpr), birth_date)
+        for cpr, birthdate in test_data:
+            with self.subTest(cpr=cpr, birthdate=birthdate):
+                self.assertEqual(cpr_util.get_birthdate(cpr), birthdate)
 
         with self.assertRaises(ValueError):
             cpr_util.get_birthdate("010190-1234")
