@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- misc.cpr_util: Function to get birth date from cpr number.
+- misc.cpr_util: Function to get birthdate from cpr number.
 
 ## [2.7.1] - 2024-09-24
 

@@ -67,13 +67,13 @@ class TestCprUtil(unittest.TestCase):
 
         for cpr, birth_date in test_data:
             with self.subTest(cpr=cpr, birth_date=birth_date):
-                self.assertEqual(cpr_util.get_birth_date(cpr), birth_date)
+                self.assertEqual(cpr_util.get_birthdate(cpr), birth_date)
 
         with self.assertRaises(ValueError):
-            cpr_util.get_birth_date("010190-1234")
+            cpr_util.get_birthdate("010190-1234")
 
         with self.assertRaises(ValueError):
-            cpr_util.get_birth_date("010190xxxx")
+            cpr_util.get_birthdate("010190xxxx")
 
 
 if __name__ == '__main__':
