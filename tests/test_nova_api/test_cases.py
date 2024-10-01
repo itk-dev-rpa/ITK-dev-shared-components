@@ -87,7 +87,9 @@ class NovaCasesTest(unittest.TestCase):
             nova_cases.get_cvr_cases(nova_access=self.nova_access)
 
     def test_add_case(self):
-        """Test adding a case to Nova."""
+        """Test adding a case to Nova.
+        Also tests getting a case on uuid.
+        """
         nova_party = os.getenv('NOVA_PARTY').split(',')
         party = CaseParty(
             role="Primær",
@@ -126,17 +128,14 @@ class NovaCasesTest(unittest.TestCase):
         nova_case = None
         for _ in range(10):
             time.sleep(1)
-            cases = nova_cases.get_cases(self.nova_access, cpr=party.identification, case_title="Test")
-            for c in cases:
-                if c.title == case.title:
-                    nova_case = c
-                    break
-            if nova_case:
+            try:
+                nova_case = nova_cases.get_case(case.uuid, self.nova_access)
                 break
+            except ValueError:
+                ...
 
         self.assertIsNotNone(nova_case)
 
-        nova_case = cases[0]
         self.assertEqual(nova_case.uuid, case.uuid)
         self.assertEqual(nova_case.title, case.title)
         self.assertEqual(nova_case.progress_state, case.progress_state)
