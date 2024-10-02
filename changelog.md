@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.8.0] - 2024-10-02
+
 ### Added
 
 - misc.cpr_util: Function to get birth date from cpr number.
@@ -179,7 +181,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.7.1...HEAD
+[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.8.0...HEAD
+[2.8.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.8.0
 [2.7.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.7.1
 [2.7.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.7.0
 [2.6.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.6.1
