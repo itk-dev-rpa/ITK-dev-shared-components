@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - misc.cpr_util: Function to get birth date from cpr number.
+- kmd_nova.nova_cases: Function to get a case on its uuid.
 
 ## [2.7.1] - 2024-09-24
 
