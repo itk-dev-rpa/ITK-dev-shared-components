@@ -132,7 +132,7 @@ class NovaCasesTest(unittest.TestCase):
                 nova_case = nova_cases.get_case(case.uuid, self.nova_access)
                 break
             except ValueError:
-                ...
+                pass
 
         self.assertIsNotNone(nova_case)
 
