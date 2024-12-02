@@ -148,7 +148,7 @@ def approve_case(browser: webdriver.Chrome):
         approve_persons_button.click()
     else:
         # Approve each person individually
-        person_count = len(browser.find_elements(By.XPATH, '//table[@id="ctl00_ContentPlaceHolder2_GridViewMovingPersons"]//tr'))
+        person_count = len(browser.find_elements(By.XPATH, '//table[@id="ctl00_ContentPlaceHolder2_GridViewMovingPersons"]//tr')) - 1
 
         for i in range(person_count):
             browser.find_element(By.XPATH, f'//table[@id="ctl00_ContentPlaceHolder2_GridViewMovingPersons"]//tr[{i+2}]//td[2]').click()
