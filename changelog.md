@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Approve case in eflyt when approvig individual people now works.
+- Approve case in eflyt when approving individual people now works.
 
 ## [2.8.0] - 2024-10-02
 
