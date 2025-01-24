@@ -18,6 +18,7 @@ def add_text_note(case_uuid: str, note_title: str, note_text: str, caseworker: C
         case_uuid: The uuid of the case to add the journal note to.
         note_title: The title of the note.
         note_text: The text content of the note.
+        caseworker: The author of the note.
         approved: Whether the journal note should be marked as approved in Nova.
         nova_access: The NovaAccess object used to authenticate.
 
