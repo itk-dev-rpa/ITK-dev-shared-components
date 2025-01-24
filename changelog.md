@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- kmd_nova: Added support for case worker groups/units.
+
 ## [2.8.0] - 2024-10-02
 
 ### Added
