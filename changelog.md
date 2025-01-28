@@ -7,10 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.8.1] - 2024-12-02
+
+### Fixed
+
+- Approve case in eflyt when approving individual people now works.
+
+## [2.8.0] - 2024-10-02
+
+### Added
+
+- misc.cpr_util: Function to get birth date from cpr number.
+- kmd_nova.nova_cases: Function to get a case on its uuid.
+
 ## [2.7.1] - 2024-09-24
 
 ### Fixed
-- Will now change tab when adding notes
+
+- eFlyt: Will now change tab when adding notes
 
 ## [2.7.0] - 2024-09-16
 
@@ -173,7 +187,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.7.1...HEAD
+[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.8.1...HEAD
+[2.8.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.8.1
+[2.8.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.8.0
 [2.7.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.7.1
 [2.7.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.7.0
 [2.6.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.6.1

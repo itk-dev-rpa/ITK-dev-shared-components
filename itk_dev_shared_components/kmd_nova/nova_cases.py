@@ -12,6 +12,28 @@ from itk_dev_shared_components.kmd_nova.nova_objects import NovaCase, CaseParty,
 from itk_dev_shared_components.kmd_nova.util import datetime_from_iso_string
 
 
+def get_case(case_uuid: str, nova_access: NovaAccess) -> NovaCase:
+    """Get a case from based on its uuid.
+
+    Args:
+        case_uuid: The uuid of the case to get.
+        nova_access: The NovaAccess object used to authenticate.
+
+    Raises:
+        ValueError: If no case was found.
+
+    Returns:
+        The case with the given uuid.
+    """
+    payload = _create_payload(case_uuid=case_uuid)
+    cases = _get_nova_cases(nova_access, payload)
+
+    if not cases:
+        raise ValueError(f"No case found with the given uuid: {case_uuid}")
+
+    return cases[0]
+
+
 def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None, case_title: str = None, limit: int = 100) -> list[NovaCase]:
     """Search for cases on different search terms.
     Currently supports search on cpr number, case number and case title. At least one search term must be given.
@@ -33,7 +55,7 @@ def get_cases(nova_access: NovaAccess, cpr: str = None, case_number: str = None,
     if not any((cpr, case_number, case_title)):
         raise ValueError("No search terms given.")
 
-    payload = _create_payload(cpr, "CprNummer", case_number, case_title, limit)
+    payload = _create_payload(identification=cpr, identification_type="CprNummer", case_number=case_number, case_title=case_title, limit=limit)
     return _get_nova_cases(nova_access, payload)
 
 
@@ -58,7 +80,7 @@ def get_cvr_cases(nova_access: NovaAccess, cvr: str = None,  case_number: str = 
     if not any((cvr, case_number, case_title)):
         raise ValueError("No search terms given.")
 
-    payload = _create_payload(cvr, "CvrNummer", case_number, case_title, limit)
+    payload = _create_payload(identification=cvr, identification_type="CvrNummer", case_number=case_number, case_title=case_title, limit=limit)
     return _get_nova_cases(nova_access, payload)
 
 
@@ -113,10 +135,11 @@ def _get_nova_cases(nova_access: NovaAccess, payload: dict) -> list[NovaCase]:
     return cases
 
 
-def _create_payload(identification: str = None, identification_type: str = "CprNummer", case_number: str = None, case_title: str = None, limit: int = 100) -> dict:
+def _create_payload(*, case_uuid: str = None, identification: str = None, identification_type: str = "CprNummer", case_number: str = None, case_title: str = None, limit: int = 100) -> dict:
     return {
         "common": {
-            "transactionId": str(uuid.uuid4())
+            "transactionId": str(uuid.uuid4()),
+            "uuid": case_uuid
         },
         "paging": {
             "startRow": 1,

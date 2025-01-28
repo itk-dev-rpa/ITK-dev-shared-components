@@ -3,16 +3,15 @@
 from datetime import date
 
 
-def get_age(cpr: str, current_date: date = date.today()) -> int:
-    """Get the age of a person based on their cpr number
+def get_birth_date(cpr: str) -> date:
+    """Get the birth date of a person based on their cpr number
     using the 7th digit to infer the century.
 
     Args:
         cpr: The cpr number in the format 'ddmmyyxxxx'.
-        current_date: The date where the age is calculated from. Defaults to the current date.
 
     Returns:
-        The age in integer years based on the cpr number.
+        The birth date based on cpr number.
 
     Raises:
         ValueError: If the given cpr is not in 'ddmmyyxxxx' format.
@@ -51,7 +50,24 @@ def get_age(cpr: str, current_date: date = date.today()) -> int:
     else:
         year += t[2]
 
-    birthdate = date(year, month, day)
+    return date(year, month, day)
+
+
+def get_age(cpr: str, current_date: date = date.today()) -> int:
+    """Get the age of a person based on their cpr number
+    using the 7th digit to infer the century.
+
+    Args:
+        cpr: The cpr number in the format 'ddmmyyxxxx'.
+        current_date: The date where the age is calculated from. Defaults to the current date.
+
+    Returns:
+        The age in integer years based on the cpr number.
+
+    Raises:
+        ValueError: If the given cpr is not in 'ddmmyyxxxx' format.
+    """
+    birthdate = get_birth_date(cpr)
 
     age = current_date.year - birthdate.year - ((current_date.month, current_date.day) < (birthdate.month, birthdate.day))
 
