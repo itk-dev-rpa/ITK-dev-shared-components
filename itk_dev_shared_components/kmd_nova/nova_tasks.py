@@ -126,7 +126,7 @@ def _extract_caseworker(task_dict: dict) -> Caseworker | None:
     if 'caseWorkerGroup' in task_dict:
         return Caseworker(
             uuid = task_dict['caseWorkerGroup']['id'],
-            ident = task_dict['caseWorkerGroup']['ident'],
+            ident = None,
             name = task_dict['caseWorkerGroup']['name'],
             type='group'
         )

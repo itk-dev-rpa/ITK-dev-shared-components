@@ -189,6 +189,11 @@ def _create_payload(*, case_uuid: str = None, identification: str = None, identi
                     "novaUserId": True,
                     "fullName": True,
                     "racfId": True
+                },
+                "losIdentity": {
+                    "novaUnitId": True,
+                    "fullName": True,
+                    "administrativeUnitId": True
                 }
             },
             "responsibleDepartment": {

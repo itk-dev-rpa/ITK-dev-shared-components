@@ -62,7 +62,7 @@ def extract_caseworker(response_dict: dict) -> Caseworker | None:
                 return Caseworker(
                     uuid = response_dict['caseworker']['losIdentity']['novaUnitId'],
                     name = response_dict['caseworker']['losIdentity']['fullName'],
-                    ident = response_dict['caseworker']['losIdentity']['administrativeUnitId'],
+                    ident = str(response_dict['caseworker']['losIdentity']['administrativeUnitId']),
                     type='group'
                 )
 
