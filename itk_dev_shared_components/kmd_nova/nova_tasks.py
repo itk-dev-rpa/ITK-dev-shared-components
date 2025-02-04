@@ -47,7 +47,6 @@ def attach_task_to_case(case_uuid: str, task: Task, nova_access: NovaAccess) -> 
     elif task.caseworker.type == 'group':
         payload["caseworkerGroupId"] = task.caseworker.uuid
 
-
     headers = {'Content-Type': 'application/json', 'Authorization': f"Bearer {nova_access.get_bearer_token()}"}
     response = requests.post(url, params=params, headers=headers, json=payload, timeout=60)
     response.raise_for_status()
