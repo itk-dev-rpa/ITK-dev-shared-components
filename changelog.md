@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Child folders in Graph are now found, even with more than 10 child folders to go through.
+- Approving eflyt cases when the person is marked as "Afsluttet" now works.
+
 ## [2.8.1] - 2024-12-02
 
 ### Fixed
