@@ -58,7 +58,7 @@ def extract_caseworker(response_dict: dict) -> Caseworker | None:
                     type='user'
                 )
 
-            elif 'losIdentity' in response_dict['caseworker']:
+            if 'losIdentity' in response_dict['caseworker']:
                 return Caseworker(
                     uuid = response_dict['caseworker']['losIdentity']['novaUnitId'],
                     name = response_dict['caseworker']['losIdentity']['fullName'],

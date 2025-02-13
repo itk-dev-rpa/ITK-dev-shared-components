@@ -2,13 +2,12 @@
 to the KMD Nova api."""
 
 import uuid
-import base64
 import urllib.parse
 
 import requests
 
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
-from itk_dev_shared_components.kmd_nova.nova_objects import NovaCase, CaseParty, JournalNote, Caseworker, Department
+from itk_dev_shared_components.kmd_nova.nova_objects import NovaCase, CaseParty, Department
 from itk_dev_shared_components.kmd_nova.util import datetime_from_iso_string, extract_caseworker
 
 

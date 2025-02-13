@@ -10,7 +10,7 @@ import urllib.parse
 import requests
 
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
-from itk_dev_shared_components.kmd_nova.nova_objects import Document, Caseworker
+from itk_dev_shared_components.kmd_nova.nova_objects import Document
 from itk_dev_shared_components.kmd_nova.util import datetime_from_iso_string, extract_caseworker
 
 
