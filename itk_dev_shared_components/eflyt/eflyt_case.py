@@ -130,7 +130,9 @@ def change_tab(browser: webdriver.Chrome, tab_index: int):
 
 
 def approve_case(browser: webdriver.Chrome):
-    """Approve a case, even if blocked by a note."""
+    """Approve a case.
+    If any person on the case is blocking approval, approve each person individually.
+    """
     change_tab(browser, 0)
 
     deadline_field = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ncPersonTab_txtDeadline")
@@ -142,20 +144,22 @@ def approve_case(browser: webdriver.Chrome):
     browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_btnApproveYes").click()
 
     approve_persons_button = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_btnGodkendAlle")
-    if not approve_persons_button.is_enabled():
+    if approve_persons_button.is_enabled():
+        approve_persons_button.click()
+    else:
+        # Approve each person individually
+        person_count = len(browser.find_elements(By.XPATH, '//table[@id="ctl00_ContentPlaceHolder2_GridViewMovingPersons"]//tr')) - 1
 
-        person_table = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_GridViewMovingPersons")
-        rows = person_table.find_elements(By.TAG_NAME, "tr")
-        rows.pop(0)
+        for i in range(person_count):
+            browser.find_element(By.XPATH, f'//table[@id="ctl00_ContentPlaceHolder2_GridViewMovingPersons"]//tr[{i+2}]//td[2]').click()
 
-        for row in rows:
-            row.find_element(By.XPATH, "td[2]").click()
             browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_btnGodkend").click()
             approve_button = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_btnApproveYes")
             if approve_button.is_displayed():
                 approve_button.click()
-    else:
-        approve_persons_button.click()
+
+        # Go back to the case
+        browser.find_element(By.XPATH, '//table[@id="ctl00_ContentPlaceHolder2_GridViewMovingPersons"]//tr[1]//td[2]').click()
 
 
 def check_all_approved(browser: webdriver.Chrome) -> bool:
@@ -167,7 +171,7 @@ def check_all_approved(browser: webdriver.Chrome) -> bool:
 
     for row in rows:
         row_status = row.find_element(By.XPATH, "td[6]").text
-        if row_status != "Godkendt":
+        if row_status not in ("Godkendt", "Afsluttet"):
             return False
     return True
 
