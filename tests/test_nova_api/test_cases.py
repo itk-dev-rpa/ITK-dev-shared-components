@@ -61,11 +61,6 @@ class NovaCasesTest(unittest.TestCase):
         case_title = cvr_case['case_title']
         case_number = cvr_case['case_number']
 
-        # This test is too slow
-        # cases = nova_cases.get_cvr_cases(cvr=cvr, nova_access=self.nova_access)
-        # self.assertIsInstance(cases[0], NovaCase)
-        # self.assertEqual(cases[0].case_parties[0].identification, cvr)
-
         cases = nova_cases.get_cvr_cases(case_number=case_number, nova_access=self.nova_access)
         self.assertEqual(cases[0].case_number, case_number)
 
