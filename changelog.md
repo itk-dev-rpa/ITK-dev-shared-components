@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- kmd_nova: Added support for case worker groups/units.
+
 ### Fixed
 
 - Child folders in Graph are now found, even with more than 10 child folders to go through.

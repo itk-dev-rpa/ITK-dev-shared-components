@@ -22,6 +22,7 @@ class Caseworker:
     uuid: str
     name: str
     ident: str
+    type: Literal['user', 'group'] = 'user'
 
 
 @dataclass(slots=True, kw_only=True)

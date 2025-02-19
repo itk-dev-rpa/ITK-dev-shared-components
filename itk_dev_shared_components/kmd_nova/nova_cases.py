@@ -2,14 +2,13 @@
 to the KMD Nova api."""
 
 import uuid
-import base64
 import urllib.parse
 
 import requests
 
 from itk_dev_shared_components.kmd_nova.authentication import NovaAccess
-from itk_dev_shared_components.kmd_nova.nova_objects import NovaCase, CaseParty, JournalNote, Caseworker, Department
-from itk_dev_shared_components.kmd_nova.util import datetime_from_iso_string
+from itk_dev_shared_components.kmd_nova.nova_objects import NovaCase, CaseParty, Department
+from itk_dev_shared_components.kmd_nova.util import datetime_from_iso_string, extract_caseworker
 
 
 def get_case(case_uuid: str, nova_access: NovaAccess) -> NovaCase:
@@ -125,7 +124,7 @@ def _get_nova_cases(nova_access: NovaAccess, payload: dict) -> list[NovaCase]:
             kle_number = case_dict['caseClassification']['kleNumber']['code'],
             proceeding_facet = case_dict['caseClassification']['proceedingFacet']['code'],
             sensitivity = case_dict["sensitivity"]["sensitivity"],
-            caseworker = _extract_case_worker(case_dict),
+            caseworker = extract_caseworker(case_dict),
             security_unit=security_unit,
             responsible_department=responsible_department
         )
@@ -189,6 +188,11 @@ def _create_payload(*, case_uuid: str = None, identification: str = None, identi
                     "novaUserId": True,
                     "fullName": True,
                     "racfId": True
+                },
+                "losIdentity": {
+                    "novaUnitId": True,
+                    "fullName": True,
+                    "administrativeUnitId": True
                 }
             },
             "responsibleDepartment": {
@@ -235,29 +239,6 @@ def _extract_departments(case_dict: dict) -> tuple[Department, Department]:
     return security_unit, responsible_department
 
 
-def _extract_case_worker(case_dict: dict) -> Caseworker | None:
-    """Extract the case worker from a HTTP request response.
-    If the case worker is in a unexpected format, None is returned.
-
-    Args:
-        case_dict: The dictionary describing the case.
-
-    Returns:
-        A case worker object describing the case worker if any.
-    """
-    if 'caseworker' in case_dict:
-        try:
-            return Caseworker(
-                uuid = case_dict['caseworker']['kspIdentity']['novaUserId'],
-                name = case_dict['caseworker']['kspIdentity']['fullName'],
-                ident = case_dict['caseworker']['kspIdentity']['racfId']
-            )
-        except KeyError:
-            return None
-
-    return None
-
-
 def _extract_case_parties(case_dict: dict) -> list[CaseParty]:
     """Extract the case parties from a HTTP request response.
 
@@ -279,29 +260,6 @@ def _extract_case_parties(case_dict: dict) -> list[CaseParty]:
         parties.append(party)
 
     return parties
-
-
-def _extract_journal_notes(case_dict: dict) -> list:
-    """Extract the journal notes from a HTTP request response.
-
-    Args:
-        case_dict: The dictionary describing the journal note.
-
-    Returns:
-        A journal note object describing the journal note.
-    """
-    notes = []
-    for note_dict in case_dict['journalNotes']['journalNotes']:
-        note = JournalNote(
-            uuid = note_dict['uuid'],
-            title = note_dict['journalNoteAttributes']['title'],
-            journal_date = note_dict['journalNoteAttributes']['journalNoteDate'],
-            note_format = note_dict['journalNoteAttributes']['format'],
-            note = base64.b64decode(note_dict['journalNoteAttributes']['note']),
-            approved = note_dict['journalNoteAttributes'].get('approved', False)
-        )
-        notes.append(note)
-    return notes
 
 
 def add_case(case: NovaCase, nova_access: NovaAccess):
@@ -371,12 +329,20 @@ def add_case(case: NovaCase, nova_access: NovaAccess):
     }
 
     if case.caseworker:
-        payload['caseworker'] = {
-            "kspIdentity": {
-                "racfId": case.caseworker.ident,
-                "fullName": case.caseworker.name
+        if case.caseworker.type == 'user':
+            payload['caseworker'] = {
+                "kspIdentity": {
+                    "racfId": case.caseworker.ident,
+                    "fullName": case.caseworker.name
+                }
             }
-        }
+        elif case.caseworker.type == 'group':
+            payload['caseworker'] = {
+                "losIdentity": {
+                    "administrativeUnitId": case.caseworker.ident,
+                    "fullName": case.caseworker.name
+                }
+            }
 
     headers = {'Content-Type': 'application/json', 'Authorization': f"Bearer {nova_access.get_bearer_token()}"}
 
