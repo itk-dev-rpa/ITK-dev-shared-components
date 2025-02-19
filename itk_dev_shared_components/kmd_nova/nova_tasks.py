@@ -35,13 +35,17 @@ def attach_task_to_case(case_uuid: str, task: Task, nova_access: NovaAccess) -> 
         "caseUuid": case_uuid,
         "title": task.title,
         "description": task.description,  # Optional
-        "caseworkerPersonId": task.caseworker.uuid,  # Optional
         "statusCode": task.status_code,
         "deadline": datetime_to_iso_string(task.deadline),
         "startDate": datetime_to_iso_string(task.started_date),  # Optional
         "closeDate": datetime_to_iso_string(task.closed_date),  # Optional
         "taskTypeName": "Aktivitet"
     }
+
+    if task.caseworker.type == 'user':
+        payload["caseworkerPersonId"] = task.caseworker.uuid
+    elif task.caseworker.type == 'group':
+        payload["caseworkerGroupId"] = task.caseworker.uuid
 
     headers = {'Content-Type': 'application/json', 'Authorization': f"Bearer {nova_access.get_bearer_token()}"}
     response = requests.post(url, params=params, headers=headers, json=payload, timeout=60)
@@ -114,7 +118,16 @@ def _extract_caseworker(task_dict: dict) -> Caseworker | None:
         return Caseworker(
             uuid = task_dict['caseWorker']['id'],
             ident = task_dict['caseWorker']['ident'],
-            name = task_dict['caseWorker']['name']
+            name = task_dict['caseWorker']['name'],
+            type='user'
+        )
+
+    if 'caseWorkerGroup' in task_dict:
+        return Caseworker(
+            uuid = task_dict['caseWorkerGroup']['id'],
+            ident = None,
+            name = task_dict['caseWorkerGroup']['name'],
+            type='group'
         )
 
     return None
@@ -143,13 +156,17 @@ def update_task(task: Task, case_uuid: str, nova_access: NovaAccess):
         "caseUuid": case_uuid,
         "title": task.title,
         "description": task.description,
-        "caseworkerPersonId": task.caseworker.uuid,
         "statusCode": task.status_code,
         "deadline": datetime_to_iso_string(task.deadline),
         "startDate": datetime_to_iso_string(task.started_date),
         "closeDate": datetime_to_iso_string(task.closed_date),
         "taskType": "Aktivitet"
     }
+
+    if task.caseworker.type == 'user':
+        payload["caseworkerPersonId"] = task.caseworker.uuid
+    elif task.caseworker.type == 'group':
+        payload["caseworkerGroupId"] = task.caseworker.uuid
 
     headers = {'Content-Type': 'application/json', 'Authorization': f"Bearer {nova_access.get_bearer_token()}"}
     response = requests.put(url, params=params, headers=headers, json=payload, timeout=60)

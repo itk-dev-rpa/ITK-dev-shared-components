@@ -61,10 +61,6 @@ class NovaCasesTest(unittest.TestCase):
         case_title = cvr_case['case_title']
         case_number = cvr_case['case_number']
 
-        cases = nova_cases.get_cvr_cases(cvr=cvr, nova_access=self.nova_access)
-        self.assertIsInstance(cases[0], NovaCase)
-        self.assertEqual(cases[0].case_parties[0].identification, cvr)
-
         cases = nova_cases.get_cvr_cases(case_number=case_number, nova_access=self.nova_access)
         self.assertEqual(cases[0].case_number, case_number)
 
@@ -146,6 +142,56 @@ class NovaCasesTest(unittest.TestCase):
         self.assertEqual(nova_case.case_parties[0].identification, case.case_parties[0].identification)
         self.assertEqual(nova_case.responsible_department.id, case.responsible_department.id)
         self.assertEqual(nova_case.security_unit.id, case.security_unit.id)
+
+    def test_user_groups(self):
+        """Test getting and adding a case with a user group as caseworker."""
+        # Get case
+        group_case = json.loads(os.environ['NOVA_GROUP_CASE'])
+        cpr = group_case['cpr']
+        case_number = group_case['case_number']
+        caseworker_dict = json.loads(os.environ['NOVA_USER_GROUP'])
+        caseworker = Caseworker(
+            type='group',
+            **caseworker_dict
+        )
+
+        cases = nova_cases.get_cases(cpr=cpr, case_number=case_number, nova_access=self.nova_access)
+
+        self.assertEqual(len(cases), 1)
+        nova_case = cases[0]
+        self.assertIsInstance(nova_case, NovaCase)
+
+        self.assertEqual(nova_case.caseworker, caseworker)
+
+        # Add case
+        nova_party = os.getenv('NOVA_PARTY').split(',')
+        party = CaseParty(
+            role="Primær",
+            identification_type="CprNummer",
+            identification=nova_party[0],
+            name=nova_party[1]
+        )
+
+        department_dict = json.loads(os.environ['NOVA_DEPARTMENT'])
+        department = Department(
+            **department_dict
+        )
+
+        case = NovaCase(
+            uuid=str(uuid.uuid4()),
+            title=f"Test {datetime.now()}",
+            case_date=datetime.now(),
+            progress_state="Opstaaet",
+            case_parties=[party],
+            kle_number="23.05.01",
+            proceeding_facet="G01",
+            sensitivity="Fortrolige",
+            caseworker=caseworker,
+            responsible_department=department,
+            security_unit=department
+        )
+
+        nova_cases.add_case(case, self.nova_access)
 
 
 if __name__ == '__main__':

@@ -68,6 +68,39 @@ class NovaCasesTest(unittest.TestCase):
         self.assertEqual(nova_task.caseworker.uuid, new_task.caseworker.uuid)
         self.assertEqual(nova_task.status_code, new_task.status_code)
 
+    def test_add_task_with_group(self):
+        """Test adding a Task to Nova with a user group as caseworker."""
+        case = self._get_test_case()
+
+        caseworker_dict = json.loads(os.environ['NOVA_USER_GROUP'])
+        caseworker = Caseworker(
+            type='group',
+            ident=None,
+            uuid=caseworker_dict['uuid'],
+            name=caseworker_dict['name']
+        )
+
+        # Test with minimal attributes set
+        new_task = Task(
+            uuid=str(uuid.uuid4()),
+            title=f"Test Task {datetime.now()}",
+            status_code="F",
+            deadline=datetime.now(),
+            caseworker=caseworker
+        )
+
+        nova_tasks.attach_task_to_case(case.uuid, new_task, self.nova_access)
+
+        # Check if it got created by finding it in Nova
+        tasks = nova_tasks.get_tasks(case.uuid, self.nova_access)
+        nova_task = self._find_task_by_title(tasks, new_task.title)
+
+        self.assertEqual(nova_task.title, new_task.title)
+        self.assertEqual(nova_task.uuid, new_task.uuid)
+        self.assertEqual(nova_task.deadline.date(), new_task.deadline.date())
+        self.assertEqual(nova_task.caseworker, new_task.caseworker)
+        self.assertEqual(nova_task.status_code, new_task.status_code)
+
     def test_add_task_full(self):
         """Test adding a Task to Nova with all information set."""
         case = self._get_test_case()

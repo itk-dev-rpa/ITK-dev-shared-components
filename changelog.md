@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.9.0] - 2025-02-19
+
+### Added
+
+- kmd_nova: Added support for case worker groups/units.
+
+### Fixed
+
+- Child folders in Graph are now found, even with more than 10 child folders to go through.
+- Approving eflyt cases when the person is marked as "Afsluttet" now works.
+
 ## [2.8.1] - 2024-12-02
 
 ### Fixed
@@ -187,7 +198,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.8.1...HEAD
+[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.9.0...HEAD
+[2.9.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.9.0
 [2.8.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.8.1
 [2.8.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.8.0
 [2.7.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.7.1

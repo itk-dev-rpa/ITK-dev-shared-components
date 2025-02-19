@@ -62,9 +62,11 @@ NOVA_PARTY = '6101009805,Test Test'
 NOVA_DEPARTMENT = '{"id": 818485,"name": "Borgerservice","user_key": "4BBORGER"}'
 NOVA_CREDENTIALS = 'nova_login,nova_password'
 NOVA_USER = '{"name": "svcitkopeno svcitkopeno", "ident": "AZX0080", "uuid": "0bacdddd-5c61-4676-9a61-b01a18cec1d5"}'
+NOVA_USER_GROUP = '{"name": "ÅÅÅ_Frontoffice", "ident": "819697", "uuid": "144d7ab7-302f-4c62-83d2-dcdefcd92dea"}'
 
 NOVA_CVR_CASE = '{"cvr": "55133018", "case_title": "rpa_testcase", "case_number": "S2024-25614"}'
 NOVA_CPR_CASE = '{"cpr": "6101009805", "case_title": "Meget_Unik_Case_Overskrift", "case_number": "S2023-61078"}'
+NOVA_GROUP_CASE = '{"cpr": "6101009805", "case_title": "Testsag brugergruppe", "case_number": "S2025-5318"}'
 
 Note: The NOVA_CVR_CASE and NOVA_CPR_CASE variables require cases to be created in Nova, and the parameters set from those cases.
 
