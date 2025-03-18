@@ -29,7 +29,7 @@ def get_documents(case_uuid: str, nova_access: NovaAccess) -> list[Document]:
         requests.exceptions.HTTPError: If the request failed.
     """
     url = urllib.parse.urljoin(nova_access.domain, "api/Document/GetList")
-    params = {"api-version": "1.0-Case"}
+    params = {"api-version": "2.0-Case"}
 
     payload = {
         "common": {
@@ -91,7 +91,7 @@ def download_document_file(document_uuid: str, nova_access: NovaAccess, checkout
         requests.exceptions.HTTPError: If the request failed.
     """
     url = urllib.parse.urljoin(nova_access.domain, "api/Document/GetFile")
-    params = {"api-version": "1.0-Case"}
+    params = {"api-version": "2.0-Case"}
 
     payload = {
         "common": {
@@ -129,7 +129,7 @@ def upload_document(file: BinaryIO, file_name: str, nova_access: NovaAccess) -> 
     document_id = urllib.parse.quote(str(uuid.uuid4()))
 
     url = urllib.parse.urljoin(nova_access.domain, f"api/Document/UploadFile/{transaction_id}/{document_id}")
-    params = {"api-version": "1.0-Case"}
+    params = {"api-version": "2.0-Case"}
 
     headers = {'Authorization': f"Bearer {nova_access.get_bearer_token()}", 'accept': '*/*'}
 
@@ -162,7 +162,7 @@ def attach_document_to_case(case_uuid: str, document: Document, nova_access: Nov
         requests.exceptions.HTTPError: If the request failed.
     """
     url = urllib.parse.urljoin(nova_access.domain, "api/Document/Import")
-    params = {"api-version": "1.0-Case"}
+    params = {"api-version": "2.0-Case"}
 
     payload = {
         "common": {
