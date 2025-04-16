@@ -84,8 +84,7 @@ def extract_cases(browser: webdriver.Chrome) -> list[Case]:
         name = row.find_element(By.XPATH, f"td[{headlines.index('Navn') + 1}]").text
         case_worker = row.find_element(By.XPATH, f"td[{headlines.index('Sagsbehandler') + 2}]").text  # eFlyt has an additional empty column before "Sagsbehandler"
 
-        case = Case(case_number, deadline, case_types, status, cpr, name, case_worker)
-        cases.append(case)
+        cases.append(Case(case_number, deadline, case_types, status, cpr, name, case_worker))
 
     return cases
 
