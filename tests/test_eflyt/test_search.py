@@ -24,22 +24,39 @@ class SearchTest(unittest.TestCase):
 
     def test_extract_cases(self):
         """Extract cases and check we found what we expected"""
-        eflyt_search.search(self.browser, date.today() - timedelta(days=2), date.today())
+        eflyt_search.search(self.browser, date.today() - timedelta(days=2), date.today(), case_state="Afsluttet", case_status="Godkendt")
         cases = eflyt_search.extract_cases(self.browser)
 
         self.assertGreater(len(cases), 0)
-        case = cases[0]
+        for case in cases:
+            self.assertIsInstance(case.case_number, str)
+            self.assertIsInstance(case.case_types, list)
+            self.assertIsInstance(case.deadline, (date, type(None)))
+            self.assertIsInstance(case.status, str)
+            self.assertIsInstance(case.cpr, str)
+            self.assertRegex(case.cpr, r"\d{6}-\d{4}")
+            self.assertIsInstance(case.name, str)
+            self.assertGreater(len(case.name), 0)
+            self.assertIsInstance(case.case_worker, str)
+            self.assertGreater(len(case.case_worker), 0)
 
-        self.assertIsInstance(case.case_number, str)
-        self.assertIsInstance(case.case_types, list)
-        self.assertIsInstance(case.deadline, (date, type(None)))
-        self.assertIsInstance(case.status, str)
-        self.assertIsInstance(case.cpr, str)
-        self.assertRegex(case.cpr, r"\d{6}-\d{4}")
-        self.assertIsInstance(case.name, str)
-        self.assertGreater(len(case.name), 0)
-        self.assertIsInstance(case.case_worker, str)
-        self.assertGreater(len(case.case_worker), 0)
+    def test_extract_cases_deadline(self):
+        """Extract cases and check we found what we expected"""
+        eflyt_search.search(self.browser, date.today() - timedelta(days=2), date.today(), case_status="Godkendt")
+        cases = eflyt_search.extract_cases(self.browser)
+
+        self.assertGreater(len(cases), 0)
+        for case in cases:
+            self.assertIsInstance(case.case_number, str)
+            self.assertIsInstance(case.case_types, list)
+            self.assertIsInstance(case.deadline, (date, type(None)))
+            self.assertIsInstance(case.status, str)
+            self.assertIsInstance(case.cpr, str)
+            self.assertRegex(case.cpr, r"\d{6}-\d{4}")
+            self.assertIsInstance(case.name, str)
+            self.assertGreater(len(case.name), 0)
+            self.assertIsInstance(case.case_worker, str)
+            self.assertGreater(len(case.case_worker), 0)
 
     def test_open_case(self):
         """Open a case and check the browser opened the case view"""
