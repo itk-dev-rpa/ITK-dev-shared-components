@@ -58,33 +58,33 @@ def extract_cases(browser: webdriver.Chrome) -> list[Case]:
     """
     table = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_GridViewSearchResult")
     rows = table.find_elements(By.TAG_NAME, "tr")
+    headlines = rows[0].text.split(" ")
+
     # Remove header row
     rows.pop(0)
     cases = []
     for row in rows:
-        deadline = row.find_element(By.XPATH, "td[3]/a").text
+        deadline = None
+        if "Deadline" in headlines:
+            deadline_text = row.find_element(By.XPATH, f"td[{headlines.index('Deadline') + 1}]/a").text
+            # Convert deadline to date object
+            if len(deadline_text) > 0:
+                deadline = datetime.strptime(deadline_text, "%d-%m-%Y")
 
-        # Convert deadline to date object
-        if deadline:
-            deadline = datetime.strptime(deadline, "%d-%m-%Y")
-        else:
-            deadline = None
-
-        case_number = row.find_element(By.XPATH, "td[4]").text
-        case_types_text = row.find_element(By.XPATH, "td[5]").text
+        case_number = row.find_element(By.XPATH, f"td[{headlines.index('Sagsnr.') + 1}]").text
+        case_types_text = row.find_element(By.XPATH, f"td[{headlines.index('Flyttetype') + 1}]").text
 
         # If the case types ends with '...' we need to get the title instead
         if case_types_text.endswith("..."):
-            case_types_text = row.find_element(By.XPATH, "td[5]").get_attribute("Title")
+            case_types_text = row.find_element(By.XPATH, f"td[{headlines.index('Flyttetype') + 1}]").get_attribute("Title")
         case_types = case_types_text.split(", ")
 
-        status = row.find_element(By.XPATH, "td[6]").text
-        cpr = row.find_element(By.XPATH, "td[7]/a").text
-        name = row.find_element(By.XPATH, "td[8]").text
-        case_worker = row.find_element(By.XPATH, "td[10]").text
+        status = row.find_element(By.XPATH, f"td[{headlines.index('Status') + 1}]").text
+        cpr = row.find_element(By.XPATH, f"td[{headlines.index('CPR-nr.') + 1}]/a").text
+        name = row.find_element(By.XPATH, f"td[{headlines.index('Navn') + 1}]").text
+        case_worker = row.find_element(By.XPATH, f"td[{headlines.index('Sagsbehandler') + 2}]").text  # eFlyt has an additional empty column before "Sagsbehandler"
 
-        case = Case(case_number, deadline, case_types, status, cpr, name, case_worker)
-        cases.append(case)
+        cases.append(Case(case_number, deadline, case_types, status, cpr, name, case_worker))
 
     return cases
 
