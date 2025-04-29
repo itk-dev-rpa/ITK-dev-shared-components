@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.11.1] - 2025-04-28
+
 ### Fixed
 
 - Eflyt case search now handles list of cases without a deadline
@@ -218,7 +220,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.11.0...HEAD
+[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.11.1...HEAD
+[2.11.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.11.1
 [2.11.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.11.0
 [2.10.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.10.0
 [2.9.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.9.0
