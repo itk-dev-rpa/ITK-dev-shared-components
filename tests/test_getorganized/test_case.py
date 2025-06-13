@@ -1,6 +1,7 @@
 import unittest
 import os
 import re
+import json
 from uuid import uuid4
 
 from dotenv import load_dotenv
@@ -32,11 +33,14 @@ class CaseTest(unittest.TestCase):
         test_data = bytearray(b"Testdata")
         document = go_api.upload_document(session=self.session, apiurl=os.getenv("GO_APIURL"), case=self.test_case, filename="Testfil", file=test_data)
         self.assertIsNotNone(document)
-        go_api.delete_document(session=self.session, apiurl=os.getenv("GO_APIURL"), document_id=document)
+        response = go_api.delete_document(session=self.session, apiurl=os.getenv("GO_APIURL"), document_id=json.loads(document)['DocId'])
+        self.assertEqual(response.status_code, 200)
 
     def test_find_case(self):
-        """Test finding a case."""
+        """Test finding a case and getting metadata."""
         metadata = go_api.case_metadata(self.session, os.getenv("GO_APIURL"), self.test_case)
+        self.assertIsNotNone(metadata)
+
         test_case_title = re.match('.*ows_Title="([^"]+)"', metadata)[1]
         case_found = go_api.find_case(session=self.session, apiurl=os.getenv("GO_APIURL"), case_title=test_case_title, case_type="EMN")
         if isinstance(case_found, list):

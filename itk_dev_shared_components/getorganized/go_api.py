@@ -67,10 +67,14 @@ def delete_document(apiurl: str, document_id: int, session: Session) -> tuple[st
     Returns:
         Return the response and session objects
     """
-    url = urljoin(apiurl, f"/_goapi/Documents/ByDocumentId/{document_id}")
-    response = session.delete(url, timeout=60)
+    url = urljoin(apiurl, "/_goapi/Documents/ByDocumentId/")
+    payload = {
+        "DocId": document_id,
+        "ForceDelete": True
+    }
+    response = session.delete(url, timeout=60, data=json.dumps(payload))
     response.raise_for_status()
-    return response.text
+    return response
 
 
 def create_case(session: Session, apiurl: str, title: str, case_type: str = Literal["EMN", "GEO"]) -> tuple[str, Session]:
