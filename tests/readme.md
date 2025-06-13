@@ -74,9 +74,14 @@ Note: The NOVA_CVR_CASE and NOVA_CPR_CASE variables require cases to be created 
 
 CVR_CREDS = 'login;password'
 
-### EFLYT
+### eFlyt
 
-EFLYT_LOGIN = 'username,password'
+EFLYT_LOGIN = 'login,password'
 TEST_CPR = 'XXXXXXXXXX'
 TEST_CASE = '123456' # A test case with multiple current inhabitants, with relations registered
 TEST_CASE_NOONE = '56789' # A test case without any current inhabitants
+
+### GetOrganized
+
+GO_LOGIN = 'login;password'
+GO_APIURL = 'https://test.go.aarhuskommune.dk'

@@ -25,7 +25,7 @@ def create_session(username: str, password: str) -> Session:
     return session
 
 
-def upload_document(*, apiurl: str, file: bytearray, case: str, filename: str, agent_name: str | None = None, date_string: str | None = None, session: Session, doc_category: str | None = None) -> tuple[str, Session]:
+def upload_document(*, apiurl: str, file: bytearray, case: str, filename: str, agent_name: str | None = None, date_string: str | None = None, session: Session, doc_category: str | None = None, case_type: str = Literal["EMN", "GEO"]) -> tuple[str, Session]:
     """Upload a document to Get Organized.
 
     Args:
@@ -44,7 +44,7 @@ def upload_document(*, apiurl: str, file: bytearray, case: str, filename: str, a
     payload = {
         "Bytes": list(file),
         "CaseId": case,
-        "SiteUrl": urljoin(apiurl, f"/cases/EMN/{case}"),
+        "SiteUrl": urljoin(apiurl, f"/case{case_type}/{case}"),
         "ListName": "Dokumenter",
         "FolderPath": agent_name,
         "FileName": filename,
@@ -53,7 +53,7 @@ def upload_document(*, apiurl: str, file: bytearray, case: str, filename: str, a
     }
     response = session.post(url, data=json.dumps(payload), timeout=60)
     response.raise_for_status()
-    return response.text, session
+    return response.text
 
 
 def delete_document(apiurl: str, document_id: int, session: Session) -> tuple[str, Session]:
@@ -67,13 +67,10 @@ def delete_document(apiurl: str, document_id: int, session: Session) -> tuple[st
     Returns:
         Return the response and session objects
     """
-    url = urljoin(apiurl, "/_goapi/Documents/ByDocumentId")
-    payload = {
-        "DocId": document_id
-    }
-    response = session.delete(url, data=json.dumps(payload), timeout=60)
+    url = urljoin(apiurl, f"/_goapi/Documents/ByDocumentId/{document_id}")
+    response = session.delete(url, timeout=60)
     response.raise_for_status()
-    return response.text, session
+    return response.text
 
 
 def create_case(session: Session, apiurl: str, title: str, case_type: str = Literal["EMN", "GEO"]) -> tuple[str, Session]:
@@ -95,7 +92,7 @@ def create_case(session: Session, apiurl: str, title: str, case_type: str = Lite
     }
     response = session.post(url, data=json.dumps(payload), timeout=60)
     response.raise_for_status()
-    return response.text, session
+    return response.json()["CaseID"]
 
 
 def case_metadata(session: Session, apiurl: str, case_id: str):
@@ -112,22 +109,40 @@ def case_metadata(session: Session, apiurl: str, case_id: str):
     url = urljoin(apiurl, f"/_goapi/Cases/Metadata/{case_id}")
     response = session.get(url, timeout=60)
     response.raise_for_status()
-    return response.text, session
+    return response.json()["Metadata"]
 
 
-def close_case(apiurl: str, case_number: str, session: Session) -> tuple[str, Session]:
-    """Close a case in GetOrganized.
+def find_case(session: Session, apiurl: str, case_title: str, case_type: str = Literal["EMN", "GEO"]) -> str | list[str] | None:
+    """Search for an existing case in GO with the given case title.
+    The search finds any case that contains the given title in its title.
 
     Args:
-        apiurl: Url for the GetOrganized API.
-        session: Session object to access API.
-        case_number: Case number of case to be closed.
+        case_title: The title to search for.
+        session: Session object to access the API.
 
     Returns:
-        Return the response and session objects.
+        The case id of the found case(s) if any.
     """
-    url = urljoin(apiurl, "/_goapi/Cases/CloseCase")
-    payload = {"CaseId": case_number}
-    response = session.post(url, data=payload, timeout=60)
+    url = apiurl + "/_goapi/Cases/FindByCaseProperties"
+    payload = {
+        "FieldProperties": [
+            {
+                "InternalName": "ows_Title",
+                "Value": case_title,
+                "ComparisonType": "Contains",
+            }
+        ],
+        "CaseTypePrefixes": [case_type],
+        "LogicalOperator": "AND",
+        "ExcludeDeletedCases": True
+    }
+    response = session.post(url, data=json.dumps(payload), timeout=60)
     response.raise_for_status()
-    return response.text, session
+    cases = response.json()['CasesInfo']
+
+    if len(cases) == 0:
+        return None
+    if len(cases) == 1:
+        return cases[0]['CaseID']
+    else:
+        return [case['CaseID'] for case in cases]
