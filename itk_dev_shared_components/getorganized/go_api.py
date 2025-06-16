@@ -148,5 +148,5 @@ def find_case(session: Session, apiurl: str, case_title: str, case_type: str = L
         return None
     if len(cases) == 1:
         return cases[0]['CaseID']
-    else:
-        return [case['CaseID'] for case in cases]
+
+    return [case['CaseID'] for case in cases]
