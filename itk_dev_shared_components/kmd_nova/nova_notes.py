@@ -28,7 +28,7 @@ def add_text_note(case_uuid: str, note_title: str, note_text: str, caseworker: C
     note_uuid = str(uuid.uuid4())
 
     url = urllib.parse.urljoin(nova_access.domain, "api/Case/Update")
-    params = {"api-version": "1.0-Case"}
+    params = {"api-version": "2.0-Case"}
 
     payload = {
         "common": {
@@ -103,7 +103,7 @@ def get_notes(case_uuid: str, nova_access: NovaAccess, offset: int = 0, limit: i
         A tuple of JournalNote objects.
     """
     url = urllib.parse.urljoin(nova_access.domain, "api/Case/GetList")
-    params = {"api-version": "1.0-Case"}
+    params = {"api-version": "2.0-Case"}
 
     payload = {
         "common": {

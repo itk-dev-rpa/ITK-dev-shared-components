@@ -121,12 +121,13 @@ def change_tab(browser: webdriver.Chrome, tab_index: int):
         tab_index: The zero-based index of the tab to select.
     """
     # Use the src of the tab image to determine if the tab needs to be changed
-    tab_image = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ImgJournalMap")
+    tab_image = browser.find_element(By.CSS_SELECTOR, "[id^='ctl00_ContentPlaceHolder2_ptFanePerson_ImgJournalMap']")
     image_src = tab_image.get_attribute("src")
     current_index = int(image_src[-5]) - 1
 
     if current_index != tab_index:
-        browser.execute_script(f"__doPostBack('ctl00$ContentPlaceHolder2$ptFanePerson$ImgJournalMap','{tab_index}')")
+        element_id = tab_image.get_attribute("id").replace("_", "$")
+        browser.execute_script(f"__doPostBack('{element_id}','{tab_index}')")
 
 
 def approve_case(browser: webdriver.Chrome):
