@@ -99,7 +99,7 @@ def create_case(session: Session, apiurl: str, title: str, case_type: str = Lite
     return response.json()["CaseID"]
 
 
-def case_metadata(session: Session, apiurl: str, case_id: str):
+def get_case_metadata(session: Session, apiurl: str, case_id: str):
     """Get metadata for a GetOrganized case, to look through parameters and values.
 
     Args:
