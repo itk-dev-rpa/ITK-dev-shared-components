@@ -11,6 +11,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - getorganized: Added functions and tests for using GetOrganized.
 
+## [2.11.1] - 2025-04-28
+
+### Fixed
+
+- Eflyt case search now handles list of cases without a deadline
+
+## [2.11.0] - 2025-03-24
+
+### Changed
+
+- Eflyt now using resilient browser for login to avoid stale elements
+
+## [2.10.0] - 2025-03-20
+
+### Changed
+
+- Switched KMD Nova case api from 1.0 to 2.0.
+
+### Fixed
+
+- Fixed eflyt tab changing
+
 ## [2.9.0] - 2025-02-19
 
 ### Added
@@ -202,7 +224,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.9.0...HEAD
+[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.11.1...HEAD
+[2.11.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.11.1
+[2.11.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.11.0
+[2.10.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.10.0
 [2.9.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.9.0
 [2.8.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.8.1
 [2.8.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.8.0

@@ -97,7 +97,7 @@ def _get_nova_cases(nova_access: NovaAccess, payload: dict) -> list[NovaCase]:
         requests.exceptions.HTTPError: If the request failed.
     """
     url = urllib.parse.urljoin(nova_access.domain, "api/Case/GetList")
-    params = {"api-version": "1.0-Case"}
+    params = {"api-version": "2.0-Case"}
 
     headers = {'Content-Type': 'application/json', 'Authorization': f"Bearer {nova_access.get_bearer_token()}"}
 
@@ -275,7 +275,7 @@ def add_case(case: NovaCase, nova_access: NovaAccess):
         requests.exceptions.HTTPError: If the request failed.
     """
     url = urllib.parse.urljoin(nova_access.domain, "api/Case/Import")
-    params = {"api-version": "1.0-Case"}
+    params = {"api-version": "2.0-Case"}
 
     payload = {
         "common": {
