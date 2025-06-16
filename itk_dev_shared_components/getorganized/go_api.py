@@ -12,7 +12,6 @@ def create_session(username: str, password: str) -> Session:
     """Create a session for accessing GetOrganized API.
 
     Args:
-        apiurl: URL for the API.
         username: Username for login.
         password: Password for login.
 
@@ -25,31 +24,31 @@ def create_session(username: str, password: str) -> Session:
     return session
 
 
-def upload_document(*, apiurl: str, file: bytearray, case: str, filename: str, agent_name: str | None = None, date_string: str | None = None, session: Session, doc_category: str | None = None, case_type: str = Literal["EMN", "GEO"]) -> tuple[str, Session]:
+def upload_document(*, apiurl: str, file: bytearray, case_id: str, filename: str, agent_name: str | None = None, date_string: str | None = None, session: Session, doc_category: str | None = None, case_type: str = Literal["EMN", "GEO"], overwrite: bool = True) -> tuple[str, Session]:
     """Upload a document to Get Organized.
 
     Args:
         apiurl: Base url for API.
         session: Session token for request.
         file: Bytearray of file to upload.
-        case: Case name already present in GO.
+        case_id: Case ID already present in GO.
         filename: Name of file when saved in GO.
         agent_name: Agent name, used for creating a folder in GO. Defaults to None.
         date_string: A date to add as metadata to GetOrganized. Defaults to None.
 
     Returns:
-        Return response text and session token.
+        Return response text.
     """
     url = apiurl + "/_goapi/Documents/AddToCase"
     payload = {
         "Bytes": list(file),
-        "CaseId": case,
-        "SiteUrl": urljoin(apiurl, f"/case{case_type}/{case}"),
+        "CaseId": case_id,
+        "SiteUrl": urljoin(apiurl, f"/case{case_type}/{case_id}"),
         "ListName": "Dokumenter",
         "FolderPath": agent_name,
         "FileName": filename,
         "Metadata": f"<z:row xmlns:z='#RowsetSchema' ows_Dato='{date_string}' ows_Kategori='{doc_category}'/>",
-        "Overwrite": True
+        "Overwrite": overwrite
     }
     response = session.post(url, data=json.dumps(payload), timeout=60)
     response.raise_for_status()
@@ -65,7 +64,7 @@ def delete_document(apiurl: str, document_id: int, session: Session) -> tuple[st
         document_id: ID of the document to delete.
 
     Returns:
-        Return the response and session objects
+        Return the response.
     """
     url = urljoin(apiurl, "/_goapi/Documents/ByDocumentId/")
     payload = {
@@ -77,7 +76,7 @@ def delete_document(apiurl: str, document_id: int, session: Session) -> tuple[st
     return response
 
 
-def create_case(session: Session, apiurl: str, title: str, case_type: str = Literal["EMN", "GEO"]) -> tuple[str, Session]:
+def create_case(session: Session, apiurl: str, title: str, category: str, department: str, kle: str, case_type: str = Literal["EMN", "GEO"]) -> str:
     """Create a case in GetOrganized.
 
     Args:
@@ -86,12 +85,17 @@ def create_case(session: Session, apiurl: str, title: str, case_type: str = Lite
         title: Title of the case being created.
 
     Returns:
-        Return the response and session objects.
+        Return the caseID of the created case.
     """
     url = urljoin(apiurl, "/_goapi/Cases/")
     payload = {
         'CaseTypePrefix': case_type,
-        'MetadataXml': f'<z:row xmlns:z="#RowsetSchema" ows_Title="{title}" ows_CaseStatus="Åben" ows_CaseCategory="Åben for alle" ows_Afdeling="916;#Backoffice - Drift og Økonomi" ows_KLENummer="318;#25.02.00 Ejendomsbeskatning i almindelighed"/>',
+        'MetadataXml': f'''<z:row xmlns:z="#RowsetSchema"
+                            ows_Title="{title}"
+                            ows_CaseStatus="Åben"
+                            ows_CaseCategory="{category}"
+                            ows_Afdeling="{department}"
+                            ows_KLENummer="{kle}"/>''',
         'ReturnWhenCaseFullyCreated': False
     }
     response = session.post(url, data=json.dumps(payload), timeout=60)
@@ -99,7 +103,7 @@ def create_case(session: Session, apiurl: str, title: str, case_type: str = Lite
     return response.json()["CaseID"]
 
 
-def get_case_metadata(session: Session, apiurl: str, case_id: str):
+def get_case_metadata(session: Session, apiurl: str, case_id: str) -> str:
     """Get metadata for a GetOrganized case, to look through parameters and values.
 
     Args:
@@ -108,7 +112,7 @@ def get_case_metadata(session: Session, apiurl: str, case_id: str):
         case_id: Case ID to get metadata on.
 
     Returns:
-        Return the response and session objects.
+        Return the metadata for the case as an XML string.
     """
     url = urljoin(apiurl, f"/_goapi/Cases/Metadata/{case_id}")
     response = session.get(url, timeout=60)
@@ -116,7 +120,7 @@ def get_case_metadata(session: Session, apiurl: str, case_id: str):
     return response.json()["Metadata"]
 
 
-def find_case(session: Session, apiurl: str, case_title: str, case_type: str = Literal["EMN", "GEO"]) -> str | list[str] | None:
+def find_case(session: Session, apiurl: str, case_title: str, case_type: str = Literal["EMN", "GEO"]) -> list[str]:
     """Search for an existing case in GO with the given case title.
     The search finds any case that contains the given title in its title.
 
@@ -143,10 +147,5 @@ def find_case(session: Session, apiurl: str, case_title: str, case_type: str = L
     response = session.post(url, data=json.dumps(payload), timeout=60)
     response.raise_for_status()
     cases = response.json()['CasesInfo']
-
-    if len(cases) == 0:
-        return None
-    if len(cases) == 1:
-        return cases[0]['CaseID']
 
     return [case['CaseID'] for case in cases]
