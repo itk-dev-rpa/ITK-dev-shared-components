@@ -1,3 +1,5 @@
+"""Tests related to the GetOrganized module."""
+
 import unittest
 import os
 import re
@@ -13,7 +15,7 @@ load_dotenv()
 
 class CaseTest(unittest.TestCase):
     """Test the Case functionality of GetOrganized integration"""
-    test_case = None    
+    test_case = None
 
     @classmethod
     def setUpClass(cls):
