@@ -27,9 +27,10 @@ class CaseTest(unittest.TestCase):
                                            apiurl=os.getenv("GO_APIURL"),
                                            title=uuid,
                                            case_type="EMN",
-                                           category="Åben for alle",
-                                           department="916;#Backoffice - Drift og Økonomi",
-                                           kle="318;#25.02.00 Ejendomsbeskatning i almindelighed")
+                                           category=os.getenv("GO_CATEGORY"),
+                                           department=os.getenv("GO_DEPARTMENT"),
+                                           kle=os.getenv("GO_KLE")
+                                           )
 
     def test_case_created(self):
         """Test case is created."""

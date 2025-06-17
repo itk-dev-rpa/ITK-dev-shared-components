@@ -85,3 +85,9 @@ TEST_CASE_NOONE = '56789' # A test case without any current inhabitants
 
 GO_LOGIN = 'login;password'
 GO_APIURL = 'https://test.go.aarhuskommune.dk'
+GO_CATEGORY="Åben for alle",
+GO_DEPARTMENT="916;#Backoffice - Drift og Økonomi",
+GO_KLE="318;#25.02.00 Ejendomsbeskatning i almindelighed"
+
+These GO-variables are found by fetching metadata for a case created in the GO interface with the correct setup for a specific process.
+Use get_case_metadata on a known case ID with the required setup, and use those when implementing GetOrganized.

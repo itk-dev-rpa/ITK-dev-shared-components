@@ -83,6 +83,9 @@ def create_case(session: Session, apiurl: str, title: str, category: str, depart
         apiurl: Url for the GetOrganized API.
         session: Session object to access API.
         title: Title of the case being created.
+        category: Case category to create the case for.
+        department: Department for the case.
+        kle: KLE number for the case (https://www.kle-online.dk/emneplan/00/)
 
     Returns:
         Return the caseID of the created case.
