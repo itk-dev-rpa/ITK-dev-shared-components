@@ -22,7 +22,8 @@ dependencies = [
   "requests == 2.*",
   "beautifulsoup4 == 4.*",
   "selenium == 4.*",
-  "uiautomation == 2.*"
+  "uiautomation == 2.*",
+  "requests_ntlm == 1.*"
 ]
 
 [project.urls]

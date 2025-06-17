@@ -74,9 +74,20 @@ Note: The NOVA_CVR_CASE and NOVA_CPR_CASE variables require cases to be created 
 
 CVR_CREDS = 'login;password'
 
-### EFLYT
+### eFlyt
 
-EFLYT_LOGIN = 'username,password'
+EFLYT_LOGIN = 'login,password'
 TEST_CPR = 'XXXXXXXXXX'
 TEST_CASE = '123456' # A test case with multiple current inhabitants, with relations registered
 TEST_CASE_NOONE = '56789' # A test case without any current inhabitants
+
+### GetOrganized
+
+GO_LOGIN = 'login;password'
+GO_APIURL = 'https://test.go.aarhuskommune.dk'
+GO_CATEGORY="Åben for alle",
+GO_DEPARTMENT="916;#Backoffice - Drift og Økonomi",
+GO_KLE="318;#25.02.00 Ejendomsbeskatning i almindelighed"
+
+These GO-variables are found by fetching metadata for a case created in the GO interface with the correct setup for a specific process.
+Use get_case_metadata on a known case ID with the required setup, and use those when implementing GetOrganized.
