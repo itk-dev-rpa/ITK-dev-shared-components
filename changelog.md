@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.12.0] - 2025-06-17
+
+### Added
+
+- getorganized: Added functions and tests for using GetOrganized.
+
 ## [2.11.1] - 2025-04-28
 
 ### Fixed
@@ -220,7 +226,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.11.1...HEAD
+[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.12.0...HEAD
+[2.12.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.12.0
 [2.11.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.11.1
 [2.11.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.11.0
 [2.10.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.10.0
