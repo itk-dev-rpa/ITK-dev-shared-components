@@ -10,7 +10,7 @@ def open_forretningspartner(session, fp: str) -> None:
         fp: The forretningspartner number.
 
     Raises:
-        ValueError: If the forretningspartner wasn't found.
+        LookupError: If the forretningspartner wasn't found.
     """
     session.StartTransaction('fmcacov')
 
@@ -18,10 +18,18 @@ def open_forretningspartner(session, fp: str) -> None:
     session.findById("wnd[0]/usr/ctxtGPART_DYN").text = fp
     session.findById("wnd[0]").sendVKey(0)
 
-    # Detect window "Forretningspartner * Entries"
-    if session.findById('wnd[1]/usr', False) is not None:
-        # Pop-up detected
-        for row_id in range(3, 5):
+    # Detect popup
+    popup = session.findById('wnd[1]', False)
+
+    # Inactive FP popup
+    if popup and popup.Text == "BP inactive":
+        # Click 'OK'
+        session.FindById("wnd[1]/tbar[0]/btn[25]").press()
+
+    # "Forretningspartner 2 Entries" popup
+    elif popup and popup.Text == 'Forretningspartner 2 Entries':
+        # Look for matching fp number
+        for row_id in (3, 4):
             fp_row = session.FindById(f'wnd[1]/usr/lbl[103,{row_id}]')
             if fp_row.text == fp:
                 fp_row.SetFocus()
@@ -29,8 +37,7 @@ def open_forretningspartner(session, fp: str) -> None:
                 session.FindById('wnd[1]/tbar[0]/btn[0]').press()
                 break
         else:
-            # Range exhausted
-            raise ValueError(f"Forretningspartner '{fp}' was not found in pop-up.")
+            raise LookupError(f"Forretningspartner '{fp}' was not found in pop-up.")
 
 
 def dismiss_key_popup(session, fp: str = "25564617") -> None:
