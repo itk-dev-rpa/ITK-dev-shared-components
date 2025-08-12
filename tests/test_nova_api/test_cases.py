@@ -86,23 +86,9 @@ class NovaCasesTest(unittest.TestCase):
         """Test adding a case to Nova.
         Also tests getting a case on uuid.
         """
-        nova_party = os.getenv('NOVA_PARTY').split(',')
-        party = CaseParty(
-            role="Primær",
-            identification_type="CprNummer",
-            identification=nova_party[0],
-            name=nova_party[1]
-        )
-
-        caseworker_dict = json.loads(os.environ['NOVA_USER'])
-        caseworker = Caseworker(
-            **caseworker_dict
-        )
-
-        department_dict = json.loads(os.environ['NOVA_DEPARTMENT'])
-        department = Department(
-            **department_dict
-        )
+        party = _get_test_party()
+        caseworker = _get_test_caseworker()
+        department = _get_test_department()
 
         case = NovaCase(
             uuid=str(uuid.uuid4()),
@@ -119,16 +105,7 @@ class NovaCasesTest(unittest.TestCase):
         )
 
         nova_cases.add_case(case, self.nova_access)
-
-        # Wait up to 10 seconds for the case to be created in Nova
-        nova_case = None
-        for _ in range(10):
-            time.sleep(1)
-            try:
-                nova_case = nova_cases.get_case(case.uuid, self.nova_access)
-                break
-            except ValueError:
-                pass
+        nova_case = _get_case(case.uuid, self.nova_access)
 
         self.assertIsNotNone(nova_case)
 
@@ -164,18 +141,8 @@ class NovaCasesTest(unittest.TestCase):
         self.assertEqual(nova_case.caseworker, caseworker)
 
         # Add case
-        nova_party = os.getenv('NOVA_PARTY').split(',')
-        party = CaseParty(
-            role="Primær",
-            identification_type="CprNummer",
-            identification=nova_party[0],
-            name=nova_party[1]
-        )
-
-        department_dict = json.loads(os.environ['NOVA_DEPARTMENT'])
-        department = Department(
-            **department_dict
-        )
+        party = _get_test_party()
+        department = _get_test_department()
 
         case = NovaCase(
             uuid=str(uuid.uuid4()),
@@ -192,6 +159,94 @@ class NovaCasesTest(unittest.TestCase):
         )
 
         nova_cases.add_case(case, self.nova_access)
+
+    def test_set_case_state(self):
+        """Test setting the state of an existing case."""
+        party = _get_test_party()
+        caseworker = _get_test_caseworker()
+        department = _get_test_department()
+
+        case = NovaCase(
+            uuid=str(uuid.uuid4()),
+            title=f"Test {datetime.now()}",
+            case_date=datetime.now(),
+            progress_state="Opstaaet",
+            case_parties=[party],
+            kle_number="23.05.01",
+            proceeding_facet="G01",
+            sensitivity="Fortrolige",
+            caseworker=caseworker,
+            responsible_department=department,
+            security_unit=department
+        )
+
+        nova_cases.add_case(case, self.nova_access)
+
+        nova_case = _get_case(case.uuid, self.nova_access)
+        self.assertEqual(nova_case.progress_state, "Opstaaet")
+
+        nova_cases.set_case_state(case.uuid, "Afsluttet", self.nova_access)
+        nova_case = _get_case(case.uuid, self.nova_access)
+        self.assertEqual(nova_case.progress_state, "Afsluttet")
+
+
+
+def _get_case(case_uuid: str, nova_access: NovaAccess) -> NovaCase | None:
+    """Get a case by the given uuid. Retry for up to 10 seconds until the case appears.
+
+    Args:
+        case_uuid: The uuid of the case to get.
+        nova_access: The NovaAccess object used to authenticate.
+
+    Returns:
+        The case with the given uuid if it exists.
+    """
+    for _ in range(10):
+        time.sleep(1)
+        try:
+            return nova_cases.get_case(case_uuid, nova_access)
+        except ValueError:
+            pass
+    return None
+
+
+def _get_test_party() -> CaseParty:
+    """Get the case party used for tests defined in NOVA_PARTY envvar.
+
+    Returns:
+        A CaseParty object based on the NOVA_PARTY envvar.
+    """
+    nova_party = os.getenv('NOVA_PARTY').split(',')
+    return CaseParty(
+        role="Primær",
+        identification_type="CprNummer",
+        identification=nova_party[0],
+        name=nova_party[1]
+    )
+
+
+def _get_test_caseworker() -> Caseworker:
+    """Get the caseworker used for tests defined in the NOVA_USER envvar.
+
+    Returns:
+        A Caseworker object based on the NOVA_USER envvar.
+    """
+    caseworker_dict = json.loads(os.environ['NOVA_USER'])
+    return Caseworker(
+        **caseworker_dict
+    )
+
+
+def _get_test_department() -> Department:
+    """Get the department used for tests defined in the NOVA_DEPARTMENT envvar.
+
+    Returns:
+        A Department object based on the NOVA_DEPARTMENT envvar.
+    """
+    department_dict = json.loads(os.environ['NOVA_DEPARTMENT'])
+    return Department(
+        **department_dict
+    )
 
 
 if __name__ == '__main__':
