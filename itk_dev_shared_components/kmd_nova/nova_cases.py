@@ -3,6 +3,7 @@ to the KMD Nova api."""
 
 import uuid
 import urllib.parse
+from typing import Literal
 
 import requests
 
@@ -347,4 +348,29 @@ def add_case(case: NovaCase, nova_access: NovaAccess):
     headers = {'Content-Type': 'application/json', 'Authorization': f"Bearer {nova_access.get_bearer_token()}"}
 
     response = requests.post(url, params=params, headers=headers, json=payload, timeout=60)
+    response.raise_for_status()
+
+
+def set_case_state(case_uuid: str, new_state: Literal["Opstaaet", "Oplyst", "Afgjort", "Bestilt", "Udfoert", "Afsluttet"], nova_access: NovaAccess):
+    """Set the state of an existing case.
+
+    Args:
+        case_uuid: The uuid of the case.
+        new_state: The new state of the case.
+        nova_access: The NovaAccess object used to authenticate.
+    """
+    url = urllib.parse.urljoin(nova_access.domain, "api/Case/Update")
+    params = {"api-version": "2.0-Case"}
+
+    headers = {'Content-Type': 'application/json', 'Authorization': f"Bearer {nova_access.get_bearer_token()}"}
+
+    payload = {
+        "common": {
+            "transactionId": str(uuid.uuid4()),
+            "uuid": case_uuid
+        },
+        "state": new_state
+    }
+
+    response = requests.patch(url, params=params, headers=headers, json=payload, timeout=60)
     response.raise_for_status()
