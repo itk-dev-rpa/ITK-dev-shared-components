@@ -190,7 +190,6 @@ class NovaCasesTest(unittest.TestCase):
         self.assertEqual(nova_case.progress_state, "Afsluttet")
 
 
-
 def _get_case(case_uuid: str, nova_access: NovaAccess) -> NovaCase | None:
     """Get a case by the given uuid. Retry for up to 10 seconds until the case appears.
 
