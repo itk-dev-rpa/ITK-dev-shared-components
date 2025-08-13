@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.13.0] - 2025-08-13
+
 ### Added
 
 - Nova: Function to set the state of an existing case.
@@ -236,7 +238,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.12.1...HEAD
+[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.13.0...HEAD
+[2.13.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.13.0
 [2.12.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.12.1
 [2.12.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.12.0
 [2.11.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.11.1
