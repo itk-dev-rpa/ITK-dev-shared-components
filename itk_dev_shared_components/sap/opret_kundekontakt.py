@@ -82,7 +82,7 @@ def _select_multiple_aftaler(session, aftaler: list[str]):
         session: The sap session object.
         aftaler: The list of aftaler.
     """
-        # Click 'Opret kundekontakt-flere
+    # Click 'Opret kundekontakt-flere
     session.findById("wnd[0]/shellcont/shell").nodeContextMenu("GP0000000001")
     session.findById("wnd[0]/shellcont/shell").selectContextMenuItem("FLERE")
 
