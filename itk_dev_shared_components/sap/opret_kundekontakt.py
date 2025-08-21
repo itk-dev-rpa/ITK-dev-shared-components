@@ -26,7 +26,63 @@ def opret_kundekontakter(session, fp: str, aftaler: list[str] | None,
     """
     fmcacov.open_forretningspartner(session, fp)
 
-    # Click 'Opret kundekontakt-flere
+    if not aftaler:
+        _select_no_aftaler(session)
+    elif len(aftaler) == 1:
+        _select_single_aftale(session, aftaler[0])
+    else:
+        _select_multiple_aftaler(session, aftaler)
+
+    # Set art
+    session.findById("wnd[0]/usr/tabsTSTRIP/tabpT_CA/ssubSUBSR_TSTRIP:SAPLBPT1:0510/cmbBCONTD-CTYPE").Value = art
+
+    # Go to editor and paste (lock if multithreaded)
+    session.findById("wnd[0]/usr/subNOTICE:SAPLEENO:1002/btnEENO_TEXTE-EDITOR").press()
+    if lock:
+        lock.acquire()
+    _set_clipboard(notat)
+    session.findById("wnd[0]/tbar[1]/btn[9]").press()
+    if lock:
+        lock.release()
+
+    # Back and save
+    session.findById("wnd[0]/tbar[0]/btn[3]").press()
+    session.findById("wnd[0]/tbar[0]/btn[11]").press()
+
+    _confirm_kundekontakt(session, notat, art)
+
+
+def _select_no_aftaler(session):
+    """Right click the fp and select 'Opret kundekontakt'.
+
+    Args:
+        session: The sap session object.
+    """
+    session.findById("wnd[0]/shellcont/shell").nodeContextMenu("GP0000000001")
+    session.findById("wnd[0]/shellcont/shell").selectContextMenuItem("POPUP")
+
+
+def _select_single_aftale(session, aftale: str):
+    """Right click a single aftale and select 'Opret kundekontakt'.
+
+    Args:
+        session: The sap session object.
+        aftale: The aftale number.
+    """
+    tree = session.findById("wnd[0]/shellcont/shell")
+    node_key = tree_util.get_node_key_by_text(tree, aftale)
+    tree.nodeContextMenu(node_key)
+    tree.selectContextMenuItem("POPUP")
+
+
+def _select_multiple_aftaler(session, aftaler: list[str]):
+    """Use 'Opret kundekontakt-flere' to select multiple aftaler.
+
+    Args:
+        session: The sap session object.
+        aftaler: The list of aftaler.
+    """
+        # Click 'Opret kundekontakt-flere
     session.findById("wnd[0]/shellcont/shell").nodeContextMenu("GP0000000001")
     session.findById("wnd[0]/shellcont/shell").selectContextMenuItem("FLERE")
 
@@ -48,24 +104,6 @@ def opret_kundekontakter(session, fp: str, aftaler: list[str] | None,
             key, name = tree_util.get_item_by_text(aftale_tree, aftale, True)
             aftale_tree.ChangeCheckBox(key, name, True)
     session.findById("wnd[1]/usr/cntlCONTAINER_PSOBKEY/shellcont/shell/shellcont[1]/shell[0]").pressButton("OK")
-
-    # Set art
-    session.findById("wnd[0]/usr/tabsTSTRIP/tabpT_CA/ssubSUBSR_TSTRIP:SAPLBPT1:0510/cmbBCONTD-CTYPE").Value = art
-
-    # Go to editor and paste (lock if multithreaded)
-    session.findById("wnd[0]/usr/subNOTICE:SAPLEENO:1002/btnEENO_TEXTE-EDITOR").press()
-    if lock:
-        lock.acquire()
-    _set_clipboard(notat)
-    session.findById("wnd[0]/tbar[1]/btn[9]").press()
-    if lock:
-        lock.release()
-
-    # Back and save
-    session.findById("wnd[0]/tbar[0]/btn[3]").press()
-    session.findById("wnd[0]/tbar[0]/btn[11]").press()
-
-    _confirm_kundekontakt(session, notat, art)
 
 
 def _set_clipboard(text: str) -> None:
