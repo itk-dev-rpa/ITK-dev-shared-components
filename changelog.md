@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- SAP: Changed how kundekontakter are created with 0 or 1 aftaler.
+
 ## [2.13.0] - 2025-08-13
 
 ### Added
