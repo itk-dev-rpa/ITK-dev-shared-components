@@ -11,7 +11,7 @@ from itk_dev_shared_components.eflyt import eflyt_case
 
 
 def send_letter_to_anmelder(browser: webdriver.Chrome, letter_text: str) -> bool:
-    """Open the 'Breve' tab and send a letter to the anmelder.
+    """Open the 'Breve' tab and send a letter to the anmelder using the 'Individuelt brev'-template.
 
     Args:
         browser: The webdriver browser object.
