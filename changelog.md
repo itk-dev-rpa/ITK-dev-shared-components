@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- SAP: Changed how kundekontakter are created with 0 or 1 aftaler.
+
 ### Added
 
 - Eflyt: Added functions for sending letters.
