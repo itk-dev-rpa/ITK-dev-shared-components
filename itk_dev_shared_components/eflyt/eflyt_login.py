@@ -1,4 +1,4 @@
-"""Module for logging into Eflyt/Daedalus/Whatchamacallit using Selenium"""
+"""Module for logging into Eflyt using Selenium"""
 import time
 
 from selenium import webdriver

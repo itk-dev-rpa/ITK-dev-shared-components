@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.14.0] - 2025-08-22
+
+### Changed
+
+- SAP: Changed how kundekontakter are created with 0 or 1 aftaler.
+
+### Added
+
+- Eflyt: Added functions for sending letters.
+
 ## [2.13.0] - 2025-08-13
 
 ### Added
@@ -238,7 +248,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.13.0...HEAD
+[Unreleased]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/compare/2.14.0...HEAD
+[2.14.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.14.0
 [2.13.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.13.0
 [2.12.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.12.1
 [2.12.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.12.0
