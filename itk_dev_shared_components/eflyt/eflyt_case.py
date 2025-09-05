@@ -144,9 +144,9 @@ def approve_case(browser: webdriver.Chrome):
     browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_btnGodkend").click()
     browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_btnApproveYes").click()
 
-    approve_persons_button = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_btnGodkendAlle")
-    if approve_persons_button.is_enabled():
-        approve_persons_button.click()
+    approve_persons_button = browser.find_elements(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_btnGodkendAlle")
+    if any(approve_persons_button) and approve_persons_button[0].is_enabled():
+        approve_persons_button[0].click()
     else:
         # Approve each person individually
         person_count = len(browser.find_elements(By.XPATH, '//table[@id="ctl00_ContentPlaceHolder2_GridViewMovingPersons"]//tr')) - 1
