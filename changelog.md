@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- In case the "Godkend Alle" button does not exist, the robot will now correctly progress.
+
 ## [2.14.0] - 2025-08-22
 
 ### Changed
