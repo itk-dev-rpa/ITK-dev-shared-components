@@ -1,6 +1,13 @@
 """This module contains functions to help with actions in the fmcacov transaction."""
 
 
+class InvalidFPError(LookupError):
+    """A subclass of LookupError
+    which indicates that an invalid FP number
+    has been entered.
+    """
+
+
 def open_forretningspartner(session, fp: str) -> None:
     """Start the transaction FMCACOV and open the given forretningspartner.
     If the fp-number also matches a cvr-number the fp-number will be opened.
@@ -10,6 +17,7 @@ def open_forretningspartner(session, fp: str) -> None:
         fp: The forretningspartner number.
 
     Raises:
+        InvalidFPError: If the forretningpartner doesn't exist in the system.
         LookupError: If the forretningspartner wasn't found.
     """
     session.StartTransaction('fmcacov')
@@ -21,7 +29,7 @@ def open_forretningspartner(session, fp: str) -> None:
     # Check for lookup error
     status_bar = session.findbyid("wnd[0]/sbar")
     if status_bar.MessageType == 'E':
-        raise LookupError(status_bar.text)
+        raise InvalidFPError(status_bar.text)
 
     # Detect popup
     popup = session.findById('wnd[1]', False)
