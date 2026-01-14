@@ -18,6 +18,11 @@ def open_forretningspartner(session, fp: str) -> None:
     session.findById("wnd[0]/usr/ctxtGPART_DYN").text = fp
     session.findById("wnd[0]").sendVKey(0)
 
+    # Check for lookup error
+    status_bar = session.findbyid("wnd[0]/sbar")
+    if status_bar.MessageType == 'E':
+        raise LookupError(status_bar.text)
+
     # Detect popup
     popup = session.findById('wnd[1]', False)
 

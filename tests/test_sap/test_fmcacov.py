@@ -17,10 +17,10 @@ class TestFmcacov(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Launch SAP and get the main session."""
-        sap_login.kill_sap()
+        # sap_login.kill_sap()
 
-        user, password = os.environ['SAP_LOGIN'].split(';')
-        sap_login.login_using_cli(user, password)
+        # user, password = os.environ['SAP_LOGIN'].split(';')
+        # sap_login.login_using_cli(user, password)
 
         cls.session = multi_session.get_all_sap_sessions()[0]
 
@@ -43,6 +43,15 @@ class TestFmcacov(unittest.TestCase):
 
         # Go back to home screen.
         self.session.findById("wnd[0]/tbar[0]/btn[12]").press()
+
+    def test_lookup_error(self):
+        """Test that an invalid fp number raises a LookupError."""
+        with self.assertRaises(LookupError):
+            fmcacov.open_forretningspartner(self.session, "12345678")
+
+        # Go back to home screen.
+        self.session.findById("wnd[0]/tbar[0]/btn[12]").press()
+
 
     def test_dismiss_key_popup(self):
         """Try to find 'afstemningsnøgle'-popup and dismiss it.
