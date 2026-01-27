@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.15.0] - 2026-01-27
+
+### Changed
+
+- SAP.fmcacov now raises an error when an FP doesn't exist in the system.
+
 ## [2.14.1] - 2025-09-05
 
 ### Fixed

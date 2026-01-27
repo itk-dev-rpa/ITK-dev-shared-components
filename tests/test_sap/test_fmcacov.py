@@ -44,6 +44,14 @@ class TestFmcacov(unittest.TestCase):
         # Go back to home screen.
         self.session.findById("wnd[0]/tbar[0]/btn[12]").press()
 
+    def test_lookup_error(self):
+        """Test that an invalid fp number raises a LookupError."""
+        with self.assertRaises(fmcacov.InvalidFPError):
+            fmcacov.open_forretningspartner(self.session, "12345678")
+
+        # Go back to home screen.
+        self.session.findById("wnd[0]/tbar[0]/btn[12]").press()
+
     def test_dismiss_key_popup(self):
         """Try to find 'afstemningsnøgle'-popup and dismiss it.
         The popup only appears once a day after midnight.
