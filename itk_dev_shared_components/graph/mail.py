@@ -65,7 +65,7 @@ def get_emails_from_folder(user: str, folder_path: str, graph_access: GraphAcces
     Returns:
         tuple[Email]: The emails from the given folder.
     """
-    if not (0 < limit <= 1000):
+    if not 0 < limit <= 1000:
         raise ValueError("Limit must be between 1 and 1000.")
 
     folder_id = get_folder_id_from_path(user, folder_path, graph_access)
