@@ -7,6 +7,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException
 
 
+# pylint: disable=inherit-non-class, missing-function-docstring, too-few-public-methods
 class ResilientBrowser(webdriver.Chrome):
     """A webdriver.Chrome subclass that retries find_element if the element goes stale."""
     def find_element(self, by=By.ID, value = None) -> WebElement:
