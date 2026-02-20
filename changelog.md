@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Graph get emails now has a limit argument.
+
 ## [2.15.0] - 2026-01-27
 
 ### Changed
