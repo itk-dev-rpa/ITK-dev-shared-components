@@ -142,5 +142,5 @@ def _confirm_kundekontakt(session, notat: str, art: str):
 
         time.sleep(i+1)
         session.findById("wnd[0]/tbar[1]/btn[7]").press()  # Refresh page
-    else:
-        raise RuntimeError("The kundekontakt wasn't found in the kontakt-table after creation.")
+
+    raise RuntimeError("The kundekontakt wasn't found in the kontakt-table after creation.")
