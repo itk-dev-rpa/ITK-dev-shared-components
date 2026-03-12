@@ -51,7 +51,7 @@ class Attachment:
     size: int
 
 
-def get_emails_from_folder(user: str, folder_path: str, graph_access: GraphAccess) -> tuple[Email]:
+def get_emails_from_folder(user: str, folder_path: str, graph_access: GraphAccess, limit: int = 100) -> tuple[Email]:
     """Get all emails from the specified user and folder.
     You need to authorize against Graph to get the GraphAccess before using this function
     see the graph.authentication module.
@@ -60,13 +60,17 @@ def get_emails_from_folder(user: str, folder_path: str, graph_access: GraphAcces
         user: The user who owns the folder.
         folder_path: The absolute path of the folder e.g. 'Inbox/Economy/May'
         graph_access: The GraphAccess object used to authenticate.
+        limit: The maximum number of mails to fetch. Max 1000.
 
     Returns:
         tuple[Email]: The emails from the given folder.
     """
+    if not 0 < limit <= 1000:
+        raise ValueError("Limit must be between 1 and 1000.")
+
     folder_id = get_folder_id_from_path(user, folder_path, graph_access)
 
-    endpoint = f"https://graph.microsoft.com/v1.0/users/{user}/mailFolders/{folder_id}/messages?$top=1000"
+    endpoint = f"https://graph.microsoft.com/v1.0/users/{user}/mailFolders/{folder_id}/messages?$top={limit}"
 
     response = get_request(endpoint, graph_access)
     emails_raw = response.json()['value']
