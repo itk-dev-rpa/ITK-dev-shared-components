@@ -12,7 +12,7 @@ from itk_dev_shared_components.sap import tree_util, fmcacov
 
 def opret_kundekontakter(session, fp: str, aftaler: list[str] | None,
                          art: Literal[' ', 'Automatisk', 'Fakturagrundlag', 'Fuldmagt ifm. værge', 'Konverteret', 'Myndighedshenvend.', 'Orientering', 'Returpost', 'Ringeaktivitet', 'Skriftlig henvend.', 'Telefonisk henvend.'],
-                         notat: str, lock: threading.Lock = None) -> None:
+                         notat: str, lock: threading.Lock = None, check_kundekontakt: bool = False) -> None:
     """Creates a kundekontakt on the given FP and aftaler.
 
     Args:
@@ -51,7 +51,8 @@ def opret_kundekontakter(session, fp: str, aftaler: list[str] | None,
     session.findById("wnd[0]/tbar[0]/btn[3]").press()
     session.findById("wnd[0]/tbar[0]/btn[11]").press()
 
-    _confirm_kundekontakt(session, notat, art)
+    if check_kundekontakt:
+        _confirm_kundekontakt(session, notat, art)
 
 
 def _select_no_aftaler(session):
