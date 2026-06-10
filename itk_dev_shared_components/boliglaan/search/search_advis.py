@@ -36,7 +36,7 @@ class Advis:
     state: str
 
 
-def search_advis(cpr: str | None = None, date_from: date | None = None, date_to: date | None = None, types: list[AdvisType] = ['All']):
+def search_advis(cpr: str | None = None, date_from: date | None = None, date_to: date | None = None, types: tuple[AdvisType] = ('All',)):
     """Search for advis.
 
     Args:
@@ -70,8 +70,8 @@ def search_advis(cpr: str | None = None, date_from: date | None = None, date_to:
     else:
         popup.CheckBoxControl(Name='Vælg alle').GetTogglePattern().SetToggleState(0)
 
-        for type in types:
-            popup.CheckBoxControl(Name=type).GetTogglePattern().SetToggleState(1, waitTime=0)
+        for type_ in types:
+            popup.CheckBoxControl(Name=type_).GetTogglePattern().SetToggleState(1, waitTime=0)
 
     popup.ButtonControl(Name="Søg").GetInvokePattern().Invoke()
 
