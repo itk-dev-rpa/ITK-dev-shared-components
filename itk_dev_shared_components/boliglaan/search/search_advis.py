@@ -12,7 +12,6 @@ from itk_dev_shared_components.boliglaan import common
 
 
 AdvisType = Literal[
-    'All',
     'Eget oprettet advis',
     'Indbetaling mangler på lånet i KMD Boliglån',
     'Lånet er ikke pålignet',
@@ -36,14 +35,14 @@ class Advis:
     state: str
 
 
-def search_advis(cpr: str | None = None, date_from: date | None = None, date_to: date | None = None, types: tuple[AdvisType] = ('All',)):
+def search_advis(cpr: str | None = None, date_from: date | None = None, date_to: date | None = None, types: tuple[AdvisType] | None = None):
     """Search for advis.
 
     Args:
-        cpr: The cpr to look for. Defaults to None.
-        date_from: The date to search from. Defaults to None.
-        date_to: The date to search to. Defaults to None.
-        types: The types of advis to search for. Defaults to ['Vælg alle'].
+        cpr: The cpr to look for.
+        date_from: The date to search from.
+        date_to: The date to search to.
+        types: The types of advis to search for. If None all types are chosen.
 
     Raises:
         ValueError: If 'All' is not alone in the types list.
@@ -62,10 +61,7 @@ def search_advis(cpr: str | None = None, date_from: date | None = None, date_to:
     if date_to:
         popup.TextControl(Name="Dato til:").GetNextSiblingControl().GetValuePattern().SetValue(date_to.strftime("%d-%m-%Y"))
 
-    if 'All' in types and len(types) != 1:
-        raise ValueError("Can't have more than one type when 'All' is chosen")
-
-    if 'All' in types:
+    if types is None:
         popup.CheckBoxControl(Name='Vælg alle').GetTogglePattern().SetToggleState(1)
     else:
         popup.CheckBoxControl(Name='Vælg alle').GetTogglePattern().SetToggleState(0)
