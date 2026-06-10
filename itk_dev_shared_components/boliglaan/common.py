@@ -71,3 +71,10 @@ def wait_for_case_load(cpr: str, case_number: str, timeout: int = 15):
         raise LookupError(f"Case number wasn't found: {case_number}")
 
     print(f"Case loaded {cpr}, {case_number}")
+
+
+def save_case():
+    """Save the case by clicking 'Gem/Dan brev...'."""
+    boliglaan = get_boliglaan()
+    toolbar = boliglaan.GroupControl(Name="None BarContainerControl", searchDepth=1)
+    toolbar.ButtonControl(Name="Gem/Dan brev...").GetInvokePattern().Invoke()
