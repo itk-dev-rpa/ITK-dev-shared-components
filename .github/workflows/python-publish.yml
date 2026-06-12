@@ -1,10 +1,11 @@
-# This workflow will upload a Python Package using Twine when a release is created
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#publishing-to-package-registries
-
+# Publishes a single package to PyPI when a GitHub release is created.
+#
+# The package to publish is derived from the release tag, which must follow the
+# format "<package-name>-v<version>", e.g.:
+#   itkdev-sap-v1.2.3                  -> packages/itkdev-sap
+#   itk-dev-shared-components-v3.0.0   -> meta/itk-dev-shared-components
+#
 # This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
 
 name: Upload Python Package
 
@@ -19,18 +20,33 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+    - name: Determine package directory from tag
+      id: pkg
+      shell: bash
+      run: |
+        TAG="${{ github.event.release.tag_name }}"
+        NAME="${TAG%-v*}"
+        if [ -d "packages/$NAME" ]; then
+          echo "dir=packages/$NAME" >> "$GITHUB_OUTPUT"
+        elif [ -d "meta/$NAME" ]; then
+          echo "dir=meta/$NAME" >> "$GITHUB_OUTPUT"
+        else
+          echo "::error::No package directory found for tag '$TAG' (derived name '$NAME'). Expected tag format '<package>-v<version>'."
+          exit 1
+        fi
     - name: Set up Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v5
       with:
         python-version: '3.x'
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install build
     - name: Build package
-      run: python -m build
+      # Output into the workspace-root dist/ so the publish step finds it by default.
+      run: |
+        python -m pip install --upgrade pip build
+        python -m build "${{ steps.pkg.outputs.dir }}" --outdir dist
     - name: Publish package
+      # NOTE: PYPI_API_TOKEN must be an account-scoped token so it can publish any
+      # of the itkdev-* projects. Consider migrating to Trusted Publishing (OIDC).
       uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
       with:
         user: __token__

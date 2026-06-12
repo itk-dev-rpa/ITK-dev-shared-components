@@ -1,0 +1,3 @@
+2026-05-04 12:28:52.431 file_util.py[46] handle_save_dialog -> Find Control Timeout(10s): {AutomationId: '1001', ControlType: EditControl}
+2026-05-04 14:26:18.546 file_util.py[46] handle_save_dialog -> Find Control Timeout(10s): {AutomationId: '1001', ControlType: EditControl}
+2026-05-04 14:56:49.988 file_util.py[46] handle_save_dialog -> Find Control Timeout(10s): {AutomationId: '1001', ControlType: EditControl}

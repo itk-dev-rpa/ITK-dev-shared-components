@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=65.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "itkdev-sap"
+version = "1.0.0"
+authors = [
+  { name="ITK Development", email="itk-rpa@mkb.aarhus.dk" },
+]
+description = "SAP GUI automation helpers for RPA projects (itkdev.sap)."
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+]
+dependencies = [
+  "pywin32 >= 306",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/itk-dev-rpa/itk-dev-shared-components"
+"Bug Tracker" = "https://github.com/itk-dev-rpa/itk-dev-shared-components/issues"
+
+[project.optional-dependencies]
+dev = [
+  "python-dotenv",
+  "flake8",
+  "pylint"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = true

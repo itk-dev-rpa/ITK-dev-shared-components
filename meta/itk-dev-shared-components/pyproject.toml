@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=65.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "itk-dev-shared-components"
+version = "3.0.0"
+authors = [
+  { name="ITK Development", email="itk-rpa@mkb.aarhus.dk" },
+]
+description = "Backwards-compatibility meta package. Pulls in all itkdev-* packages and redirects old imports."
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+]
+dependencies = [
+  "itkdev-sap == 1.*",
+  "itkdev-graph == 1.*",
+  "itkdev-kmdnova == 1.*",
+  "itkdev-eflyt == 1.*",
+  "itkdev-misc == 1.*",
+  "itkdev-smtp == 1.*",
+  "itkdev-getorganized == 1.*",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/itk-dev-rpa/itk-dev-shared-components"
+"Bug Tracker" = "https://github.com/itk-dev-rpa/itk-dev-shared-components/issues"
+
+[project.optional-dependencies]
+dev = [
+  "python-dotenv",
+  "flake8",
+  "pylint"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

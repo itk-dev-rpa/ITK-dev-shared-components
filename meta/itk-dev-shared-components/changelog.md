@@ -1,0 +1,325 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [3.0.0]
+
+### Changed
+
+- **Breaking (internal):** The library has been split into individual, separately
+  installable packages under the `itkdev` namespace: `itkdev-sap`, `itkdev-graph`,
+  `itkdev-kmdnova`, `itkdev-eflyt`, `itkdev-misc`, `itkdev-smtp`,
+  `itkdev-getorganized`.
+- `itk-dev-shared-components` is now a meta package that depends on all of the
+  above and provides a backwards-compatibility shim: old imports such as
+  `from itk_dev_shared_components.sap import sap_login` continue to work but emit a
+  `DeprecationWarning` and are redirected to `itkdev.sap`.
+
+### Deprecated
+
+- Importing from `itk_dev_shared_components.*`. Migrate to `itkdev.*`
+  (e.g. `from itkdev.sap import sap_login`) and depend only on the individual
+  packages you need.
+
+## [2.16.2] - 2026-03-13
+
+### Fixed
+
+- Made confirm_kundekontakt optional in SAP.
+
+## [2.16.1] - 2026-03-12
+
+### Fixed
+
+- Added retry on confirm_kundekontakt in SAP.
+
+## [2.16.0] - 2026-02-20
+
+### Changed
+
+- Graph get emails now has a limit argument.
+
+## [2.15.0] - 2026-01-27
+
+### Changed
+
+- SAP.fmcacov now raises an error when an FP doesn't exist in the system.
+
+## [2.14.1] - 2025-09-05
+
+### Fixed
+
+- In case the "Godkend Alle" button does not exist, the robot will now correctly progress.
+
+## [2.14.0] - 2025-08-22
+
+### Changed
+
+- SAP: Changed how kundekontakter are created with 0 or 1 aftaler.
+
+### Added
+
+- Eflyt: Added functions for sending letters.
+
+## [2.13.0] - 2025-08-13
+
+### Added
+
+- Nova: Function to set the state of an existing case.
+
+## [2.12.1] - 2025-08-07
+
+### Fixed
+
+- SAP: Dismiss popup when opening an inactive FP.
+
+## [2.12.0] - 2025-06-17
+
+### Added
+
+- getorganized: Added functions and tests for using GetOrganized.
+
+## [2.11.1] - 2025-04-28
+
+### Fixed
+
+- Eflyt case search now handles list of cases without a deadline
+
+## [2.11.0] - 2025-03-24
+
+### Changed
+
+- Eflyt now using resilient browser for login to avoid stale elements
+
+## [2.10.0] - 2025-03-20
+
+### Changed
+
+- Switched KMD Nova case api from 1.0 to 2.0.
+
+### Fixed
+
+- Fixed eflyt tab changing
+
+## [2.9.0] - 2025-02-19
+
+### Added
+
+- kmd_nova: Added support for case worker groups/units.
+
+### Fixed
+
+- Child folders in Graph are now found, even with more than 10 child folders to go through.
+- Approving eflyt cases when the person is marked as "Afsluttet" now works.
+
+## [2.8.1] - 2024-12-02
+
+### Fixed
+
+- Approve case in eflyt when approving individual people now works.
+
+## [2.8.0] - 2024-10-02
+
+### Added
+
+- misc.cpr_util: Function to get birth date from cpr number.
+- kmd_nova.nova_cases: Function to get a case on its uuid.
+
+## [2.7.1] - 2024-09-24
+
+### Fixed
+
+- eFlyt: Will now change tab when adding notes
+
+## [2.7.0] - 2024-09-16
+
+### Added
+
+- Added functionality for approving, checking approval status and noting cases
+
+## [2.6.1] - 2024-09-04
+
+### Fixed
+
+- Fixed column number on case_worker
+
+## [2.6.0] - 2024-09-04
+
+### Added
+
+- Added fields to the eflyt Case dataclass for status, cpr, name, case_worker
+
+### Changed
+
+- eflyt.eflyt_case.change_tab now checks if the tab needs to be changed before doing it.
+- Dependenices are now only locked to major versions.
+- Changed test for change sap password to use dotenv.
+
+## [2.5.0] - 2024-08-14
+
+### Added
+
+- Added modules for use with the Eflyt / Dedalus / Notus address system.
+- misc.file_util: handle_save_dialog.
+- misc.cvr_lookup: Look up cvr number.
+- misc.address_lookup: Look up addresses.
+
+### Fixed
+
+- Conversion of ÆØÅ to Ae Oe Aa when uploading notes to Nova.
+
+## [2.4.0] - 2024-07-30
+
+### Added
+
+- Caseworker for notes.
+- Directions for setting up environment variables for test.
+- misc.file_util: Wait for download function.
+
+### Changed
+
+- Changed environmental variables to use an .env file
+
+### Fixed
+- Some SAP tests were failing due to a missing value
+- Changed department and security units from rules to user control
+- Minor doc fixes to get_drive_item.
+
+## [2.3.0] - 2024-07-03
+
+### Added
+
+- Function for getting cases based on CVR from KMD Nova.
+- Tests for getting cases based on CVR from KMD Nova.
+- Module for accessing site and file endpoints in Microsoft Graph.
+
+### Changed
+
+- Unexpected format on caseworker in Nova cases results in None.
+- Minor refactoring to move common HTTP request wrappers for Microsoft Graph into their own file.
+
+## [2.2.0] - 2024-05-08
+
+### Added
+
+- Module for getting and creating journal notes in Nova.
+- Tests for journal notes.
+
+## [2.1.1] - 2024-04-10
+
+### Fixed
+
+- Documents in Nova can now have a caseworker assigned.
+
+## [2.1.0] - 2024-04-09
+
+### Added
+
+- smtp_util: For sending emails using the smtp protocol.
+- Tests for smtp_util.
+
+## [2.0.0] - 2024-04-03
+
+### Changed
+
+#### KMD Nova
+
+- Department and Caseworker classes added.
+- Ability to set security unit, department and caseworker on cases.
+- Better tests for cases.
+
+### Fixed
+
+- Security unit not set properly on Nova cases.
+
+## [1.3.1] - 2024-02-21
+
+### Fixed
+
+- Key error when accessing a Nova Task without a caseworker.
+
+## [1.3.0] - 2024-02-20
+
+### Added
+
+- SAP.fmcacov module 
+  - Function to dismiss "key-popup" in SAP.
+  - Function to reliably open forretningspartners in SAP.
+- Test for all of the above.
+
+### Changed
+
+- opret_kundekontakt uses the new SAP.fmcacov module.
+- Updated Github actions dependencies.
+
+### Removed
+
+- SAP login using web portal. Wasn't used or maintained.
+
+## [1.2.0] - 2024-02-12
+
+### Added
+
+- misc/cpr_util: Function to get age from cpr number.
+- Hooks for KMD Nova cases.
+- Hooks for KMD Nova tasks.
+- Hooks for KMD Nova documents.
+- Hooks for CPR address lookup via KMD Nova API.
+- Tests for all of the above.
+
+## [1.1.0] - 2023-11-28
+
+### Changed
+
+- sap.opret_kundekontakt: Function 'opret_kundekontakter' made more stable.
+- sap.multi_session: Function 'spawn_session' is no longer hardcoded to 1080p screen size.
+- sap.multi_session: Arrange session windows moved to separate function.
+- Bunch o' linting.
+- run_tests.bat: Dedicated test venv.
+- readme: Updated readme.
+
+### Added
+
+- Changelog!
+- pylint.yml: Flake8 added.
+
+### Fixed
+
+- sap.multi_session: Critical bug in 'run_batches'.
+- tests.sap.login: Change environ 'SAP Login' for later tests.
+
+## [1.0.0] - 2023-11-14
+
+- Initial release
+
+[2.16.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.16.0
+[2.15.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.15.0
+[2.14.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.14.0
+[2.13.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.13.0
+[2.12.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.12.1
+[2.12.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.12.0
+[2.11.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.11.1
+[2.11.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.11.0
+[2.10.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.10.0
+[2.9.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.9.0
+[2.8.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.8.1
+[2.8.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.8.0
+[2.7.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.7.1
+[2.7.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.7.0
+[2.6.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.6.1
+[2.6.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.6.0
+[2.5.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.5.0
+[2.4.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.4.0
+[2.3.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.3.0
+[2.2.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.2.0
+[2.1.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.1.1
+[2.1.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.1.0
+[2.0.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.0.0
+[1.3.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/1.3.1
+[1.3.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/1.3.0
+[1.2.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/1.2.0
+[1.1.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/1.1.0
+[1.0.0]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/1.0.0

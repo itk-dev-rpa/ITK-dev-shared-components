@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=65.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "itkdev-graph"
+version = "1.0.0"
+authors = [
+  { name="ITK Development", email="itk-rpa@mkb.aarhus.dk" },
+]
+description = "Microsoft Graph API helpers for RPA projects (itkdev.graph)."
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+]
+dependencies = [
+  "msal == 1.*",
+  "requests == 2.*",
+  "beautifulsoup4 == 4.*",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/itk-dev-rpa/itk-dev-shared-components"
+"Bug Tracker" = "https://github.com/itk-dev-rpa/itk-dev-shared-components/issues"
+
+[project.optional-dependencies]
+dev = [
+  "python-dotenv",
+  "flake8",
+  "pylint"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = true
