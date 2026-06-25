@@ -31,6 +31,7 @@ class Advis:
     date: date
     cpr: str
     case_number: str
+    case_type: str
     type: str
     state: str
 
@@ -75,7 +76,7 @@ def search_advis(cpr: str | None = None, date_from: date | None = None, date_to:
 def select_advis(cpr: str, case_number: str):
     """Select the advis from the search list with the given cpr and case number."""
     boliglaan = common.get_boliglaan()
-    rows = boliglaan.TabControl(Name="TabbedGroup", searchDepth=4).PaneControl(AutomationId="dataPresenter").GetChildren()
+    rows = boliglaan.TabControl(Name="TabbedGroup", searchDepth=4).GroupControl(Name="Advis").PaneControl(AutomationId="dataPresenter").GetChildren()
 
     for row in rows:
         row_case_number = row.CustomControl(foundIndex=2).GetPattern(uiautomation.PatternId.ValuePattern).Value
@@ -91,7 +92,7 @@ def select_advis(cpr: str, case_number: str):
 def get_advis_list() -> list[Advis]:
     """Get the advis search result as a list of Advis objects."""
     boliglaan = common.get_boliglaan()
-    rows = boliglaan.TabControl(Name="TabbedGroup", searchDepth=4).PaneControl(AutomationId="dataPresenter").GetChildren()
+    rows = boliglaan.TabControl(Name="TabbedGroup", searchDepth=4).GroupControl(Name="Advis").PaneControl(AutomationId="dataPresenter").GetChildren()
 
     result = []
 
@@ -101,10 +102,11 @@ def get_advis_list() -> list[Advis]:
         cpr = row.CustomControl(foundIndex=3).GetPattern(uiautomation.PatternId.ValuePattern).Value
         type_ = row.CustomControl(foundIndex=4).GetPattern(uiautomation.PatternId.ValuePattern).Value
         state = row.CustomControl(foundIndex=5).GetPattern(uiautomation.PatternId.ValuePattern).Value
+        case_type = row.CustomControl(foundIndex=7).GetPattern(uiautomation.PatternId.ValuePattern).Value
 
         day, month, year = (int(part) for part in date_str.split("-"))
         date_ = date(year, month, day)
 
-        result.append(Advis(date=date_, cpr=cpr, case_number=case_number, type=type_, state=state))
+        result.append(Advis(date=date_, cpr=cpr, case_number=case_number, type=type_, state=state, case_type=case_type))
 
     return result
