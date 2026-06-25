@@ -4,7 +4,6 @@ import time
 from typing import Literal
 
 import uiautomation
-from uiautomation import PatternId
 
 
 TabName = Literal["Låneoplysninger", "Advis", "Låneafvikling", "Dokumenter", "Dokumentunderskrifter", "Hændelser"]
