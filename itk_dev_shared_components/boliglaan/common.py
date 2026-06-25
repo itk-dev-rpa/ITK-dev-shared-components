@@ -4,7 +4,6 @@ import time
 from typing import Literal
 
 import uiautomation
-from uiautomation import PatternId
 
 
 TabName = Literal["Låneoplysninger", "Advis", "Låneafvikling", "Dokumenter", "Dokumentunderskrifter", "Hændelser"]
@@ -22,19 +21,18 @@ def get_tab(tab_name: TabName) -> uiautomation.TabItemControl:
     return tab_control.TabItemControl(Name=f"DXTabItem{tab_name}", searchDepth=1)
 
 
-def select_tab(tab_name: TabName):
-    """Select the tab with the given name."""
-    get_tab(tab_name).GetSelectionItemPattern().Select()
+def select_tab(tab_name: TabName) -> uiautomation.TabItemControl:
+    """Select the tab with the given name. Returns the tab object."""
+    tab = get_tab(tab_name)
+    tab.GetSelectionItemPattern().Select()
+    return tab
 
 
 def pin_sidebar():
     """Unfold the search side bar and pin it."""
     boliglaan = get_boliglaan()
     group = boliglaan.GroupControl(AutomationId="DockLayoutManager", searchDepth=2)
-
-    pane = group.CustomControl(AutomationId="PART_LeftAutoHideTrayPanel")
-    pane.GetPattern(PatternId.ExpandCollapsePattern).Expand()
-
+    group.GroupControl(AutomationId="dockItem2").Click(simulateMove=False)
     group.ButtonControl(AutomationId="PART_PinButton").GetInvokePattern().Invoke()
 
 
@@ -78,3 +76,7 @@ def save_case():
     boliglaan = get_boliglaan()
     toolbar = boliglaan.GroupControl(Name="None BarContainerControl", searchDepth=1)
     toolbar.ButtonControl(Name="Gem/Dan brev...").GetInvokePattern().Invoke()
+
+    # Handle popup
+    popup = boliglaan.WindowControl(Name="Kvittering", searchDepth=1)
+    popup.ButtonControl(Name="Gem/Send breve", searchDepth=1).GetInvokePattern().Invoke()
