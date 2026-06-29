@@ -133,7 +133,8 @@ def get_notes(case_uuid: str, nova_access: NovaAccess, offset: int = 0, limit: i
     response = requests.put(url, params=params, headers=headers, json=payload, timeout=60)
     response.raise_for_status()
 
-    note_dicts = response.json()['cases'][0]['journalNotes']['journalNotes']
+    case = response.json()['cases'][0]
+    note_dicts = case.get('journalNotes', {}).get('journalNotes', [])
 
     notes_list = []
 
