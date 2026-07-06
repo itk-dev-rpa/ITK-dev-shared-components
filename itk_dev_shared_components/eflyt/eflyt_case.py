@@ -5,6 +5,11 @@ from datetime import date, datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
+
+WAIT_TIMEOUT = 10  # Seconds to wait for ASP.NET postbacks in approve_case.
 
 
 @dataclass
@@ -131,23 +136,34 @@ def change_tab(browser: webdriver.Chrome, tab_index: int):
 
 
 def approve_case(browser: webdriver.Chrome):
-    """Approve a case.
-    If any person on the case is blocking approval, approve each person individually.
+    """Approve a case, including cases where the anmeldelse is already approved and only the
+    persons remain. Uses waits around the ASP.NET postbacks to avoid stale/not-interactable
+    races. If any person on the case is blocking approval, approve each person individually.
     """
     change_tab(browser, 0)
 
-    deadline_field = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ncPersonTab_txtDeadline")
-    deadline_field.clear()
-    note_field = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ncPersonTab_txtDeadlineNote")
-    note_field.clear()
+    browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ncPersonTab_txtDeadline").clear()
+    browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_ncPersonTab_txtDeadlineNote").clear()
 
-    browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_btnGodkend").click()
-    browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_btnApproveYes").click()
+    # 1. Approve the anmeldelse only if that step is available (skip if already approved).
+    godkend = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_btnGodkend")
+    if godkend.is_enabled():
+        godkend.click()
+        # 2. Confirm OK only if the confirmation dialog actually appears.
+        try:
+            WebDriverWait(browser, WAIT_TIMEOUT).until(
+                EC.element_to_be_clickable((By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_btnApproveYes"))
+            ).click()
+        except TimeoutException:
+            pass
 
-    approve_persons_button = browser.find_elements(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_btnGodkendAlle")
-    if any(approve_persons_button) and approve_persons_button[0].is_enabled():
-        approve_persons_button[0].click()
-    else:
+    # 3. Approve the persons; clickability decides bulk vs per-person and waits out the
+    #    postback (no is_enabled() on a stale element).
+    try:
+        WebDriverWait(browser, WAIT_TIMEOUT).until(
+            EC.element_to_be_clickable((By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_btnGodkendAlle"))
+        ).click()
+    except TimeoutException:
         # Approve each person individually
         person_count = len(browser.find_elements(By.XPATH, '//table[@id="ctl00_ContentPlaceHolder2_GridViewMovingPersons"]//tr')) - 1
 
@@ -155,9 +171,12 @@ def approve_case(browser: webdriver.Chrome):
             browser.find_element(By.XPATH, f'//table[@id="ctl00_ContentPlaceHolder2_GridViewMovingPersons"]//tr[{i+2}]//td[2]').click()
 
             browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_btnGodkend").click()
-            approve_button = browser.find_element(By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_btnApproveYes")
-            if approve_button.is_displayed():
-                approve_button.click()
+            try:
+                WebDriverWait(browser, WAIT_TIMEOUT).until(
+                    EC.element_to_be_clickable((By.ID, "ctl00_ContentPlaceHolder2_ptFanePerson_stcPersonTab1_btnApproveYes"))
+                ).click()
+            except TimeoutException:
+                pass
 
         # Go back to the case
         browser.find_element(By.XPATH, '//table[@id="ctl00_ContentPlaceHolder2_GridViewMovingPersons"]//tr[1]//td[2]').click()
