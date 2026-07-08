@@ -309,6 +309,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
+[2.17.4]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.17.4
 [2.17.3]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.17.3
 [2.17.2]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.17.2
 [2.17.1]: https://github.com/itk-dev-rpa/ITK-dev-shared-components/releases/tag/2.17.1
