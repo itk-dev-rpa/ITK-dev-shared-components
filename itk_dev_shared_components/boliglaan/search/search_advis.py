@@ -4,7 +4,7 @@ and handling the advis search results.
 
 from dataclasses import dataclass
 from datetime import date
-from typing import Literal
+from typing import Any, Literal
 
 import uiautomation
 
@@ -70,20 +70,21 @@ def search_advis(cpr: str | None = None, date_from: date | None = None, date_to:
         for type_ in types:
             popup.CheckBoxControl(Name=type_).GetTogglePattern().SetToggleState(1, waitTime=0)
 
-    popup.ButtonControl(Name="Søg").GetInvokePattern().Invoke()
+    popup.ButtonControl(Name="Søg").Click(simulateMove=False)
 
 
 def select_advis(cpr: str, case_number: str):
     """Select the advis from the search list with the given cpr and case number."""
     boliglaan = common.get_boliglaan()
-    rows = boliglaan.TabControl(Name="TabbedGroup", searchDepth=4).GroupControl(Name="Advis").PaneControl(AutomationId="dataPresenter").GetChildren()
+    grid = boliglaan.TabControl(Name="TabbedGroup", searchDepth=4).GroupControl(Name="Advis").DataGridControl(AutomationId="AdvisGridControl")
+    grid_pattern = grid.GetGridPattern()
 
-    for row in rows:
-        row_case_number = row.CustomControl(foundIndex=2).GetPattern(uiautomation.PatternId.ValuePattern).Value
-        case_cpr = row.CustomControl(foundIndex=3).GetPattern(uiautomation.PatternId.ValuePattern).Value
+    for row in range(grid_pattern.RowCount):
+        row_case_number = _get_grid_value(grid_pattern, row, 1)
+        case_cpr = _get_grid_value(grid_pattern, row, 2)
 
         if case_cpr == cpr and row_case_number == case_number:
-            row.DoubleClick(simulateMove=False)
+            grid_pattern.GetItem(row, 0).DoubleClick(simulateMove=False)
             return
 
     raise LookupError(f"Couldn't find advis: {cpr} - {case_number}")
@@ -92,17 +93,19 @@ def select_advis(cpr: str, case_number: str):
 def get_advis_list() -> list[Advis]:
     """Get the advis search result as a list of Advis objects."""
     boliglaan = common.get_boliglaan()
-    rows = boliglaan.TabControl(Name="TabbedGroup", searchDepth=4).GroupControl(Name="Advis").PaneControl(AutomationId="dataPresenter").GetChildren()
+
+    grid = boliglaan.TabControl(Name="TabbedGroup", searchDepth=4).GroupControl(Name="Advis").DataGridControl(AutomationId="AdvisGridControl")
+    grid_pattern = grid.GetGridPattern()
 
     result = []
 
-    for row in rows:
-        date_str: str = row.CustomControl(foundIndex=1).GetPattern(uiautomation.PatternId.ValuePattern).Value
-        case_number = row.CustomControl(foundIndex=2).GetPattern(uiautomation.PatternId.ValuePattern).Value
-        cpr = row.CustomControl(foundIndex=3).GetPattern(uiautomation.PatternId.ValuePattern).Value
-        type_ = row.CustomControl(foundIndex=4).GetPattern(uiautomation.PatternId.ValuePattern).Value
-        state = row.CustomControl(foundIndex=5).GetPattern(uiautomation.PatternId.ValuePattern).Value
-        case_type = row.CustomControl(foundIndex=7).GetPattern(uiautomation.PatternId.ValuePattern).Value
+    for row in range(grid_pattern.RowCount):
+        date_str: str = _get_grid_value(grid_pattern, row, 0)
+        case_number = _get_grid_value(grid_pattern, row, 1)
+        cpr = _get_grid_value(grid_pattern, row, 2)
+        type_ = _get_grid_value(grid_pattern, row, 3)
+        state = _get_grid_value(grid_pattern, row, 4)
+        case_type = _get_grid_value(grid_pattern, row, 6)
 
         day, month, year = (int(part) for part in date_str.split("-"))
         date_ = date(year, month, day)
@@ -110,3 +113,8 @@ def get_advis_list() -> list[Advis]:
         result.append(Advis(date=date_, cpr=cpr, case_number=case_number, type=type_, state=state, case_type=case_type))
 
     return result
+
+
+def _get_grid_value(grid_pattern: uiautomation.GridPattern, row: int, column: int) -> Any:
+    """Helper function to get the value of a grid item."""
+    return grid_pattern.GetItem(row, column).GetPattern(uiautomation.PatternId.ValuePattern).Value
