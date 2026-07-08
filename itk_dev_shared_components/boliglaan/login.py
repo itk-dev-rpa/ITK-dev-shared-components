@@ -27,8 +27,8 @@ def login(username: str, password: str):
     kmd_logon.ButtonControl(AutomationId="UserPwLogonButton").GetInvokePattern().Invoke()
 
     boliglaan = uiautomation.WindowControl(Name="KMD Boliglån", searchDepth=1)
-    if not boliglaan.Exists(maxSearchSeconds=30):
-        raise RuntimeError("Boliglån didn't appear within 30 seconds")
+    if not boliglaan.Exists(maxSearchSeconds=60):
+        raise RuntimeError("Boliglån didn't appear within 60 seconds")
 
 
 def kill_boliglaan():
