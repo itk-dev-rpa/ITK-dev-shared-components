@@ -143,4 +143,4 @@ def select_case(cpr: str, case_number: str):
             grid_pattern.GetItem(row, 0).DoubleClick(simulateMove=False)
             return
 
-    raise LookupError(f"Couldn't find advis: {cpr} - {case_number}")
+    raise LookupError(f"Couldn't find case: {cpr} - {case_number}")
