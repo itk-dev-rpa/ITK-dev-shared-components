@@ -2,6 +2,8 @@
 
 from dataclasses import dataclass, field
 import io
+from typing import Generator
+from urllib.parse import quote
 
 import requests
 from bs4 import BeautifulSoup
@@ -51,10 +53,13 @@ class Attachment:
     size: int
 
 
-def get_emails_from_folder(user: str, folder_path: str, graph_access: GraphAccess, limit: int = 100) -> tuple[Email]:
+def get_emails_from_folder(user: str, folder_path: str, graph_access: GraphAccess, limit: int | None = 100) -> tuple[Email] | Generator[Email, None, None]:
     """Get all emails from the specified user and folder.
     You need to authorize against Graph to get the GraphAccess before using this function
     see the graph.authentication module.
+
+    If limit is an integer a tuple of the first <limit> emails is returned.
+    If limit is None a generator over all emails in the folder is returned instead.
 
     Args:
         user: The user who owns the folder.
@@ -65,17 +70,58 @@ def get_emails_from_folder(user: str, folder_path: str, graph_access: GraphAcces
     Returns:
         tuple[Email]: The emails from the given folder.
     """
-    if not 0 < limit <= 1000:
+    SELECTORS = ",".join(("body", "from", "hasAttachments", "id", "receivedDateTime", "subject", "toRecipients"))
+
+    tuple_mode = isinstance(limit, int)
+
+    if tuple_mode and not 0 < limit <= 1000:
         raise ValueError("Limit must be between 1 and 1000.")
 
     folder_id = get_folder_id_from_path(user, folder_path, graph_access)
 
-    endpoint = f"https://graph.microsoft.com/v1.0/users/{user}/mailFolders/{folder_id}/messages?$top={limit}"
+    endpoint = f"https://graph.microsoft.com/v1.0/users/{user}/mailFolders/{folder_id}/messages?$select={SELECTORS}"
 
+    # --- Tuple mode ---
+    if tuple_mode:
+        endpoint += f"&$top={limit}"
+        emails, _ = _get_emails(endpoint, user, graph_access)
+        return emails
+
+    # --- Generator mode ---
+    return _iterate_emails(endpoint, user, graph_access)
+
+
+def _iterate_emails(endpoint: str, user: str, graph_access: GraphAccess) -> Generator[Email, None, None]:
+    """Yield all emails from the given endpoint, following pagination until exhausted.
+
+    Args:
+        endpoint: The endpoint to get the first page of emails from.
+        user: The user who owns the emails.
+        graph_access: The GraphAccess object used to authenticate.
+
+    Yields:
+        Email: The emails from the endpoint, one page at a time.
+    """
+    while endpoint is not None:
+        emails, endpoint = _get_emails(endpoint, user, graph_access)
+        yield from emails
+
+
+def _get_emails(endpoint: str, user: str, graph_access: GraphAccess) -> tuple[tuple[Email], str | None]:
+    """A helper function to get a tuple of emails from the given endpoint.
+
+    Args:
+        endpoint: The endpoint to get from.
+        user: The user who owns the emails.
+        graph_access:  The GraphAccess object used to authenticate.
+
+    Returns:
+        A tuple of emails and a next-page endpoint if any.
+    """
     response = get_request(endpoint, graph_access)
-    emails_raw = response.json()['value']
-
-    return _unpack_email_response(user, emails_raw)
+    response_json = response.json()
+    emails_raw = response_json['value']
+    return _unpack_email_response(user, emails_raw), response_json.get("@odata.nextLink")
 
 
 def get_email_as_mime(email: Email, graph_access: GraphAccess) -> io.BytesIO:
@@ -114,43 +160,44 @@ def get_folder_id_from_path(user: str, folder_path: str, graph_access: GraphAcce
     main_folder = folders[0]
     child_folders = folders[1:]
 
-    folder_id = None
-
     # Get main folder
-    endpoint = f"https://graph.microsoft.com/v1.0/users/{user}/mailFolders"
-    response = get_request(endpoint, graph_access).json()
-    folder_id = _find_folder(response, main_folder)
+    base_endpoint = f"https://graph.microsoft.com/v1.0/users/{user}/mailFolders"
+    folder_id = _find_folder_by_name(base_endpoint, graph_access, main_folder)
     if folder_id is None:
         raise ValueError(f"Top level folder '{main_folder}' was not found for user '{user}'.")
 
     # Get child folders
     for child_folder in child_folders:
-        endpoint = f"https://graph.microsoft.com/v1.0/users/{user}/mailFolders/{folder_id}/childFolders"
-        folder_id = recursive_find_folder(endpoint, graph_access, child_folder)
+        base_endpoint = f"https://graph.microsoft.com/v1.0/users/{user}/mailFolders/{folder_id}/childFolders"
+        folder_id = _find_folder_by_name(base_endpoint, graph_access, child_folder)
         if folder_id is None:
             raise ValueError(f"Child folder '{child_folder}' not found under '{main_folder}' for user '{user}'.")
 
     return folder_id
 
 
-def recursive_find_folder(endpoint: str, graph_access: GraphAccess, target_folder: str) -> str:
-    """Look for target folder at endpoint, recursively going through pagination if available and necessary.
+def _find_folder_by_name(base_endpoint: str, graph_access: GraphAccess, target_folder: str) -> str | None:
+    """Find a mail folder by its display name using a server-side $filter.
+
+    Using $filter lets Graph return only the matching folder(s), so no client-side
+    pagination is needed. Note that Graph's 'eq' on displayName is case-insensitive.
 
     Args:
-        endpoint: Graph endpoint to lookup folder.
-        graph_access: Access token for Graph API.
-        target_folder: ID of target folder.
+        base_endpoint: The mailFolders or childFolders endpoint to search under.
+        graph_access: The GraphAccess object used to authenticate.
+        target_folder: The display name of the folder to find.
 
     Returns:
-        Return folder ID.
+        The id of the folder, or None if no folder with that name exists.
     """
+    # Escape single quotes for OData by doubling them, then url-encode the whole expression.
+    filter_value = target_folder.replace("'", "''")
+    query = quote(f"displayName eq '{filter_value}'")
+    endpoint = f"{base_endpoint}?$filter={query}"
+
     response = get_request(endpoint, graph_access).json()
-    folder_id = _find_folder(response, target_folder)
-
-    if folder_id is None and '@odata.nextLink' in response:
-        return recursive_find_folder(response['@odata.nextLink'], graph_access, target_folder)
-
-    return folder_id
+    folders = response['value']
+    return folders[0]['id'] if folders else None
 
 
 def list_email_attachments(email: Email, graph_access: GraphAccess) -> tuple[Attachment]:
@@ -256,22 +303,6 @@ def delete_email(email: Email, graph_access: GraphAccess, *, permanent: bool = F
         response.raise_for_status()
     else:
         move_email(email, "deleteditems", graph_access, well_known_folder=True)
-
-
-def _find_folder(response: dict, target_folder: str) -> str:
-    """Find the target folder in
-
-    Args:
-        response: The json dict of the HTTP response.
-        target_folder: The folder to find.
-
-    Returns:
-        str: The id of the target folder.
-    """
-    for g_folder in response['value']:
-        if g_folder['displayName'] == target_folder:
-            return g_folder['id']
-    return None
 
 
 def _unpack_email_response(user: str, emails_raw: list[dict[str, str]]) -> tuple[Email]:
