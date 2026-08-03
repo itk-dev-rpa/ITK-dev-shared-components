@@ -4,9 +4,7 @@ and handling the advis search results.
 
 from dataclasses import dataclass
 from datetime import date
-from typing import Any, Literal
-
-import uiautomation
+from typing import Literal
 
 from itk_dev_shared_components.boliglaan import common
 
@@ -44,9 +42,6 @@ def search_advis(cpr: str | None = None, date_from: date | None = None, date_to:
         date_from: The date to search from.
         date_to: The date to search to.
         types: The types of advis to search for. If None all types are chosen.
-
-    Raises:
-        ValueError: If 'All' is not alone in the types list.
     """
     boliglaan = common.get_boliglaan()
     boliglaan.SendKeys("{Ctrl}T")
@@ -80,8 +75,8 @@ def select_advis(cpr: str, case_number: str):
     grid_pattern = grid.GetGridPattern()
 
     for row in range(grid_pattern.RowCount):
-        row_case_number = _get_grid_value(grid_pattern, row, 1)
-        case_cpr = _get_grid_value(grid_pattern, row, 2)
+        row_case_number = common.get_grid_value(grid_pattern, row, 1)
+        case_cpr = common.get_grid_value(grid_pattern, row, 2)
 
         if case_cpr == cpr and row_case_number == case_number:
             grid_pattern.GetItem(row, 0).DoubleClick(simulateMove=False)
@@ -100,12 +95,12 @@ def get_advis_list() -> list[Advis]:
     result = []
 
     for row in range(grid_pattern.RowCount):
-        date_str: str = _get_grid_value(grid_pattern, row, 0)
-        case_number = _get_grid_value(grid_pattern, row, 1)
-        cpr = _get_grid_value(grid_pattern, row, 2)
-        type_ = _get_grid_value(grid_pattern, row, 3)
-        state = _get_grid_value(grid_pattern, row, 4)
-        case_type = _get_grid_value(grid_pattern, row, 6)
+        date_str: str = common.get_grid_value(grid_pattern, row, 0)
+        case_number = common.get_grid_value(grid_pattern, row, 1)
+        cpr = common.get_grid_value(grid_pattern, row, 2)
+        type_ = common.get_grid_value(grid_pattern, row, 3)
+        state = common.get_grid_value(grid_pattern, row, 4)
+        case_type = common.get_grid_value(grid_pattern, row, 6)
 
         day, month, year = (int(part) for part in date_str.split("-"))
         date_ = date(year, month, day)
@@ -113,8 +108,3 @@ def get_advis_list() -> list[Advis]:
         result.append(Advis(date=date_, cpr=cpr, case_number=case_number, type=type_, state=state, case_type=case_type))
 
     return result
-
-
-def _get_grid_value(grid_pattern: uiautomation.GridPattern, row: int, column: int) -> Any:
-    """Helper function to get the value of a grid item."""
-    return grid_pattern.GetItem(row, column).GetPattern(uiautomation.PatternId.ValuePattern).Value

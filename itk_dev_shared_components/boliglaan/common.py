@@ -1,7 +1,7 @@
 """This module contains functions to perform common actions in Boliglån."""
 
 import time
-from typing import Literal
+from typing import Any, Literal
 
 import uiautomation
 
@@ -80,3 +80,8 @@ def save_case():
     # Handle popup
     popup = boliglaan.WindowControl(Name="Kvittering", searchDepth=1)
     popup.ButtonControl(Name="Gem/Send breve", searchDepth=1).GetInvokePattern().Invoke()
+
+
+def get_grid_value(grid_pattern: uiautomation.GridPattern, row: int, column: int) -> Any:
+    """Helper function to get the value of a grid item."""
+    return grid_pattern.GetItem(row, column).GetPattern(uiautomation.PatternId.ValuePattern).Value
