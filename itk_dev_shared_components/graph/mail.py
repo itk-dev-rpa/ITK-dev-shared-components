@@ -70,7 +70,7 @@ def get_emails_from_folder(user: str, folder_path: str, graph_access: GraphAcces
     Returns:
         tuple[Email]: The emails from the given folder.
     """
-    SELECTORS = ",".join(("body", "from", "hasAttachments", "id", "receivedDateTime", "subject", "toRecipients"))
+    selectors = ",".join(("body", "from", "hasAttachments", "id", "receivedDateTime", "subject", "toRecipients"))
 
     tuple_mode = isinstance(limit, int)
 
@@ -79,7 +79,7 @@ def get_emails_from_folder(user: str, folder_path: str, graph_access: GraphAcces
 
     folder_id = get_folder_id_from_path(user, folder_path, graph_access)
 
-    endpoint = f"https://graph.microsoft.com/v1.0/users/{user}/mailFolders/{folder_id}/messages?$select={SELECTORS}"
+    endpoint = f"https://graph.microsoft.com/v1.0/users/{user}/mailFolders/{folder_id}/messages?$select={selectors}"
 
     # --- Tuple mode ---
     if tuple_mode:
