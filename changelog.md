@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.18.0] - 2026-11-27
+
+### Changed
+
+- Graph: get_emails_from_folder can now return all mails as a generator instead of a list of limited number of mails.
+- Graph: Mail folder search now uses server-side search instead of fetching all folders.
+
 ## [2.17.4] - 2026-07-08
 
 ### Fixed
